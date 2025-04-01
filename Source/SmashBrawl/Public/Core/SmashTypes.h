@@ -68,7 +68,6 @@ enum class EAttacks : uint8
 	None UMETA(DisplayName = "None")
 };
 
-
 UENUM(BlueprintType)
 enum class EAbilityTypes : uint8
 {

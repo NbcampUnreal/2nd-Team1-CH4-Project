@@ -224,6 +224,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility System|References")
 	TObjectPtr<ACharacter> Parent;
 
+
 	//------------------------------------------------------------
 	// 기본 공격 능력 클래스 및 인스턴스
 	//------------------------------------------------------------
@@ -291,6 +292,7 @@ public:
 	TSubclassOf<ABaseAbility> SuperAttackClass;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
 	TObjectPtr<ABaseAbility> SuperAttack;
+
 
 	//------------------------------------------------------------
 	// 공중 공격 능력 클래스 및 인스턴스

@@ -391,7 +391,6 @@ void USmashAbilitySystemComponent::Multicast_Taunts_Implementation()
 {
 	// 도발은 공격 타입 설정이 필요 없으므로 간소화된 버전 사용
 	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
-
 	switch (CurrentDirection)
 	{
 	case ESmashDirection::Up:

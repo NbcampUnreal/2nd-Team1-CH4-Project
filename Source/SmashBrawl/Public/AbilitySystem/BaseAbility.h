@@ -1,10 +1,11 @@
-// 
 
 #pragma once
+
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "BaseAbility.generated.h"
+
 
 UCLASS()
 class SMASHBRAWL_API ABaseAbility : public AActor
