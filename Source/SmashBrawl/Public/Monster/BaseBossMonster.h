@@ -15,6 +15,9 @@ public:
 	// Sets default values for this character's properties
 	ABaseBossMonster();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	UDataTable* StatsTable;
+
 // protected:
 // 	// Called when the game starts or when spawned
 // 	virtual void BeginPlay() override;

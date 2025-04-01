@@ -24,13 +24,13 @@ class SMASHBRAWL_API IInterface_BossMonsterCombat
 public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
-	void PerformAttack() = 0;
+	void PerformAttack();
 
 	// 피격 반응 (예: 피격 애니메이션)
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
-	void ReactToHit() = 0;
+	void ReactToHit();
 
 	// 죽음 시 호출
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
-	void OnDeath() = 0;
+	void OnDeath();
 };
