@@ -1,4 +1,4 @@
-#include "AI/Character/BaseAIFighter.h"
+#include "Monster/Character/BaseAIFighter.h"
 #include "Net/UnrealNetwork.h"
 
 ABaseAIFighter::ABaseAIFighter()

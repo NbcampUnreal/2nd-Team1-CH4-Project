@@ -1,7 +1,8 @@
 // 
 
 
-#include "Monster/AnimNotify_Lv1Breath.h"
+#include "Monster/AnimNotifies/AnimNotify_Lv1Breath.h"
+
 #include "Monster/Lv1BossMonster.h"
 
 void UAnimNotify_Lv1Breath::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation)

@@ -1,7 +1,8 @@
-#include "AI/Behavior/Services/BTService_CheckTargetInRange.h"
+#include "Monster/Behavior/Services/BTService_CheckTargetInRange.h"
+
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "AI/Character/BaseAIFighter.h"
+#include "Monster/Character/BaseAIFighter.h"
 
 UBTService_CheckTargetInRange::UBTService_CheckTargetInRange()
 {

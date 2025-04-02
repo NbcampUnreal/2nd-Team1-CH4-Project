@@ -4,7 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "BaseBossMonster.h"
-#include "Interfaces/Interface_BossMonsterCombat.h"
+#include "Interface/Interface_BossMonsterCombat.h"
+
 #include "Monster/Lv1BossMonsterBreathProjectile.h"
 #include "Lv1BossMonster.generated.h"
 
