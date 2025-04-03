@@ -8,6 +8,7 @@
 #include "Components/ActorComponent.h"
 #include "BaseCharacterState.generated.h"
 
+class ABaseSSTCharacter;
 /**
  * 
  */

@@ -15,6 +15,9 @@ class SMASHBRAWL_API UCharacterStateManager : public UActorComponent
 {
 	GENERATED_BODY()
 
+public:
+	UCharacterStateManager();
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -35,11 +38,18 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	virtual void InitializeComponent() override;
+
+
+	UBaseCharacterState* FindState(EPlayerStates FidState) const;
+
+	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates", Replicated)
 	TObjectPtr<UBaseCharacterState> CurrentState;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
 	TArray<TSubclassOf<UBaseCharacterState>> CharacterStates;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
-	TMap<EPlayerStates, TObjectPtr<UBaseCharacterState>> CharacterStatePtrs;
+	
+	UPROPERTY( BlueprintReadWrite, Category = "PlayerStates")
+	TArray<TObjectPtr<UBaseCharacterState>> CharacterStatePtrs;
 };

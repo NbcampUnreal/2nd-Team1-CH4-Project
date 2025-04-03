@@ -15,4 +15,5 @@ class SMASHBRAWL_API UWalkOrRunCharacterState : public UBaseCharacterState
 	GENERATED_BODY()
 public:
 	UWalkOrRunCharacterState();
+	virtual bool CanState() override;
 };

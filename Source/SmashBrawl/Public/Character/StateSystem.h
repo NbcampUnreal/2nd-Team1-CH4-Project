@@ -34,6 +34,7 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	void ChangeCharacterState(EPlayerStates NewState);
+	
 	UFUNCTION(BlueprintCallable)
 	EPlayerStates GetCurrentState() const;
 	UFUNCTION(BlueprintCallable)

@@ -14,8 +14,7 @@ UStateSystem::UStateSystem()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 	// ...
-	StateManager = CreateDefaultSubobject<UCharacterStateManager>("StateSystem");
-	AbilityManager = CreateDefaultSubobject<UAbilityTypeManager>("AbilityManager");
+	StateManager = CreateDefaultSubobject<UCharacterStateManager>("CharacterStateManager");
 }
 
 

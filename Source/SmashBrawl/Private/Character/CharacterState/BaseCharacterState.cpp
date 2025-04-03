@@ -22,6 +22,10 @@ void UBaseCharacterState::EnterState(IInterface_CharacterState* BeforeCharacterS
 	}
 }
 
+void UBaseCharacterState::TickState()
+{
+}
+
 void UBaseCharacterState::ExitState()
 {
 }

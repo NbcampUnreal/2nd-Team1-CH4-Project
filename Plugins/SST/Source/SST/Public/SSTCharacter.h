@@ -19,6 +19,7 @@ class SST_API ASSTCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+public:
 	/** Custom CharacterMovementComponent */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class USSTCharacterMovementComponent> SSTCharacterMovementComponent;
@@ -59,23 +60,23 @@ public:
 
 protected:
 	/** Called for movement input */
-	void Move(const struct FInputActionValue& Value);
+	virtual void Move(const struct FInputActionValue& Value);
 
 	/** Called for crouch/drop input */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Input")
-	void CrouchDrop();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	virtual void CrouchDrop();
 
 	/** Called when releasing crouch/drop input */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Input")
-	void StopCrouchDrop();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	virtual void StopCrouchDrop();
 
 	/** Called when jump pressed, which could also be a drop-down command */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Input")
-	void JumpOrDrop();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	virtual void JumpOrDrop();
 
 	/** Called for dash input */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Input")
-	void Dash();
+	UFUNCTION(BlueprintCallable, Category = "Input")
+	virtual void Dash();
 
 protected:
 	// APawn interface
@@ -93,8 +94,8 @@ public:
 	bool CanDash() const;
 
 	/** Called when releasing the jump button */
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = "Movement")
-	void ReleaseJump();
+	UFUNCTION(BlueprintCallable, Category = "Movement")
+	virtual void ReleaseJump();
 
 	/* Overrides to work with custom movement modes */
 	virtual bool CanCrouch() const override;
