@@ -16,15 +16,17 @@ UCLASS()
 class SMASHBRAWL_API UBaseCharacterState : public UActorComponent, public IInterface_CharacterState
 {
 	GENERATED_BODY()
+	
 public:
 	UBaseCharacterState();
+	
 	EPlayerStates GetPlayerState() const;
 	virtual void EnterState(IInterface_CharacterState* BeforeCharacterState) override;
 	virtual void ExitState() override;
+	virtual void TickState() override;
 	virtual FCharacterStateInfo GetStateInfo() override;
-
+	virtual bool CanState() override;
 protected:
 	EPlayerStates PlayerState;
-
 	FCharacterStateInfo PlayerStateInfo;
 };

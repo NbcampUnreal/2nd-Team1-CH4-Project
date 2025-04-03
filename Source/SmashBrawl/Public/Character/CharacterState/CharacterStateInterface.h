@@ -49,4 +49,7 @@ public:
 	virtual void EnterState(IInterface_CharacterState* BeforeCharacterState) = 0;
 	virtual void ExitState() = 0;
 	virtual FCharacterStateInfo GetStateInfo() = 0;
+	virtual bool CanState() = 0;
+	virtual void TickState() = 0;
+
 };

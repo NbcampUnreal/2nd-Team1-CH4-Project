@@ -26,7 +26,7 @@ void UCharacterStateManager::BeginPlay()
 	{
 		if (TObjectPtr<UBaseCharacterState> NewState = NewObject<UBaseCharacterState>(this, Class))
 		{
-			NewState->OwnerCharacter = Cast<ABaseSSTCharacter>(GetOwner());
+			//NewState->OwnerCharacter = Cast<ABaseSSTCharacter>(GetOwner());
 			CharacterStatePtrs.Add(NewState);
 		}
 	}
@@ -61,7 +61,7 @@ void UCharacterStateManager::ChangeCharacterState(EPlayerStates NewState)
 	{
 		CurrentState->ExitState();
 		CurrentState = NextState;
-		CurrentState->EnterState();
+		CurrentState->EnterState(NextState);
 	}
 	else //다음 상태로 변경을 허용하지 않는다면 기본 IDLE상태로 유지합니다.
 	{
@@ -96,7 +96,7 @@ UBaseCharacterState* UCharacterStateManager::FindState(EPlayerStates FidState) c
 {
 	for (auto BaseCharacterState : CharacterStatePtrs)
 	{
-		if (BaseCharacterState->PlayerState == FidState)
+		if (BaseCharacterState->GetPlayerState() == FidState)
 			return BaseCharacterState;
 	}
 

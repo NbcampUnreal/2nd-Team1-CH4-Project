@@ -34,3 +34,8 @@ FCharacterStateInfo UBaseCharacterState::GetStateInfo()
 {
 	return PlayerStateInfo;
 }
+
+bool UBaseCharacterState::CanState()
+{
+	return true;
+}

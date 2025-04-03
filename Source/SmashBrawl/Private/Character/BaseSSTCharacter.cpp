@@ -2,11 +2,16 @@
 
 
 #include "SmashBrawl/Public/Character//BaseSSTCharacter.h"
+
+#include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Character/BrawlPlayerController.h"
 #include "SSTCharacterMovementComponent.h"
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
 #include "Character/StateSystem.h"
 #include "Net/UnrealNetwork.h"
+
+class ABrawlPlayerController;
 
 ABaseSSTCharacter::ABaseSSTCharacter(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -87,16 +92,6 @@ void ABaseSSTCharacter::ReleaseJump()
 bool ABaseSSTCharacter::CanJumpInternal_Implementation() const
 {
 	return Super::CanJumpInternal_Implementation() || SSTCharacterMovementComponent->CanWalljump();
-}
-
-
-#include "EnhancedInputComponent.h"
-#include "Character/BrawlPlayerController.h"
-#include "Character/StateSystem.h"
-
-ABaseSSTCharacter::ABaseSSTCharacter(const FObjectInitializer& ObjectInitializer) : ASSTCharacter(ObjectInitializer)
-{
-	StateSystem = CreateDefaultSubobject<UStateSystem>(TEXT("StateSystem"));
 }
 
 void ABaseSSTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

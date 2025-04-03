@@ -19,6 +19,8 @@ public:
 	ABaseSSTCharacter(const FObjectInitializer& ObjectInitializer);
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
 public:
 	virtual void Move(const struct FInputActionValue& Value) override;
 	
@@ -33,6 +35,11 @@ public:
 	virtual void ReleaseJump() override;
 
 	virtual bool CanJumpInternal_Implementation() const override;
+
+	UFUNCTION()
+	void BaseAttack();
+	UFUNCTION()
+	void SpecialAttack();
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
 	TObjectPtr<class UStateSystem> CharacterState;
@@ -48,4 +55,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
 	bool bJumpButton = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
+	TObjectPtr<UStateSystem> StateSystem;
+
+	
 };

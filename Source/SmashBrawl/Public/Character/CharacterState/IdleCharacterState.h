@@ -16,7 +16,6 @@ public:
 	virtual void EnterState(IInterface_CharacterState* BeforeCharacterState) override;
 	UIdleCharacterState();
 	
-	virtual void EnterState() override;
 	virtual void ExitState() override;
 	virtual bool CanState() override;
 
