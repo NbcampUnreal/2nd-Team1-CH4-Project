@@ -26,12 +26,6 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	void BasicAttack();
-	void BasicAttackEnd();
-	void SpecialAttack();
-
-	UFUNCTION(Server, Reliable)
-	void Server_BasicAttack();
 
 	UFUNCTION(BlueprintCallable)
 	EPlayerStates GetCurrentState() const;
@@ -43,16 +37,4 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UStateSystem* StateSystem;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Replicated)
-	bool bCanAttack;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack", Replicated)
-	bool bCanSmash;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Replicated)
-	EAbilityTypes AbilityTypes;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	bool bAttackButton;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Attack")
-	bool bAttackButtonReleased;
 };

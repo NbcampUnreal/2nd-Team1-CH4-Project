@@ -1,7 +1,7 @@
 // 
 
 
-#include "SmashBrawl/Public/Charactor/BrawlPlayerController.h"
+#include "SmashBrawl/Public/Character/BrawlPlayerController.h"
 #include "EnhancedInputSubsystems.h"
 
 ABrawlPlayerController::ABrawlPlayerController() :

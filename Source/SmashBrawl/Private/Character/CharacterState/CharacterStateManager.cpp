@@ -5,10 +5,6 @@
 #include "Character/CharacterState/BaseCharacterState.h"
 #include "Net/UnrealNetwork.h"
 
-UCharacterStateManager::UCharacterStateManager()
-{
-
-}
 
 void UCharacterStateManager::BeginPlay()
 {
