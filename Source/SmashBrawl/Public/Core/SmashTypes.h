@@ -1,5 +1,3 @@
-// 
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -69,7 +67,6 @@ enum class EAttacks : uint8
 	Super UMETA(DisplayName = "Super"),
 	None UMETA(DisplayName = "None")
 };
-
 
 UENUM(BlueprintType)
 enum class EAbilityTypes : uint8
