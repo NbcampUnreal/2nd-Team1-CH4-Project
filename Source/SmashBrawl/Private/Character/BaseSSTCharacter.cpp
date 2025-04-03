@@ -108,7 +108,7 @@ void ABaseSSTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 void ABaseSSTCharacter::BaseAttack()
 {
-	StateSystem->ChangeCharacterState(EPlayerStates::Ability);
+	StateSystem->ChangeState(EPlayerStates::Ability);
 }
 
 void ABaseSSTCharacter::SpecialAttack()
