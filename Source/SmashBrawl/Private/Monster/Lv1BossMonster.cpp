@@ -15,38 +15,30 @@ ALv1BossMonster::ALv1BossMonster()
 }
 
 
-void ALv1BossMonster::PerformAttack_Implementation()
-{
-	UE_LOG(LogTemp, Warning, TEXT("BossAttack1"));
-	
+void ALv1BossMonster::PerformAttack_Implementation(UAnimMontage* Montage)
+{	
 	if (HasAuthority())
 	{
-		Multicast_PerformAnimation();
+		Multicast_PerformAnimation(Montage);
 	}
 }
 
-void ALv1BossMonster::Multicast_PerformAnimation_Implementation()
+void ALv1BossMonster::Multicast_PerformAnimation_Implementation(UAnimMontage* Montage)
 {
-	UE_LOG(LogTemp, Warning, TEXT("BossAttack2"));
-
 	//이 아래에서 공격 정의 필요
 
-	if (BreathMontage && GetMesh())
+	if (Montage && GetMesh())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("BreathMontage"));
-		GetMesh()->GetAnimInstance()->Montage_Play(BreathMontage);
+		GetMesh()->GetAnimInstance()->Montage_Play(Montage);
 	}
 }
 
-void ALv1BossMonster::Multicast_PerformAttack_Implementation()
-{
-}
-
+//이 아래는 각 공격 구현 목록
 void ALv1BossMonster::Server_BreathAttack_Implementation() const
 {
-		FVector SpawnLocation = HeadComp->GetComponentLocation();
-		FRotator SpawnRotation = FRotator(FMath::RandRange(0, 360), 90, 0);
-		GetWorld()->SpawnActor<ALv1BossMonsterBreathProjectile>(BreathProjectile, SpawnLocation, SpawnRotation);
+	FVector SpawnLocation = HeadComp->GetComponentLocation();
+	FRotator SpawnRotation = FRotator(FMath::RandRange(0, 360), 90, 0);
+	GetWorld()->SpawnActor<ALv1BossMonsterBreathProjectile>(BreathProjectile, SpawnLocation, SpawnRotation);
 }
 
 void ALv1BossMonster::ReactToHit_Implementation()

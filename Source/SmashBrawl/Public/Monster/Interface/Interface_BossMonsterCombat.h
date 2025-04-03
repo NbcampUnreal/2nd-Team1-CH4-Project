@@ -24,7 +24,7 @@ class SMASHBRAWL_API IInterface_BossMonsterCombat
 public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
-	void PerformAttack();
+	void PerformAttack(UAnimMontage* Montage);
 	
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Combat")
 	void ReactToHit();

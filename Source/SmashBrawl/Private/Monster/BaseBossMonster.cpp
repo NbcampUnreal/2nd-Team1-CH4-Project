@@ -16,4 +16,7 @@ ABaseBossMonster::ABaseBossMonster()
 
 	bReplicates = true;
 
+	
+
+	
 }

@@ -22,14 +22,11 @@ public:
 	TSubclassOf<ALv1BossMonsterBreathProjectile> BreathProjectile;
 
 	//이 함수는 RPC가 아님. 로컬에서도 PerformAttack() 호출 시 실행 가능
-	virtual void PerformAttack_Implementation() override;
+	virtual void PerformAttack_Implementation(UAnimMontage* Montage) override;
 
 	//이 함수는 서버에서만 실행되어야 함. 실질적 공격 함수
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
-	void Multicast_PerformAnimation();
-
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
-	void Multicast_PerformAttack();
+	void Multicast_PerformAnimation(UAnimMontage* Montage);
 
 	UFUNCTION(Server, Reliable)
 	void Server_BreathAttack() const;
@@ -37,7 +34,4 @@ public:
 	virtual void ReactToHit_Implementation() override;
 
 	virtual  void OnDeath_Implementation() override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
-	class UAnimMontage* BreathMontage;
 };
