@@ -17,7 +17,7 @@ ABaseSSTCharacter::ABaseSSTCharacter(const FObjectInitializer& ObjectInitializer
 	: Super(ObjectInitializer)
 {
 	AbilitySystemComponent = CreateDefaultSubobject<USmashAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-	CharacterState = CreateDefaultSubobject<UStateSystem>(TEXT("CharacterState"));
+	StateSystem = CreateDefaultSubobject<UStateSystem>(TEXT("CharacterState"));
 }
 
 void ABaseSSTCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

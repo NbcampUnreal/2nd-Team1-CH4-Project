@@ -42,10 +42,13 @@ public:
 	void SpecialAttack();
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
-	TObjectPtr<class UStateSystem> CharacterState;
+	TObjectPtr<class UStateSystem> StateSystem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
 	TObjectPtr<class USmashAbilitySystemComponent> AbilitySystemComponent;
+
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
+	// FCharacterStateInfo PlayerStateInfo;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter", Replicated)
 	bool bCanMove = true;
@@ -56,8 +59,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
 	bool bJumpButton = false;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
-	TObjectPtr<UStateSystem> StateSystem;
+	
 
 	
 };

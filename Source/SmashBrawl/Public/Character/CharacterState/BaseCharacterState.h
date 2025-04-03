@@ -26,6 +26,7 @@ public:
 	virtual void TickState() override;
 	virtual FCharacterStateInfo GetStateInfo() override;
 	virtual bool CanState() override;
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 protected:
 	EPlayerStates PlayerState;
 	FCharacterStateInfo PlayerStateInfo;

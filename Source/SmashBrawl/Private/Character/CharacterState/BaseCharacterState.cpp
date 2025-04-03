@@ -3,6 +3,8 @@
 
 #include "Character/CharacterState/BaseCharacterState.h"
 
+#include "Net/UnrealNetwork.h"
+
 UBaseCharacterState::UBaseCharacterState()
 {
 	PlayerState = EPlayerStates::Idle;
@@ -38,4 +40,10 @@ FCharacterStateInfo UBaseCharacterState::GetStateInfo()
 bool UBaseCharacterState::CanState()
 {
 	return true;
+}
+
+void UBaseCharacterState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(UBaseCharacterState, PlayerStateInfo.bCanAttack);
 }
