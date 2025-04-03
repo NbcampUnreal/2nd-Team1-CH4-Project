@@ -24,4 +24,5 @@ class SMASHBRAWL_API IInterface_CharacterState
 public:
 	virtual void EnterState() = 0;
 	virtual void ExitState() = 0;
+	virtual void TickState() = 0;
 };

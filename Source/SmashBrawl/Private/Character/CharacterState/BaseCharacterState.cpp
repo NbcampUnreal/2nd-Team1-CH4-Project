@@ -5,6 +5,7 @@
 
 UBaseCharacterState::UBaseCharacterState() : PlayerState(EPlayerStates::Idle)
 {
+	
 }
 
 EPlayerStates UBaseCharacterState::GetPlayerState() const
@@ -13,6 +14,10 @@ EPlayerStates UBaseCharacterState::GetPlayerState() const
 }
 
 void UBaseCharacterState::EnterState()
+{
+}
+
+void UBaseCharacterState::TickState()
 {
 }
 

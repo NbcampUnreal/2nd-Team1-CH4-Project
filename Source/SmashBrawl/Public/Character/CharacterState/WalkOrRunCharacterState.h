@@ -16,4 +16,5 @@ class SMASHBRAWL_API UWalkOrRunCharacterState : public UBaseCharacterState
 public:
 	virtual void EnterState() override;
 	UWalkOrRunCharacterState();
+	virtual bool CanState() override;
 };

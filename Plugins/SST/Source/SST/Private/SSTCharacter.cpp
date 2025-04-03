@@ -68,39 +68,15 @@ void ASSTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	}
 }
 
-void ASSTCharacter::Move(const FInputActionValue& Value)
-{
-	if (Controller && SSTCharacterMovementComponent)
-	{
-		float MovementValue = Value.Get<float>();
-		SSTCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MovementValue);
-	}
-}
+void ASSTCharacter::Move(const FInputActionValue& Value){}
 
-void ASSTCharacter::JumpOrDrop_Implementation()
-{
-	if (bIsCrouched) // attempt to drop through platform, if any
-	{
-		SSTCharacterMovementComponent->WantsToPlatformDrop = true;
-	}
-	else
-	{
-		Jump();
-	}
-}
+void ASSTCharacter::CrouchDrop(){}
 
-void ASSTCharacter::CrouchDrop_Implementation()
-{
-	if (CanCrouch())
-	{
-		Crouch();
-	}
-}
+void ASSTCharacter::StopCrouchDrop(){}
 
-void ASSTCharacter::StopCrouchDrop_Implementation()
-{
-	UnCrouch();
-}
+void ASSTCharacter::JumpOrDrop(){}
+
+void ASSTCharacter::Dash(){}
 
 bool ASSTCharacter::CanDash_Implementation() const
 {
@@ -110,15 +86,7 @@ bool ASSTCharacter::CanDash_Implementation() const
 	return true;
 }
 
-void ASSTCharacter::Dash_Implementation()
-{
-	SSTCharacterMovementComponent->WantsToDash = true;
-}
-
-void ASSTCharacter::ReleaseJump_Implementation()
-{
-	StopJumping();
-}
+void ASSTCharacter::ReleaseJump(){}
 
 bool ASSTCharacter::CanCrouch() const
 {

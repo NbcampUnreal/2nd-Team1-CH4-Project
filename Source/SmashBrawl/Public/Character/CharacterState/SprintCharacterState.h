@@ -15,5 +15,6 @@ class SMASHBRAWL_API USprintCharacterState : public UBaseCharacterState
 	GENERATED_BODY()
 public:
 	virtual void EnterState() override;
+	virtual void TickState() override;
 	USprintCharacterState();
 };

@@ -2,51 +2,70 @@
 
 
 #include "Character/CharacterState/CharacterStateManager.h"
+
+#include "Character/BaseSSTCharacter.h"
 #include "Character/CharacterState/BaseCharacterState.h"
+#include "Character/CharacterState/IdleCharacterState.h"
+#include "Character/CharacterState/JumpCharacterState.h"
+#include "Character/CharacterState/WalkOrRunCharacterState.h"
 #include "Net/UnrealNetwork.h"
 
+
+UCharacterStateManager::UCharacterStateManager()
+{
+	CharacterStates.Add(UIdleCharacterState::StaticClass());
+	CharacterStates.Add(UJumpCharacterState::StaticClass());
+	CharacterStates.Add(UWalkOrRunCharacterState::StaticClass());
+}
 
 void UCharacterStateManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	for (TSubclassOf<UBaseCharacterState> Class : CharacterStates)
 	{
-		if (TObjectPtr<UBaseCharacterState> CharacterState = NewObject<UBaseCharacterState>(this, Class))
+		if (TObjectPtr<UBaseCharacterState> NewState = NewObject<UBaseCharacterState>(this, Class))
 		{
-			CharacterStatePtrs.Add(CharacterState->GetPlayerState(), CharacterState);
+			NewState->OwnerCharacter = Cast<ABaseSSTCharacter>(GetOwner());
+			CharacterStatePtrs.Add(NewState);
 		}
 	}
-	
-	if (const TObjectPtr<UBaseCharacterState>* State = CharacterStatePtrs.Find(EPlayerStates::Idle))
-	{
-		CurrentState = State->Get();
-	}
+
+	//맨 처음 초기상태는 IDLE 로 지정
+	CurrentState = FindState(EPlayerStates::Idle);
 }
 
 void UCharacterStateManager::TickComponent(float DeltaTime, ELevelTick TickType,
-	FActorComponentTickFunction* ThisTickFunction)
+                                           FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	
+	CurrentState->TickState();
 }
 
 void UCharacterStateManager::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	
+
 	DOREPLIFETIME(UCharacterStateManager, CurrentState);
 }
 
 void UCharacterStateManager::ChangeCharacterState(EPlayerStates NewState)
 {
-	if (CurrentState)
+	UBaseCharacterState* NextState = FindState(NewState);
+	if (!NextState)
+		return;
+
+	//다음 상태로 변경을 허용한다면
+	if (NextState->CanState())
 	{
 		CurrentState->ExitState();
-	}
-	if (TObjectPtr<UBaseCharacterState>* CharacterState = CharacterStatePtrs.Find(NewState))
-	{
-		CurrentState = CharacterState->Get();
+		CurrentState = NextState;
 		CurrentState->EnterState();
+	}
+	else //다음 상태로 변경을 허용하지 않는다면 기본 IDLE상태로 유지합니다.
+	{
+		CurrentState = FindState(EPlayerStates::Idle);
 	}
 }
 
@@ -62,4 +81,15 @@ EPlayerStates UCharacterStateManager::GetCurrentState() const
 void UCharacterStateManager::InitializeComponent()
 {
 	Super::InitializeComponent();
+}
+
+UBaseCharacterState* UCharacterStateManager::FindState(EPlayerStates FidState) const
+{
+	for (auto BaseCharacterState : CharacterStatePtrs)
+	{
+		if (BaseCharacterState->PlayerState == FidState)
+			return BaseCharacterState;
+	}
+
+	return nullptr;
 }

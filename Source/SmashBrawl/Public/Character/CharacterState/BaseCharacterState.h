@@ -8,19 +8,31 @@
 #include "UObject/Object.h"
 #include "BaseCharacterState.generated.h"
 
+class ABaseSSTCharacter;
 /**
  * 
  */
-UCLASS()
+UCLASS(Blueprintable, BlueprintType)
 class SMASHBRAWL_API UBaseCharacterState : public UObject, public IInterface_CharacterState
 {
 	GENERATED_BODY()
 
-protected:
-	EPlayerStates PlayerState;	
 public:
 	UBaseCharacterState();
-	EPlayerStates GetPlayerState() const;
+
+public:
 	virtual void EnterState() override;
+	virtual void TickState() override;
 	virtual void ExitState() override;
+
+public:
+	virtual bool CanState() { return true; }
+
+	EPlayerStates GetPlayerState() const;
+
+public:
+	EPlayerStates PlayerState;
+
+	UPROPERTY()
+	ABaseSSTCharacter* OwnerCharacter;
 };

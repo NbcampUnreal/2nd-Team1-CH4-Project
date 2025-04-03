@@ -34,14 +34,11 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ChangeCharacterState(EPlayerStates NewState);
+	
 	UFUNCTION(BlueprintCallable)
 	EPlayerStates GetCurrentState() const;
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
 	TObjectPtr<UCharacterStateManager> StateManager;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
-	TObjectPtr<UAbilityTypeManager> AbilityManager;
-
 };
