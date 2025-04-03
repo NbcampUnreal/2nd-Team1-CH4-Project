@@ -36,6 +36,10 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
 	bool CanState();
 
+	UFUNCTION(BlueprintCallable, Category="Character State")
+	void SetCapsuleSize(float HalfHeight, bool bUpdateOverlap);
+
+
 public:
 	UFUNCTION(blueprintpure, Category = "Character State")
 	EPlayerStates GetPlayerState() const;

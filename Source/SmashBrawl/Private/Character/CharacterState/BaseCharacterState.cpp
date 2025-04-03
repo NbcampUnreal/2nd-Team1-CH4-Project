@@ -2,6 +2,7 @@
 
 #include "Character/StateSystem.h"
 #include "Character/BaseSSTCharacter.h"
+#include "Components/CapsuleComponent.h"
 #include "Net/UnrealNetwork.h"
 
 UBaseCharacterState::UBaseCharacterState()
@@ -36,6 +37,11 @@ void UBaseCharacterState::TickState_Implementation()
 bool UBaseCharacterState::CanState_Implementation()
 {
 	return true;
+}
+
+void UBaseCharacterState::SetCapsuleSize(float HalfHeight, bool bUpdateOverlap)
+{
+	OwnerCharacter->GetCapsuleComponent()->SetCapsuleHalfHeight(HalfHeight, bUpdateOverlap);
 }
 
 EPlayerStates UBaseCharacterState::GetPlayerState() const
