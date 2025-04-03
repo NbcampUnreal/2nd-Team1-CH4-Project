@@ -14,5 +14,5 @@ class SMASHBRAWL_API UShieldTumbleCharacterState : public UBaseCharacterState
 {
 	GENERATED_BODY()
 public:
-	virtual void EnterState() override;
+	UShieldTumbleCharacterState();
 };

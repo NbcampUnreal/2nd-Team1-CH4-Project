@@ -3,9 +3,10 @@
 
 #include "Character/CharacterState/FallCharacterState.h"
 
-void UFallCharacterState::EnterState()
+void UFallCharacterState::EnterState(IInterface_CharacterState* BeforeCharacterState)
 {
-	Super::EnterState();
+	Super::EnterState(BeforeCharacterState);
+	
 }
 
 UFallCharacterState::UFallCharacterState()

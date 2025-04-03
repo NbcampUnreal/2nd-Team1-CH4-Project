@@ -14,6 +14,6 @@ class SMASHBRAWL_API UHeldCharacterState : public UBaseCharacterState
 {
 	GENERATED_BODY()
 public:
-	virtual void EnterState() override;
+	virtual void EnterState(IInterface_CharacterState* BeforeCharacterState) override;
 	UHeldCharacterState();
 };

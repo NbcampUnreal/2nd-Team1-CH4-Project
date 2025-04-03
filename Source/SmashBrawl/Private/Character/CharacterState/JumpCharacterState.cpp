@@ -3,9 +3,13 @@
 
 #include "Character/CharacterState/JumpCharacterState.h"
 
-void UJumpCharacterState::EnterState()
+void UJumpCharacterState::EnterState(IInterface_CharacterState* BeforeCharacterState)
 {
-	Super::EnterState();
+	Super::EnterState(BeforeCharacterState);
+
+	PlayerStateInfo.bCanMove = true;
+	PlayerStateInfo.bCanFlip = false;
+	
 }
 
 UJumpCharacterState::UJumpCharacterState()

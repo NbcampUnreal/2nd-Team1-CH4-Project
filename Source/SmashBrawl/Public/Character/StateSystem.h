@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "CharacterState/IdleCharacterState.h"
 #include "Components/ActorComponent.h"
 #include "Core/SmashTypes.h"
 #include "StateSystem.generated.h"
@@ -31,11 +30,20 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
+	
+	
 	UFUNCTION(BlueprintCallable)
 	void ChangeCharacterState(EPlayerStates NewState);
 	UFUNCTION(BlueprintCallable)
 	EPlayerStates GetCurrentState() const;
+	UFUNCTION(BlueprintCallable)
+	void ChangeAbilityType(EAbilityTypes AbilityTypes);
+	UFUNCTION(BlueprintCallable)
+	EAbilityTypes GetAbilityType() const;
+	UFUNCTION(BlueprintCallable)
+	void ChangeSmashDirection(ESmashDirection SmashDirection);
+	UFUNCTION(BlueprintCallable)
+	ESmashDirection GetSmashDirection() const;
 	
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
@@ -44,4 +52,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
 	TObjectPtr<UAbilityTypeManager> AbilityManager;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
+	ESmashDirection CurrentSmashDirection;
 };

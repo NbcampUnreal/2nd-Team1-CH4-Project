@@ -3,8 +3,7 @@
 
 #include "Character/CharacterState/ShieldTumbleCharacterState.h"
 
-void UShieldTumbleCharacterState::EnterState()
+UShieldTumbleCharacterState::UShieldTumbleCharacterState()
 {
-	Super::EnterState();
-	Super::PlayerState = EPlayerStates::Shield;
+	PlayerState = EPlayerStates::Shield;
 }

@@ -60,3 +60,32 @@ EPlayerStates UStateSystem::GetCurrentState() const
 	return EPlayerStates::Idle;
 }
 
+void UStateSystem::ChangeAbilityType(EAbilityTypes NewState)
+{
+	if (AbilityManager)
+	{
+		AbilityManager->ChangeCurrentAbilityType(NewState);
+	}
+}
+
+EAbilityTypes UStateSystem::GetAbilityType() const
+{
+	if (AbilityManager)
+	{
+		return AbilityManager->GetCurrentAbilityType();
+	}
+	UE_LOG(LogTemp, Error, TEXT("UStateSystem::GetAbilityType Is None"));
+	return EAbilityTypes::None;
+}
+
+ESmashDirection UStateSystem::GetSmashDirection() const
+{
+	return CurrentSmashDirection;
+}
+
+void UStateSystem::ChangeSmashDirection(ESmashDirection SmashDirection)
+{
+	CurrentSmashDirection = SmashDirection;
+}
+
+

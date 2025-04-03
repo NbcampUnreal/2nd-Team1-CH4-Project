@@ -29,5 +29,4 @@ public:
 	UInputAction* SpecialAttackAction;
 
 	virtual void BeginPlay() override;
-
 };

@@ -21,15 +21,19 @@ protected:
 
 public:
 	
+	UFUNCTION(BlueprintCallable)
+	void ChangeCharacterState(EPlayerStates NewState);
+	UFUNCTION(BlueprintCallable)
+	EPlayerStates GetCurrentState() const;
+	UFUNCTION(BlueprintCallable)
+	bool bCanAttack() const;
+
+	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 							   FActorComponentTickFunction* ThisTickFunction) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UFUNCTION(BlueprintCallable)
-	void ChangeCharacterState(EPlayerStates NewState);
-	UFUNCTION(BlueprintCallable)
-	EPlayerStates GetCurrentState() const;
 	virtual void InitializeComponent() override;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates", Replicated)

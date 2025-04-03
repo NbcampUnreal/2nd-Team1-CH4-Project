@@ -3,8 +3,10 @@
 
 #include "Character/CharacterState/BaseCharacterState.h"
 
-UBaseCharacterState::UBaseCharacterState() : PlayerState(EPlayerStates::Idle)
+UBaseCharacterState::UBaseCharacterState()
 {
+	PlayerState = EPlayerStates::Idle;
+	PlayerStateInfo = FCharacterStateInfo();
 }
 
 EPlayerStates UBaseCharacterState::GetPlayerState() const
@@ -12,10 +14,19 @@ EPlayerStates UBaseCharacterState::GetPlayerState() const
 	return PlayerState;
 }
 
-void UBaseCharacterState::EnterState()
+void UBaseCharacterState::EnterState(IInterface_CharacterState* BeforeCharacterState)
 {
+	if (BeforeCharacterState)
+	{
+		PlayerStateInfo = BeforeCharacterState->GetStateInfo();
+	}
 }
 
 void UBaseCharacterState::ExitState()
 {
+}
+
+FCharacterStateInfo UBaseCharacterState::GetStateInfo()
+{
+	return PlayerStateInfo;
 }

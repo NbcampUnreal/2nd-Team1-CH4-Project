@@ -45,8 +45,9 @@ void UCharacterStateManager::ChangeCharacterState(EPlayerStates NewState)
 	}
 	if (TObjectPtr<UBaseCharacterState>* CharacterState = CharacterStatePtrs.Find(NewState))
 	{
-		CurrentState = CharacterState->Get();
-		CurrentState->EnterState();
+		TObjectPtr<UBaseCharacterState> NextCurrentState = CharacterState->Get();
+		NextCurrentState->EnterState(CurrentState);
+		CurrentState = NextCurrentState;
 	}
 }
 
@@ -57,6 +58,15 @@ EPlayerStates UCharacterStateManager::GetCurrentState() const
 		return CurrentState->GetPlayerState();
 	}
 	return EPlayerStates::Idle;
+}
+
+bool UCharacterStateManager::bCanAttack() const
+{
+	if (CurrentState->GetPlayerState() != EPlayerStates::Ability)
+	{
+		return true;
+	}
+	return false;
 }
 
 void UCharacterStateManager::InitializeComponent()

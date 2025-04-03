@@ -15,6 +15,5 @@ class SMASHBRAWL_API UAbilityCharacterState : public UBaseCharacterState
 	GENERATED_BODY()
 	public:
 	UAbilityCharacterState();
-	virtual void EnterState() override;
 
 };

@@ -14,6 +14,5 @@ class SMASHBRAWL_API UDodgeCharacterState : public UBaseCharacterState
 {
 	GENERATED_BODY()
 public:
-	virtual void EnterState() override;
 	UDodgeCharacterState();
 };

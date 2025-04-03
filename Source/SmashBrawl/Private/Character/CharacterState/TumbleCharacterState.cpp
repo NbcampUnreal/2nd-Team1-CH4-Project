@@ -3,9 +3,14 @@
 
 #include "Character/CharacterState/TumbleCharacterState.h"
 
-void UTumbleCharacterState::EnterState()
+void UTumbleCharacterState::EnterState(IInterface_CharacterState* BeforeCharacterState)
 {
-	Super::EnterState();
+	Super::EnterState(BeforeCharacterState);
+	
+	PlayerStateInfo.bCanMove = false;
+	PlayerStateInfo.bCanFlip = true;
+	PlayerStateInfo.bCanAttack = true;
+	PlayerStateInfo.bCanJump = false;
 }
 
 UTumbleCharacterState::UTumbleCharacterState()

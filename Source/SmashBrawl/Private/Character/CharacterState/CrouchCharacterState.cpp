@@ -3,10 +3,12 @@
 
 #include "Character/CharacterState/CrouchCharacterState.h"
 
-void UCrouchCharacterState::EnterState()
+void UCrouchCharacterState::EnterState(IInterface_CharacterState* BeforeCharacterState)
 {
-	Super::EnterState();
-	
+	Super::EnterState(BeforeCharacterState);
+
+	PlayerStateInfo.bCanMove = false;
+	PlayerStateInfo.bCanFlip = false;
 }
 
 UCrouchCharacterState::UCrouchCharacterState()
