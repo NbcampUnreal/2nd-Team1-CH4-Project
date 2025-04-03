@@ -2,9 +2,9 @@
 
 
 #include "Character/StateSystem.h"
-#include "Character/CharacterState/BaseCharacterState.h"
+
+#include "Character/AbilityType/AbilityTypeManager.h"
 #include "Character/CharacterState/CharacterStateManager.h"
-#include "Net/UnrealNetwork.h"
 
 
 // Sets default values for this component's properties
@@ -14,6 +14,8 @@ UStateSystem::UStateSystem()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 	// ...
+	StateManager = CreateDefaultSubobject<UCharacterStateManager>("StateSystem");
+	AbilityManager = CreateDefaultSubobject<UAbilityTypeManager>("AbilityManager");
 }
 
 

@@ -9,6 +9,7 @@
 #include "StateSystem.generated.h"
 
 
+class UAbilityTypeManager;
 class UCharacterStateManager;
 class UBaseCharacterState;
 
@@ -39,8 +40,8 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
 	TObjectPtr<UCharacterStateManager> StateManager;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
-	TObjectPtr<UCharacterStateManager> AbilityManager;
-	
+	TObjectPtr<UAbilityTypeManager> AbilityManager;
+
 };
