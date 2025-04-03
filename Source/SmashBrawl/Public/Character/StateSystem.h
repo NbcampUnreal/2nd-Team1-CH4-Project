@@ -45,11 +45,12 @@ public:
 	void ChangeSmashDirection(ESmashDirection SmashDirection);
 	UFUNCTION(BlueprintCallable)
 	ESmashDirection GetSmashDirection() const;
+
+	UFUNCTION(BlueprintCallable)
+	bool GetSameState(EPlayerStates ChecktoState);
 	
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
-	TObjectPtr<UCharacterStateManager> StateManager;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlayerStates")
 	TObjectPtr<UAbilityTypeManager> AbilityManager;
 

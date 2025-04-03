@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -22,24 +20,26 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 public:
-	virtual void Move(const struct FInputActionValue& Value) override;
-	
-	virtual void CrouchDrop() override;
-	
-	virtual void StopCrouchDrop() override;
-	
-	virtual void JumpOrDrop() override;
-	
-	virtual void Dash() override;
-
-	virtual void ReleaseJump() override;
+	// virtual void Move(const struct FInputActionValue& Value) override;
+	//
+	// virtual void CrouchDrop() override;
+	//
+	// virtual void StopCrouchDrop() override;
+	//
+	// virtual void JumpOrDrop() override;
+	//
+	// virtual void Dash() override;
+	//
+	// virtual void ReleaseJump() override;
 
 	virtual bool CanJumpInternal_Implementation() const override;
 
 	UFUNCTION()
 	void BaseAttack();
+	
 	UFUNCTION()
 	void SpecialAttack();
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
 	TObjectPtr<class UStateSystem> StateSystem;
@@ -49,7 +49,7 @@ public:
 
 	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
 	// FCharacterStateInfo PlayerStateInfo;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter", Replicated)
 	bool bCanMove = true;
 
@@ -58,8 +58,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="BaseSSTCharacter")
 	bool bJumpButton = false;
-
-	
-
-	
 };

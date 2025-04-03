@@ -1,33 +1,52 @@
-// 
-
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Character/CharacterState/CharacterStateInterface.h"
 #include "Core/SmashTypes.h"
-#include "Components/ActorComponent.h"
+#include "UObject/Object.h"
 #include "BaseCharacterState.generated.h"
 
+class UStateSystem;
 class ABaseSSTCharacter;
 /**
  * 
  */
 UCLASS()
-class SMASHBRAWL_API UBaseCharacterState : public UActorComponent, public IInterface_CharacterState
+class SMASHBRAWL_API UBaseCharacterState : public UObject
 {
 	GENERATED_BODY()
-	
+
 public:
 	UBaseCharacterState();
-	
-	EPlayerStates GetPlayerState() const;
-	virtual void EnterState(IInterface_CharacterState* BeforeCharacterState) override;
-	virtual void ExitState() override;
-	virtual void TickState() override;
-	virtual FCharacterStateInfo GetStateInfo() override;
-	virtual bool CanState() override;
+
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
-protected:
+
+public:
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
+	void InitState(UStateSystem* InStateSystem);
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
+	void EnterState();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
+	void ExitState();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
+	void TickState();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
+	bool CanState();
+
+public:
+	UFUNCTION(blueprintpure, Category = "Character State")
+	EPlayerStates GetPlayerState() const;
+
+private:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State", meta=(AllowPrivateAccess=true))
 	EPlayerStates PlayerState;
-	FCharacterStateInfo PlayerStateInfo;
+
+	UPROPERTY(BlueprintReadWrite, Category="Character State", meta=(AllowPrivateAccess=true))
+	TObjectPtr<UStateSystem> OwnerStateSystem;
+
+	UPROPERTY(BlueprintReadWrite, Category="Character State", meta=(AllowPrivateAccess=true))
+	TObjectPtr<ABaseSSTCharacter> OwnerCharacter;
 };

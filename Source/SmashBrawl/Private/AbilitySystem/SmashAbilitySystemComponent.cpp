@@ -9,7 +9,7 @@ USmashAbilitySystemComponent::USmashAbilitySystemComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 
@@ -309,7 +309,7 @@ void USmashAbilitySystemComponent::Multicast_BasicAttack_Implementation()
 		EAttacks::TiltForward, // 앞쪽 공격 타입
 		EAttacks::TiltForward, // 뒤쪽 공격 타입
 		EAttacks::Neutral // 중립 공격 타입
-	);
+	);	
 }
 
 void USmashAbilitySystemComponent::Multicast_SpecialAttack_Implementation()
@@ -411,7 +411,6 @@ void USmashAbilitySystemComponent::Multicast_Taunts_Implementation()
 void USmashAbilitySystemComponent::Multicast_Throw_Implementation()
 {
 	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
-
 	switch (CurrentDirection)
 	{
 	case ESmashDirection::Up:
@@ -433,7 +432,6 @@ void USmashAbilitySystemComponent::Multicast_Throw_Implementation()
 void USmashAbilitySystemComponent::Multicast_Prone_Implementation()
 {
 	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
-
 	switch (CurrentDirection)
 	{
 	case ESmashDirection::Up:
@@ -455,8 +453,6 @@ void USmashAbilitySystemComponent::Multicast_Respawning_Implementation()
 void USmashAbilitySystemComponent::Multicast_WitchAbility_Implementation()
 {
 	const EAbilityTypes CurrentAbilityTypes = IInterface_SmashCombat::Execute_GetAbilityTypes(Parent);
-
-	// 현재 능력 타입에 따라 적절한 함수 호출
 	switch (CurrentAbilityTypes)
 	{
 	case EAbilityTypes::Basic:

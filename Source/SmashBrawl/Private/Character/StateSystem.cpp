@@ -4,7 +4,6 @@
 #include "Character/StateSystem.h"
 
 #include "Character/AbilityType/AbilityTypeManager.h"
-#include "Character/CharacterState/CharacterStateManager.h"
 
 
 // Sets default values for this component's properties
@@ -14,7 +13,6 @@ UStateSystem::UStateSystem()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 	// ...
-	StateManager = CreateDefaultSubobject<UCharacterStateManager>("CharacterStateManager");
 }
 
 
@@ -24,9 +22,7 @@ void UStateSystem::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-
 }
-
 
 // Called every frame
 void UStateSystem::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -44,18 +40,11 @@ void UStateSystem::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& O
 
 void UStateSystem::ChangeCharacterState(EPlayerStates NewState)
 {
-	if (StateManager)
-	{
-		StateManager->ChangeCharacterState(NewState);
-	}
+
 }
 
 EPlayerStates UStateSystem::GetCurrentState() const
 {
-	if (StateManager)
-	{
-		return StateManager->GetCurrentState();
-	}
 	return EPlayerStates::Idle;
 }
 
@@ -80,6 +69,11 @@ EAbilityTypes UStateSystem::GetAbilityType() const
 ESmashDirection UStateSystem::GetSmashDirection() const
 {
 	return CurrentSmashDirection;
+}
+
+bool UStateSystem::GetSameState(EPlayerStates ChecktoState)
+{
+	return GetCurrentState() == ChecktoState;
 }
 
 void UStateSystem::ChangeSmashDirection(ESmashDirection SmashDirection)
