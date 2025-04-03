@@ -1,5 +1,5 @@
 
 
 
-#include "Charactor/BaseSSTCharacter.h"
+#include "SmashBrawl/Public/Character//BaseSSTCharacter.h"
 
