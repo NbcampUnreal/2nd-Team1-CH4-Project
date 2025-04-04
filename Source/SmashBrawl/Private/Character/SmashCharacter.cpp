@@ -1,6 +1,7 @@
 #include "SmashBrawl/Public/Character//SmashCharacter.h"
 
 
+#include "EnhancedInputComponent.h"
 #include "AbilitySystem/BaseAbility.h"
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
 #include "Actors/Shield.h"
@@ -53,6 +54,7 @@ void ASmashCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>
 	DOREPLIFETIME(ASmashCharacter, PlayerNo);
 	DOREPLIFETIME(ASmashCharacter, bAttachedAbil);
 	DOREPLIFETIME(ASmashCharacter, Team);
+	DOREPLIFETIME(ASmashCharacter, MoveInputValue);
 }
 
 void ASmashCharacter::BeginPlay()
@@ -68,7 +70,13 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// 추가 입력 바인딩이 필요한 경우 여기에 구현
+
+	// 추가 입력 바인딩
+	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
+	{
+		// 이동 액션 Completed 이벤트에 바인딩 추가
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ASmashCharacter::ResetMoveInput);
+	}
 }
 
 void ASmashCharacter::StartUp()
@@ -113,7 +121,7 @@ void ASmashCharacter::StartUp()
 		AttachShield();
 
 		// 이동 상태 초기화
-		SetMovementState(FSmashPlayerMovement(false, false, false, false));
+		SetMovementState(FSmashPlayerMovement(false, false, false, true));
 
 		// 능력 시스템 초기화 및 널 체크
 		if (AbilitySystemComponent)
@@ -271,6 +279,8 @@ void ASmashCharacter::Tick(float DeltaSeconds)
 	// 널 체크 추가된 각 기능 호출
 	FacingCheck();
 	SprintCheck();
+
+
 	SmashDetection();
 	UpdateLocations();
 	UpdateFlashing();
@@ -309,6 +319,11 @@ void ASmashCharacter::FacingCheck()
 // 미구현된 함수들의 기본 구현
 void ASmashCharacter::SprintCheck()
 {
+	// 나 레프트나 라이트 입력값이 눌렸어. 현재 상태가 IDLE 거나 WALK /RUN 다음로직을 실행한다.
+	//발자국이펙트를 생성하고
+	//상태를 Sprint로 바꾼다.
+
+
 	// TODO: 달리기 상태 확인 및 처리
 	// 예시 구현:
 	// if (!IsInitialized() || !SmashCharacterMovementComponent) return;
@@ -377,6 +392,23 @@ void ASmashCharacter::UpdateStates()
 	// if (!IsInitialized() || !StateSystem) return;
 	// 
 	// 현재 상태에 따른 추가 처리
+}
+
+void ASmashCharacter::Move(const struct FInputActionValue& Value)
+{
+	if (Controller && SmashCharacterMovementComponent)
+	{
+		// 입력값 저장
+		MoveInputValue = Value.Get<float>();
+
+		// 기존 이동 로직
+		SmashCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MoveInputValue);
+	}
+}
+
+void ASmashCharacter::ResetMoveInput(const FInputActionValue& Value)
+{
+	MoveInputValue = 0.0f;
 }
 
 void ASmashCharacter::SetMovementState(FSmashPlayerMovement SetMovement)
