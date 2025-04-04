@@ -107,3 +107,12 @@ enum class ESmashDirection : uint8
 	Forward UMETA(DisplayName = "Forward"),
 	None UMETA(DisplayName = "None")
 };
+
+UENUM(BlueprintType)
+enum class ESmashBossState : uint8
+{
+	Phase1 UMETA(DisplayName = "Phase1"),
+	ChangingPhase UMETA(DisplayName = "ChangingPhase"),
+	Phase2 UMETA(DisplayName = "Phase2"),
+	Dead UMETA(DisplayName = "Dead"),
+};

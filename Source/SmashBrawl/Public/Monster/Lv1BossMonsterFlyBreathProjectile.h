@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Lv1BossMonsterBreathProjectile.generated.h"
+#include "Lv1BossMonsterFlyBreathProjectile.generated.h"
 
 UCLASS()
-class SMASHBRAWL_API ALv1BossMonsterBreathProjectile : public AActor
+class SMASHBRAWL_API ALv1BossMonsterFlyBreathProjectile : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	ALv1BossMonsterBreathProjectile();
+	ALv1BossMonsterFlyBreathProjectile();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class USceneComponent* RootComp;
@@ -35,9 +35,8 @@ public:
 
 protected:
 	UFUNCTION()
-	void OnProjectileOverlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-							bool bFromSweep, const FHitResult& SweepResult);
+	void OnProjectileOverlapped(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
 public:
 	
 	FORCEINLINE float GetDamage() const { return Damage; }
