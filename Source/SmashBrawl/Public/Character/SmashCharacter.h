@@ -85,7 +85,7 @@ public:
 
 	virtual void Move(const struct FInputActionValue& Value) override;
 	void ResetMoveInput(const FInputActionValue& Value);
-	
+
 public:
 	UFUNCTION(BlueprintCallable, Category="Smash Character|Movement")
 	void SetMovementState(FSmashPlayerMovement SetMovement);
