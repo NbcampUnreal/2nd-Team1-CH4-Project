@@ -5,6 +5,7 @@
 
 #include "Components/SphereComponent.h"
 #include "Layers/LayersSubsystem.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ABaseBossMonster::ABaseBossMonster()
@@ -22,6 +23,13 @@ ABaseBossMonster::ABaseBossMonster()
 	Tags.Add("Boss");
 }
 
+void ABaseBossMonster::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ABaseBossMonster, BossState);
+	DOREPLIFETIME(ABaseBossMonster, bIsAttacking);
+}
 
 
 void ABaseBossMonster::PerformAttack_Implementation(int32 MontageIndex)

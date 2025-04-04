@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BaseBossMonster.h"
 #include "Monster/Lv1BossMonsterBreathProjectile.h"
+#include "Monster/Lv1BossMonsterMeteor.h"
 #include "Lv1BossMonster.generated.h"
 
 UCLASS()
@@ -18,6 +19,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TSubclassOf<ALv1BossMonsterBreathProjectile> BreathProjectile;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ALv1BossMonsterMeteor> FlyBreathProjectile;
 	
 	UFUNCTION(Server, Reliable)
 	void Server_BreathAttack() const;

@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "Lv1BossMonsterBreathProjectile.generated.h"
 
 UCLASS()
@@ -14,6 +16,8 @@ class SMASHBRAWL_API ALv1BossMonsterBreathProjectile : public AActor
 public:
 	// Sets default values for this actor's properties
 	ALv1BossMonsterBreathProjectile();
+
+	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class USceneComponent* RootComp;
@@ -27,8 +31,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UProjectileMovementComponent* ProjectileComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	class UParticleSystem* HitParticle;
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	UNiagaraComponent* NiagaraTrailEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UNiagaraSystem* NiagaraStartEffectTemplate;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UNiagaraSystem* NiagaraEffectTemplate;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UNiagaraSystem* NiagaraDestroyEffectTemplate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float Damage;

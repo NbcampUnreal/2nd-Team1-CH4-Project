@@ -5,6 +5,7 @@
 
 #include "Components/SphereComponent.h"
 #include "Monster/Lv1BossMonsterBreathProjectile.h"
+#include "Monster/Lv1BossMonsterMeteor.h"
 
 
 // Sets default values
@@ -16,9 +17,9 @@ ALv1BossMonster::ALv1BossMonster()
 
 void ALv1BossMonster::Server_FlyBreathAttack_Implementation() const
 {
-	FVector SpawnLocation = HeadCollision->GetComponentLocation() + FVector(50, 0, 0);
-	FRotator SpawnRotation = FRotator(FMath::RandRange(-90, -90), 90, 0);
-	GetWorld()->SpawnActor<ALv1BossMonsterBreathProjectile>(BreathProjectile, SpawnLocation, SpawnRotation);
+	// FVector SpawnLocation = HeadCollision->GetComponentLocation() + FVector(50, 0, 0);
+	// FRotator SpawnRotation = FRotator(FMath::RandRange(-90, -90), 90, 0);
+	// GetWorld()->SpawnActor<ALv1BossMonsterMeteor>(FlyBreathProjectile, SpawnLocation, SpawnRotation);
 }
 
 void ALv1BossMonster::Server_BiteAttack_Implementation() const
@@ -29,9 +30,10 @@ void ALv1BossMonster::Server_BiteAttack_Implementation() const
 //이 아래는 각 공격 구현 목록
 void ALv1BossMonster::Server_BreathAttack_Implementation() const
 {
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
-		FVector SpawnLocation = HeadCollision->GetComponentLocation() + FVector(50, 0, 0);
+		FVector HeadLocation = HeadCollision->GetComponentLocation();
+		FVector SpawnLocation = FVector(0, HeadLocation.Y, HeadLocation.Z);
 		FRotator SpawnRotation = FRotator(FMath::RandRange(0, 360), 90, 0);
 		GetWorld()->SpawnActor<ALv1BossMonsterBreathProjectile>(BreathProjectile, SpawnLocation, SpawnRotation);
 	}

@@ -39,11 +39,39 @@ ALv1BossMonsterBreathProjectile::ALv1BossMonsterBreathProjectile()
 	Damage = 10.0f;
 
 	Tags.Add("Projectile");
+
+	NiagaraTrailEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailEffect"));
+	NiagaraTrailEffect->SetupAttachment(RootComponent);
+	NiagaraTrailEffect->bAutoActivate = false;
+}
+
+void ALv1BossMonsterBreathProjectile::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (NiagaraStartEffectTemplate)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			NiagaraStartEffectTemplate,
+			GetActorLocation(),
+			GetActorRotation(),
+			FVector(5.0f, 5.0f, 5.0f) 
+		);
+	}
+
+	
+	if (NiagaraEffectTemplate)
+	{
+		NiagaraTrailEffect->Activate();
+		NiagaraTrailEffect->SetAsset(NiagaraEffectTemplate);
+	}
+	
 }
 
 void ALv1BossMonsterBreathProjectile::OnProjectileOverlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
-							bool bFromSweep, const FHitResult& SweepResult)
+                                                             UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+                                                             bool bFromSweep, const FHitResult& SweepResult)
 {
 
 	if (OtherActor)
@@ -61,8 +89,25 @@ void ALv1BossMonsterBreathProjectile::Destroyed()
 {
 	Super::Destroyed();
 
-	if (HitParticle)
+	if (NiagaraStartEffectTemplate)
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, GetActorLocation(), FRotator::ZeroRotator, true);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			NiagaraStartEffectTemplate,
+			GetActorLocation(),
+			GetActorRotation(),
+			FVector(5.0f, 5.0f, 5.0f) 
+		);
+	}
+	
+	if (NiagaraDestroyEffectTemplate)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			NiagaraDestroyEffectTemplate,
+			GetActorLocation(),
+			GetActorRotation(),
+			FVector(5.0f, 5.0f, 5.0f) 
+		);
 	}
 }
