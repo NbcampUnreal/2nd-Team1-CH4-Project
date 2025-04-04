@@ -1,11 +1,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "SSTCharacter.h"
-#include "Core/SmashPlatFighterGameMode.h"
 #include "Core/SmashTypes.h"
 #include "SmashCharacter.generated.h"
 
+class ASmashPlatFighterGameMode;
 class UFXComponent;
 class AShield;
 class ASmashGameState;
@@ -28,13 +29,14 @@ class SMASHBRAWL_API ASmashCharacter : public ASSTCharacter
 public:
 	ASmashCharacter(const FObjectInitializer& ObjectInitializer);
 
-	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;	
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 protected:
 	virtual void BeginPlay() override;
 
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
 	// 초기화 함수 개선
 	UFUNCTION()
 	void StartUp();
@@ -49,29 +51,49 @@ protected:
 	void AttachShield();
 
 	void UpdateCamera();
-	
+
 public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	// 방향 체크 및 업데이트
 	void FacingCheck();
-	
+
 	// 이전에 없던 함수들을 구현
 	void SprintCheck();
+
+	//이동 입력 값이 없으면
+
+
 	void SmashDetection();
 	void UpdateLocations();
 	void UpdateFlashing();
 	void UpdateWalkRun();
 	void UpdateStates();
+
+public:
+	// 이동 입력값 접근 함수
+	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
+	float GetMoveInputValue() const { return MoveInputValue; }
+
+	// 이동 입력 존재 여부 확인 함수
+	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
+	bool HasMoveInput() const { return !FMath::IsNearlyZero(MoveInputValue); }
+
+	// 이동 방향 확인 함수 (오른쪽 방향인지)
+	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
+	bool IsMovingRight() const { return MoveInputValue > 0.0f; }
+
+	virtual void Move(const struct FInputActionValue& Value) override;
+	void ResetMoveInput(const FInputActionValue& Value);
 	
 public:
-	UFUNCTION(BlueprintCallable,Category="Smash Character|Movement")
+	UFUNCTION(BlueprintCallable, Category="Smash Character|Movement")
 	void SetMovementState(FSmashPlayerMovement SetMovement);
-	
+
 	// 방향 전환만 활성화/비활성화 - 권한 체크 강화
 	UFUNCTION(BlueprintCallable, Category = "Smash Character|Movement")
 	void SetCanFlip(bool bNewCanFlip);
-    
+
 	// 현재 방향 전환 가능 상태 확인
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Movement")
 	bool CanFlip() const;
@@ -79,11 +101,11 @@ public:
 	// 서버 RPC 함수
 	UFUNCTION(Server, Reliable)
 	void Server_SetCanFlip(bool bNewCanFlip);
-	
+
 	// 클라이언트 RPC 함수 추가 - 상태 정보 변경 전파
 	UFUNCTION(Client, Reliable)
 	void Client_UpdateStateInfo(const FSmashPlayerStateInfo& NewStateInfo);
-	
+
 public:
 	// StateInfo 접근자 추가
 	UFUNCTION(BlueprintPure, Category = "Smash Character|State")
@@ -113,7 +135,7 @@ public:
 	/** 커스텀 캐릭터 이동 컴포넌트 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category ="Smash Character|Component")
 	TObjectPtr<class USmashCharacterMovementComponent> SmashCharacterMovementComponent;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character|Component")
 	TObjectPtr<class UStateSystem> StateSystem;
 
@@ -122,9 +144,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character|Component")
 	TObjectPtr<UWidgetComponent> WidgetComponent;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character|Component")
-	TObjectPtr< UFXComponent> FXComponent;
+	TObjectPtr<UFXComponent> FXComponent;
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	TObjectPtr<USmashGameInstance> SmashGameInstance;
@@ -137,7 +159,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config")
 	TSubclassOf<AShield> ShieldClass;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config")
 	FName ShieldSocket;
 
@@ -168,7 +190,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	AShield* Shield;
-	
+
+protected:
+	// 현재 이동 입력값 (네트워크 복제됨)
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Smash Character|Input")
+	float MoveInputValue;
+
 private:
 	// 초기화 완료 여부 추적
 	bool bInitialized;
@@ -176,8 +203,9 @@ private:
 	// 기본 FX 속성 추가
 	UPROPERTY(EditAnywhere, Category="Smash Character|FX")
 	float FlashDuration;
-    
+
 	// 캐릭터 상태 추적 변수들
 	float FlashTimeRemaining;
 	bool bIsFlashing;
 };
+

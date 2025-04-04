@@ -29,7 +29,7 @@ protected:
 	 * 이동 입력에 대한 처리
 	 * @param Value - 입력 액션 값, 좌우 이동의 방향과 강도 결정
 	 */
-	void Move(const struct FInputActionValue& Value);
+	virtual  void Move(const struct FInputActionValue& Value);
 
 	/** 
 	 * 웅크리기/낙하 입력에 대한 처리
