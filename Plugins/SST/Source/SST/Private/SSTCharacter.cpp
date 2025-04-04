@@ -67,13 +67,21 @@ void ASSTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ASSTCharacter::Move(const FInputActionValue& Value){}
 
-void ASSTCharacter::CrouchDrop(){}
+void ASSTCharacter::CrouchDrop_Implementation()
+{
+}
 
-void ASSTCharacter::StopCrouchDrop(){}
+void ASSTCharacter::StopCrouchDrop_Implementation()
+{
+}
 
-void ASSTCharacter::JumpOrDrop(){}
+void ASSTCharacter::JumpOrDrop_Implementation()
+{
+}
 
-void ASSTCharacter::Dash(){}
+void ASSTCharacter::Dash_Implementation()
+{
+}
 
 bool ASSTCharacter::CanDash_Implementation() const
 {
@@ -83,7 +91,9 @@ bool ASSTCharacter::CanDash_Implementation() const
 	return true;
 }
 
-void ASSTCharacter::ReleaseJump(){}
+void ASSTCharacter::ReleaseJump_Implementation()
+{
+}
 
 bool ASSTCharacter::CanCrouch() const
 {
