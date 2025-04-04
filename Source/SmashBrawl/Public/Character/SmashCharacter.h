@@ -4,8 +4,10 @@
 #include "InputActionValue.h"
 #include "SSTCharacter.h"
 #include "Core/SmashTypes.h"
+#include "Core/SmashUitilityLibrary.h"
 #include "SmashCharacter.generated.h"
 
+class USmashCharacterStats;
 class ASmashPlatFighterGameMode;
 class UFXComponent;
 class AShield;
@@ -14,6 +16,7 @@ class USmashGameInstance;
 class ABaseAbility;
 class UWidgetComponent;
 class UStateSystem;
+class UParticleSystem;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogSmashCharacter, Log, All);
 
@@ -34,7 +37,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	
+
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	// 초기화 함수 개선
@@ -55,37 +58,34 @@ protected:
 public:
 	virtual void Tick(float DeltaSeconds) override;
 
-	// 방향 체크 및 업데이트
 	void FacingCheck();
 
-	// 이전에 없던 함수들을 구현
-	void SprintCheck();
+	UFUNCTION(NetMulticast, Unreliable)
+	void Multicast_SmashDetection();
 
-	//이동 입력 값이 없으면
-
-
-	void SmashDetection();
 	void UpdateLocations();
+
 	void UpdateFlashing();
-	void UpdateWalkRun();
-	void UpdateStates();
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Movement")
+	void SpawnFeetFX();
 
 public:
-	// 이동 입력값 접근 함수
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	float GetMoveInputValue() const { return MoveInputValue; }
 
-	// 이동 입력 존재 여부 확인 함수
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	bool HasMoveInput() const { return !FMath::IsNearlyZero(MoveInputValue); }
 
-	// 이동 방향 확인 함수 (오른쪽 방향인지)
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	bool IsMovingRight() const { return MoveInputValue > 0.0f; }
 
 	virtual void Move(const struct FInputActionValue& Value) override;
+
+	virtual void JumpOrDrop_Implementation() override;
+
 	void ResetMoveInput(const FInputActionValue& Value);
-	
+
 public:
 	UFUNCTION(BlueprintCallable, Category="Smash Character|Movement")
 	void SetMovementState(FSmashPlayerMovement SetMovement);
@@ -135,6 +135,9 @@ public:
 	/** 커스텀 캐릭터 이동 컴포넌트 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category ="Smash Character|Component")
 	TObjectPtr<class USmashCharacterMovementComponent> SmashCharacterMovementComponent;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category ="Smash Character|Component")
+	TObjectPtr<USmashCharacterStats> SmashCharacterStatsComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character|Component")
 	TObjectPtr<class UStateSystem> StateSystem;
@@ -162,6 +165,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config")
 	FName ShieldSocket;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config")
+	UParticleSystem* SprintFX;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Cosmetics")
 	TArray<TObjectPtr<UMaterialInstance>> TeamOptionMaterials;
@@ -169,6 +175,24 @@ public:
 	// BaseCharacterState에서 옮겨온 StateInfo
 	UPROPERTY(ReplicatedUsing=OnRep_StateInfo, BlueprintReadWrite, Category="Smash Character|State")
 	FSmashPlayerStateInfo StateInfo;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	bool bFlashing;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	bool bIsSmashFlash;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character")
+	float InvonFlash;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character")
+	float SmashFlash;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character")
+	float HitFlash;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character")
+	float FreeFallFlash;
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	bool bAttachedAbil = false;
@@ -178,6 +202,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	ESmashCharacter Character;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	ESmashHitState HitStates;
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	int32 Team;
@@ -191,21 +218,37 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	AShield* Shield;
 
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	ESmashDirection Direction;
+	
+
 protected:
-	// 현재 이동 입력값 (네트워크 복제됨)
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Smash Character|Input")
 	float MoveInputValue;
+
+	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Smash Character|Input")
+	float UpDownInputValue;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	FVector Location;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	float YPos;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	float ZPos;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	float FootZPos;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	FVector LocationFeet;
 
 private:
 	// 초기화 완료 여부 추적
 	bool bInitialized;
 
-	// 기본 FX 속성 추가
-	UPROPERTY(EditAnywhere, Category="Smash Character|FX")
-	float FlashDuration;
-
-	// 캐릭터 상태 추적 변수들
-	float FlashTimeRemaining;
-	bool bIsFlashing;
+	FDoOnce DoOnceMoveDirection;
+	FDoOnce DoOnceUpDirection;
+	FDoOnce DoOnceDownDirection;
 };
-

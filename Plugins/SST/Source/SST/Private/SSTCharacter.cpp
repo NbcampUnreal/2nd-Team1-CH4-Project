@@ -178,7 +178,7 @@ void ASSTCharacter::CheckJumpInput(float DeltaTime)
 					JumpCurrentCount++;
 				}
 
-				const bool bDidJump = CanJump() && SSTCharacterMovementComponent->DoJump(bClientUpdating,DeltaTime);
+				const bool bDidJump = CanJump() && SSTCharacterMovementComponent->DoJump(bClientUpdating, DeltaTime);
 				if (bDidJump)
 				{
 					// Transition from not (actively) jumping to jumping.
@@ -206,4 +206,9 @@ FCollisionQueryParams ASSTCharacter::GetIgnoreSelfParams() const
 	Params.AddIgnoredActor(this);
 
 	return Params;
+}
+
+bool ASSTCharacter::IsFacingRight()
+{
+	return SSTCharacterMovementComponent->IsFacingRight();
 }

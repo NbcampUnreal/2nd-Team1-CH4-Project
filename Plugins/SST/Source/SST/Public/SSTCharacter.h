@@ -136,6 +136,9 @@ public:
 	 */
 	virtual FCollisionQueryParams GetIgnoreSelfParams() const;
 
+	UFUNCTION(BlueprintCallable,Category="Movement")
+	bool IsFacingRight();
+
 public:
 	/** 커스텀 캐릭터 이동 컴포넌트 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
