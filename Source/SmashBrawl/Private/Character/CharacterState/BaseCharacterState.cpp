@@ -62,6 +62,7 @@ void UBaseCharacterState::OnRep_StateInfo()
 	// 자식 클래스에서 필요시 구현
 }
 
+
 void UBaseCharacterState::SetStateInfo(const FPlayerStateInfo& NewStateInfo)
 {
 	// 서버에서만 상태 정보 변경
@@ -70,6 +71,8 @@ void UBaseCharacterState::SetStateInfo(const FPlayerStateInfo& NewStateInfo)
 		StateInfo = NewStateInfo;
 		OnRep_StateInfo();
 	}
+}
+
 void UBaseCharacterState::SetCapsuleSize(float HalfHeight, bool bUpdateOverlap)
 {
 	OwnerCharacter->GetCapsuleComponent()->SetCapsuleHalfHeight(HalfHeight, bUpdateOverlap);
