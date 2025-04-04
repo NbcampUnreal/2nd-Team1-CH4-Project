@@ -7,7 +7,7 @@
 #include "AbilityTypeManager.generated.h"
 
 
-enum class EAbilityTypes : uint8;
+enum class ESmashAbilityTypes : uint8;
 class UBaseAbilityType;
 class IInterface_AbilityTypeInterface;
 
@@ -29,8 +29,8 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
-	void ChangeCurrentAbilityType(EAbilityTypes AbilityTypes);
-	EAbilityTypes GetCurrentAbilityType() const;
+	void ChangeCurrentAbilityType(ESmashAbilityTypes AbilityTypes);
+	ESmashAbilityTypes GetCurrentAbilityType() const;
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability Type", Replicated)
@@ -38,5 +38,5 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability Type")
 	TArray<TSubclassOf<UBaseAbilityType>> ValidAbilityTypeClasses;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ability Type")
-	TMap<EAbilityTypes, TObjectPtr<UBaseAbilityType>> ValidAbilityTypePtrs;
+	TMap<ESmashAbilityTypes, TObjectPtr<UBaseAbilityType>> ValidAbilityTypePtrs;
 };

@@ -6,7 +6,20 @@
 
 
 UENUM(BlueprintType)
-enum class EPlayerStates : uint8
+enum class ESmashCharacter : uint8
+{
+	None UMETA(DisplayName = "None"),
+	Fighter UMETA(DisplayName = "Fighter"),
+	SwordMan UMETA(DisplayName = "SwordMan"),
+	Gunner UMETA(DisplayName = "Gunner"),
+	Hats UMETA(DisplayName = "Hats"),
+	Mage UMETA(DisplayName = "Mage"),
+	Bob UMETA(DisplayName = "Bob"),
+	Random UMETA(DisplayName = "Random")
+};
+
+UENUM(BlueprintType)
+enum class ESmashPlayerStates : uint8
 {
 	Idle UMETA(DisplayName = "Idle"),
 	WalkAndRun UMETA(DisplayName = "Walk/Run"),
@@ -31,9 +44,8 @@ enum class EPlayerStates : uint8
 	Hold UMETA(DisplayName = "Hold")
 };
 
-
 UENUM(BlueprintType)
-enum class EAttacks : uint8
+enum class ESmashAttacks : uint8
 {
 	TiltUp UMETA(DisplayName = "Tilt Up"),
 	TiltDown UMETA(DisplayName = "Tilt Down"),
@@ -69,7 +81,7 @@ enum class EAttacks : uint8
 };
 
 UENUM(BlueprintType)
-enum class EAbilityTypes : uint8
+enum class ESmashAbilityTypes : uint8
 {
 	None UMETA(DisplayName = "None"),
 	Basic UMETA(DisplayName = "Basic"),
@@ -96,7 +108,6 @@ enum class ESmashBuffer : uint8
 	None UMETA(DisplayName = "None")
 };
 
-
 UENUM(BlueprintType)
 enum class ESmashDirection : uint8
 {
@@ -105,4 +116,41 @@ enum class ESmashDirection : uint8
 	Back UMETA(DisplayName = "Back"),
 	Forward UMETA(DisplayName = "Forward"),
 	None UMETA(DisplayName = "None")
+};
+
+USTRUCT(BlueprintType)
+struct FSmashPlayerMovement
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Movement")
+	bool bCanAttack = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Movement")
+	bool bCanMove = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Movement")
+	bool bCanJump = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Movement")
+	bool bCanFlipping = true;
+
+	FSmashPlayerMovement() : bCanAttack(false), bCanMove(true), bCanJump(true), bCanFlipping(true)
+	{
+	}
+
+	FSmashPlayerMovement(bool InCanAttack, bool InCanMove, bool InCanJump, bool InCanFlipping) : bCanAttack(InCanAttack), bCanMove(InCanMove), bCanJump(InCanJump), bCanFlipping(InCanFlipping)
+	{
+	}
+};
+
+USTRUCT(BlueprintType)
+struct FSmashPlayerStateInfo
+{
+	GENERATED_BODY()
+
+	// 액션 가능 여부 플래그
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
+	FSmashPlayerMovement PlayerMovement;
+	
 };

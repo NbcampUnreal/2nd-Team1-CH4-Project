@@ -6,36 +6,14 @@
 #include "BaseCharacterState.generated.h"
 
 class UStateSystem;
-class ABaseSSTCharacter;
+class ASmashCharacter;
 
-// 상태별 추가 정보를 위한 구조체 (네트워크 복제를 위함)
-USTRUCT(BlueprintType)
-struct FPlayerStateInfo
-{
-	GENERATED_BODY()
 
-	// 액션 가능 여부 플래그
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
-	bool bCanAttack = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
-	bool bCanMove = true;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
-	bool bCanJump = true;
-
-	// // 디버프 효과 정보
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
-	// bool bHasSlowDebuff = false;
-	//
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
-	// bool bHasBlindDebuff = false;
-	//
-	// // 디버프 지속 시간
-	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
-	// float DebuffDuration = 0.0f;
-};
-
+/**
+ * 캐릭터 상태를 나타내는 기본 클래스
+ * UObject를 상속받기 때문에 네트워크 복제에 직접 사용하지 않고,
+ * 상태 ID와 데이터만 복제하는 방식으로 변경
+ */
 UCLASS()
 class SMASHBRAWL_API UBaseCharacterState : public UObject
 {
@@ -44,53 +22,49 @@ class SMASHBRAWL_API UBaseCharacterState : public UObject
 public:
 	UBaseCharacterState();
 
-	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
-
 public:
+	// 상태 초기화 - StateSystem과 연결
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
 	void InitState(UStateSystem* InStateSystem);
 
+	// 상태 진입 시 호출
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
 	void EnterState();
 
+	// 상태 종료 시 호출
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
 	void ExitState();
 
+	// 상태 업데이트 시 호출
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
 	void TickState();
 
+	// 이 상태로 진입 가능한지 확인
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
 	bool CanState();
 
-	// 상태 정보 변경 시 호출될 함수
-	UFUNCTION()
-	virtual void OnRep_StateInfo();
-	UFUNCTION(BlueprintCallable, Category="Character State")
-	void SetCapsuleSize(float HalfHeight, bool bUpdateOverlap);
-
-
-public:
+	// 상태 ID 반환
 	UFUNCTION(BlueprintPure, Category = "Character State")
-	EPlayerStates GetPlayerState() const;
+	ESmashPlayerStates GetPlayerState() const;
 
-	// 상태 정보 getter/setter
+	// 캐릭터의 상태 정보에 접근
 	UFUNCTION(BlueprintPure, Category = "Character State")
-	const FPlayerStateInfo& GetStateInfo() const { return StateInfo; }
+	const FSmashPlayerStateInfo& GetStateInfo() const;
 
+	// 캐릭터의 상태 정보 설정 - 서버 권한 확인 추가
 	UFUNCTION(BlueprintCallable, Category = "Character State")
-	void SetStateInfo(const FPlayerStateInfo& NewStateInfo);
+	void SetStateInfo(const FSmashPlayerStateInfo& NewStateInfo);
 
 protected:
+	// 이 상태의 ID
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
-	EPlayerStates PlayerState;
+	ESmashPlayerStates PlayerState;
 
+	// 소유 상태 시스템 참조
 	UPROPERTY(BlueprintReadWrite, Category="Character State")
 	TObjectPtr<UStateSystem> OwnerStateSystem;
 
+	// 소유 캐릭터 참조
 	UPROPERTY(BlueprintReadWrite, Category="Character State")
-	TObjectPtr<ABaseSSTCharacter> OwnerCharacter;
-
-	// 상태별 추가 정보 (복제되도록 설정)
-	UPROPERTY(ReplicatedUsing=OnRep_StateInfo, BlueprintReadWrite, Category="Character State")
-	FPlayerStateInfo StateInfo;
+	TObjectPtr<ASmashCharacter> OwnerCharacter;
 };

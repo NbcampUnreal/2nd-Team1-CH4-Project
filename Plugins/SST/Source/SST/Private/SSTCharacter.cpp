@@ -1,5 +1,3 @@
-// Copyright 2024 NFB Makes Games. All Rights Reserved.
-
 #include "SSTCharacter.h"
 #include "SSTCharacterMovementComponent.h"
 #include "FollowCameraComponent.h"
@@ -14,8 +12,7 @@
 #include "InputActionValue.h"
 
 
-ASSTCharacter::ASSTCharacter(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer.SetDefaultSubobjectClass<USSTCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+ASSTCharacter::ASSTCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<USSTCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	SSTCharacterMovementComponent = Cast<USSTCharacterMovementComponent>(GetCharacterMovement());
 
@@ -149,7 +146,7 @@ void ASSTCharacter::CheckJumpInput(float DeltaTime)
 					JumpCurrentCount++;
 				}
 
-				const bool bDidJump = CanJump() && SSTCharacterMovementComponent->DoJump(bClientUpdating);
+				const bool bDidJump = CanJump() && SSTCharacterMovementComponent->DoJump(bClientUpdating,DeltaTime);
 				if (bDidJump)
 				{
 					// Transition from not (actively) jumping to jumping.

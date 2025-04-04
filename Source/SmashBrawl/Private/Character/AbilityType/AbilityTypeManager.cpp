@@ -32,7 +32,7 @@ void UAbilityTypeManager::BeginPlay()
 		}
 	}
 	
-	if (const TObjectPtr<UBaseAbilityType>* State = ValidAbilityTypePtrs.Find(EAbilityTypes::None))
+	if (const TObjectPtr<UBaseAbilityType>* State = ValidAbilityTypePtrs.Find(ESmashAbilityTypes::None))
 	{
 		CurrentAbilityType = State->Get();
 	}
@@ -48,7 +48,7 @@ void UAbilityTypeManager::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
-void UAbilityTypeManager::ChangeCurrentAbilityType(EAbilityTypes AbilityTypes)
+void UAbilityTypeManager::ChangeCurrentAbilityType(ESmashAbilityTypes AbilityTypes)
 {
 	if (CurrentAbilityType)
 	{
@@ -61,13 +61,13 @@ void UAbilityTypeManager::ChangeCurrentAbilityType(EAbilityTypes AbilityTypes)
 	}
 }
 
-EAbilityTypes UAbilityTypeManager::GetCurrentAbilityType() const
+ESmashAbilityTypes UAbilityTypeManager::GetCurrentAbilityType() const
 {
 	if (CurrentAbilityType)
 	{
 		return CurrentAbilityType->GetAbilityType();
 	}
-	return EAbilityTypes::None;
+	return ESmashAbilityTypes::None;
 }
 
 void UAbilityTypeManager::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const

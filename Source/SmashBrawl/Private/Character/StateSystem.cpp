@@ -8,7 +8,9 @@ UStateSystem::UStateSystem()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// 기본 상태를 설정
-	DefaultState = EPlayerStates::Idle;
+	DefaultState = ESmashPlayerStates::Idle;
+	CurrentStateID = DefaultState;
+	bInitialized = false;
 }
 
 void UStateSystem::BeginPlay()
@@ -32,15 +34,17 @@ void UStateSystem::BeginPlay()
 		}
 	}
 
-	// 기본 상태 설정 및 null 체크 추가
+	// DefaultState가 InitStates에 포함되어 있는지 확인
 	if (UBaseCharacterState* DefaultStateObj = FindState(DefaultState))
 	{
 		CurrentState = DefaultStateObj;
+		CurrentStateID = DefaultState;
 		CurrentState->EnterState();
+		bInitialized = true;
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("UStateSystem::BeginPlay - 기본 상태를 찾을 수 없습니다"));
+		UE_LOG(LogTemp, Error, TEXT("UStateSystem::BeginPlay - 기본 상태를 찾을 수 없습니다. InitStates에 DefaultState를 추가하세요."));
 	}
 }
 
@@ -48,23 +52,22 @@ void UStateSystem::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& O
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// 상태 시스템 속성들을 네트워크로 복제하도록 설정
-	DOREPLIFETIME(UStateSystem, States);
-	DOREPLIFETIME(UStateSystem, CurrentState);
+	// 현재 상태 ID만 복제 (객체 참조 대신)
+	DOREPLIFETIME(UStateSystem, CurrentStateID);
 }
 
 void UStateSystem::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// null 체크 추가
-	if (CurrentState)
+	// 초기화 및 null 체크 추가
+	if (bInitialized && CurrentState)
 	{
 		CurrentState->TickState();
 	}
 }
 
-UBaseCharacterState* UStateSystem::FindState(EPlayerStates FindToState)
+UBaseCharacterState* UStateSystem::FindState(ESmashPlayerStates FindToState)
 {
 	for (UBaseCharacterState* State : States)
 	{
@@ -73,12 +76,15 @@ UBaseCharacterState* UStateSystem::FindState(EPlayerStates FindToState)
 			return State;
 		}
 	}
+
+	// 상태를 찾지 못한 경우 로그 출력
+	UE_LOG(LogTemp, Warning, TEXT("UStateSystem::FindState - 상태를 찾을 수 없습니다: %s"), *UEnum::GetValueAsString(FindToState));
 	return nullptr;
 }
 
-void UStateSystem::ChangeState(EPlayerStates NewState)
+void UStateSystem::ChangeState(ESmashPlayerStates NewState)
 {
-	// 권한 체크 추가
+	// 권한 체크 추가 (서버권한이 아니라면)
 	if (GetOwnerRole() < ROLE_Authority)
 	{
 		// 클라이언트에서 서버로 요청
@@ -91,26 +97,32 @@ void UStateSystem::ChangeState(EPlayerStates NewState)
 	}
 }
 
-void UStateSystem::Server_ChangeState_Implementation(EPlayerStates NewState)
+void UStateSystem::Server_ChangeState_Implementation(ESmashPlayerStates NewState)
 {
 	// 서버에서만 실행되는 함수
 	Internal_ChangeState(NewState);
 }
 
-void UStateSystem::Internal_ChangeState(EPlayerStates NewState)
+void UStateSystem::Internal_ChangeState(ESmashPlayerStates NewState)
 {
-	UBaseCharacterState* NewChangeState = FindState(NewState);
-	if (!NewChangeState)
+	// 초기화 완료 체크
+	if (!bInitialized)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("UStateSystem::Internal_ChangeState - 상태를 찾을 수 없습니다: %s"), *UEnum::GetValueAsString(NewState));
+		UE_LOG(LogTemp, Warning, TEXT("UStateSystem::Internal_ChangeState - 상태 시스템이 초기화되지 않았습니다"));
 		return;
 	}
 
 	// 같은 상태로 변경 시도하는 경우 처리
-	if (CurrentState == NewChangeState)
+	if (CurrentStateID == NewState)
 	{
-		UE_LOG(LogTemp, Verbose, TEXT("UStateSystem::Internal_ChangeState - 이미 상태에 있습니다: %s"),
-		       *UEnum::GetValueAsString(NewState));
+		UE_LOG(LogTemp, Verbose, TEXT("UStateSystem::Internal_ChangeState - 이미 상태에 있습니다: %s"), *UEnum::GetValueAsString(NewState));
+		return;
+	}
+
+	UBaseCharacterState* NewChangeState = FindState(NewState);
+	if (!NewChangeState)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("UStateSystem::Internal_ChangeState - 상태를 찾을 수 없습니다: %s"), *UEnum::GetValueAsString(NewState));
 		return;
 	}
 
@@ -123,6 +135,7 @@ void UStateSystem::Internal_ChangeState(EPlayerStates NewState)
 		}
 
 		CurrentState = NewChangeState;
+		CurrentStateID = NewState; // 복제되는 ID 업데이트
 		CurrentState->EnterState();
 
 		UE_LOG(LogTemp, Log, TEXT("UStateSystem::Internal_ChangeState - 상태로 변경되었습니다: %s"), *UEnum::GetValueAsString(NewState));
@@ -133,14 +146,26 @@ void UStateSystem::Internal_ChangeState(EPlayerStates NewState)
 	}
 }
 
-EPlayerStates UStateSystem::GetCurrentState() const
+void UStateSystem::OnRep_CurrentStateID()
 {
-	// null 체크 추가
-	if (CurrentState)
+	// 복제된 상태 ID에 따라 CurrentState 업데이트
+	if (UBaseCharacterState* NewState = FindState(CurrentStateID))
 	{
-		return CurrentState->GetPlayerState();
+		// 이전 상태 종료
+		if (CurrentState && CurrentState != NewState)
+		{
+			CurrentState->ExitState();
+		}
+
+		// 새 상태 설정 및 진입
+		CurrentState = NewState;
+		CurrentState->EnterState();
 	}
-	return DefaultState;
+}
+
+ESmashPlayerStates UStateSystem::GetCurrentState() const
+{
+	return CurrentStateID;
 }
 
 void UStateSystem::DebugStateSystem()
@@ -165,5 +190,6 @@ void UStateSystem::DebugStateSystem()
 		}
 	}
 
+	UE_LOG(LogTemp, Log, TEXT("초기화 완료: %s"), bInitialized ? TEXT("예") : TEXT("아니오"));
 	UE_LOG(LogTemp, Log, TEXT("==========================="));
 }

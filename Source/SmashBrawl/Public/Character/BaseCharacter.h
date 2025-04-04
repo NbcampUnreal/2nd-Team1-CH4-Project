@@ -28,7 +28,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(BlueprintCallable)
-	EPlayerStates GetCurrentState() const;
+	ESmashPlayerStates GetCurrentState() const;
 	
 protected:
 	// Called when the game starts or when spawned

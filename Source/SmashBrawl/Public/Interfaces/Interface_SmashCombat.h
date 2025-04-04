@@ -24,13 +24,13 @@ class SMASHBRAWL_API IInterface_SmashCombat
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Interface SmashCombat")
-	EPlayerStates GetPlayerState();
+	ESmashPlayerStates GetPlayerState();
 
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Interface SmashCombat")
-	EAttacks GetAttackTypes();
+	ESmashAttacks GetAttackTypes();
 
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Interface SmashCombat")
-	EAbilityTypes GetAbilityTypes();
+	ESmashAbilityTypes GetAbilityTypes();
 
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Interface SmashCombat")
 	ESmashDirection GetDirection();
@@ -45,7 +45,7 @@ public:
 	void SetSuper(int32 NewSuper);
 
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Interface SmashCombat")
-	void SetAttacks(EAttacks NewAttacks);
+	void SetAttacks(ESmashAttacks NewAttacks);
 	
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "Interface SmashInput")
 	void BufferButtons();

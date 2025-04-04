@@ -16,7 +16,7 @@ ABaseCharacter::ABaseCharacter()
 	StateSystem = CreateDefaultSubobject<UStateSystem>(TEXT("StateSystem"));
 }
 
-EPlayerStates ABaseCharacter::GetCurrentState() const
+ESmashPlayerStates ABaseCharacter::GetCurrentState() const
 {
 	return StateSystem->GetCurrentState();
 }
