@@ -94,7 +94,7 @@ private:
 	 * @param AttackType - 공격 타입 (설정될 값)
 	 * @param Ability - 활성화할 능력
 	 */
-	void ActivateDirectionalAbility(ESmashDirection Direction, EAttacks AttackType, ABaseAbility* Ability);
+	void ActivateDirectionalAbility(ESmashDirection Direction, ESmashAttacks AttackType, ABaseAbility* Ability);
 
 	/**
 	 * 방향에 따른 능력 선택 및 활성화
@@ -115,11 +115,11 @@ private:
 		ABaseAbility* ForwardAbility,
 		ABaseAbility* BackAbility = nullptr,
 		ABaseAbility* NeutralAbility = nullptr,
-		EAttacks UpAttackType = EAttacks::None,
-		EAttacks DownAttackType = EAttacks::None,
-		EAttacks ForwardAttackType = EAttacks::None,
-		EAttacks BackAttackType = EAttacks::None,
-		EAttacks NeutralAttackType = EAttacks::None
+		ESmashAttacks UpAttackType = ESmashAttacks::None,
+		ESmashAttacks DownAttackType = ESmashAttacks::None,
+		ESmashAttacks ForwardAttackType = ESmashAttacks::None,
+		ESmashAttacks BackAttackType = ESmashAttacks::None,
+		ESmashAttacks NeutralAttackType = ESmashAttacks::None
 	);
 
 	//------------------------------------------------------------

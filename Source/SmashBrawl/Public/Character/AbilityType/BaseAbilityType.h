@@ -17,15 +17,15 @@ class SMASHBRAWL_API UBaseAbilityType : public UObject, public IInterface_Abilit
 	GENERATED_BODY()
 
 public:
-	UBaseAbilityType() : AbilityType(EAbilityTypes::None) {};
-	UBaseAbilityType(EAbilityTypes AbilityTypes) : AbilityType(AbilityTypes) {};
+	UBaseAbilityType() : AbilityType(ESmashAbilityTypes::None) {};
+	UBaseAbilityType(ESmashAbilityTypes AbilityTypes) : AbilityType(AbilityTypes) {};
 
-	EAbilityTypes GetAbilityType() const;
+	ESmashAbilityTypes GetAbilityType() const;
 
 	virtual void EnterState() override;
 	virtual void ExitState() override;
 protected:
-	EAbilityTypes AbilityType;
+	ESmashAbilityTypes AbilityType;
 };
 UCLASS()
 class UNoneAbilityType : public UBaseAbilityType
@@ -33,7 +33,7 @@ class UNoneAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	UNoneAbilityType() : UBaseAbilityType(EAbilityTypes::None) {};
+	UNoneAbilityType() : UBaseAbilityType(ESmashAbilityTypes::None) {};
 };
 UCLASS()
 class UBasicAbilityType : public UBaseAbilityType
@@ -41,7 +41,7 @@ class UBasicAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	UBasicAbilityType() : UBaseAbilityType(EAbilityTypes::Basic) {};
+	UBasicAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Basic) {};
 	
 };
 UCLASS()
@@ -50,7 +50,7 @@ class USpecialAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	USpecialAbilityType() : UBaseAbilityType(EAbilityTypes::Special) {};
+	USpecialAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Special) {};
 };
 UCLASS()
 class UAirAbilityType : public UBaseAbilityType
@@ -58,7 +58,7 @@ class UAirAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	UAirAbilityType() : UBaseAbilityType(EAbilityTypes::Air) {};
+	UAirAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Air) {};
 };
 UCLASS()
 class USmashAbilityType : public UBaseAbilityType
@@ -67,7 +67,7 @@ class USmashAbilityType : public UBaseAbilityType
 
 public:
 
-	USmashAbilityType() : UBaseAbilityType(EAbilityTypes::Smash) {};
+	USmashAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Smash) {};
 };
 UCLASS()
 class USuperAbilityType : public UBaseAbilityType
@@ -75,7 +75,7 @@ class USuperAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	USuperAbilityType() : UBaseAbilityType(EAbilityTypes::Super) {};
+	USuperAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Super) {};
 };
 UCLASS()
 class UDodgeAbilityType : public UBaseAbilityType
@@ -83,7 +83,7 @@ class UDodgeAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	UDodgeAbilityType() : UBaseAbilityType(EAbilityTypes::Dodge) {};
+	UDodgeAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Dodge) {};
 };
 UCLASS()
 class UTauntAbilityType : public UBaseAbilityType
@@ -91,7 +91,7 @@ class UTauntAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	UTauntAbilityType() : UBaseAbilityType(EAbilityTypes::Taunt) {};
+	UTauntAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Taunt) {};
 };
 UCLASS()
 class ULedgeAbilityType : public UBaseAbilityType
@@ -99,7 +99,7 @@ class ULedgeAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	ULedgeAbilityType() : UBaseAbilityType(EAbilityTypes::Ledge) {};
+	ULedgeAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Ledge) {};
 };
 UCLASS()
 class UThrowAbilityType : public UBaseAbilityType
@@ -107,7 +107,7 @@ class UThrowAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	UThrowAbilityType() : UBaseAbilityType(EAbilityTypes::Throw) {};
+	UThrowAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Throw) {};
 };
 UCLASS()
 class UProneAbilityType : public UBaseAbilityType
@@ -115,7 +115,7 @@ class UProneAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	UProneAbilityType() : UBaseAbilityType(EAbilityTypes::Prone) {};
+	UProneAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Prone) {};
 };
 UCLASS()
 class UGrabAbilityType : public UBaseAbilityType
@@ -123,7 +123,7 @@ class UGrabAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	UGrabAbilityType() : UBaseAbilityType(EAbilityTypes::Grab) {};
+	UGrabAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Grab) {};
 };
 UCLASS()
 class UOtherAbilityType : public UBaseAbilityType
@@ -131,5 +131,5 @@ class UOtherAbilityType : public UBaseAbilityType
 	GENERATED_BODY()
 
 public:
-	UOtherAbilityType() : UBaseAbilityType(EAbilityTypes::Other) {};
+	UOtherAbilityType() : UBaseAbilityType(ESmashAbilityTypes::Other) {};
 };

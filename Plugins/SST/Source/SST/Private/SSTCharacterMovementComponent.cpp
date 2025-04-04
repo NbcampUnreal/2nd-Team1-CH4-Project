@@ -158,13 +158,12 @@ void USSTCharacterMovementComponent::OnMovementModeChanged(EMovementMode Previou
 			}
 		}
 	}
-	
 }
 
 void USSTCharacterMovementComponent::UpdateCharacterStateBeforeMovement(float DeltaSeconds)
 {
 	Super::UpdateCharacterStateBeforeMovement(DeltaSeconds);
-	
+
 	// Check for platform drop
 	if (WantsToPlatformDrop)
 	{
@@ -246,8 +245,7 @@ void USSTCharacterMovementComponent::StartNewPhysics(float deltaTime, int32 Iter
 	*  in the opposite direction.
 	*/
 	FVector forward = SSTCharacterOwner->GetActorForwardVector();
-	if ((FacingRight && (forward.X < 1.f - FLT_EPSILON))
-		|| (!FacingRight && (forward.X > -1.f + FLT_EPSILON)))
+	if ((FacingRight && (forward.X < 1.f - FLT_EPSILON)) || (!FacingRight && (forward.X > -1.f + FLT_EPSILON)))
 	{
 		float angleFromXAxis = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(forward, (FacingRight ? 1 : -1) * FVector::ForwardVector)));
 
@@ -293,7 +291,7 @@ float USSTCharacterMovementComponent::GetMaxSpeed() const
 		return DashDistance / DashDurationSeconds;
 	default:
 		UE_LOG(LogTemp, Error, TEXT("Attempt to get max speed with an unknown movement mode"))
-			return 0.0f;
+		return 0.0f;
 	}
 }
 
@@ -309,7 +307,7 @@ float USSTCharacterMovementComponent::GetMaxBrakingDeceleration() const
 		return 0.0f;
 	default:
 		UE_LOG(LogTemp, Error, TEXT("Attempt to get max braking deceleration with an unknown movement mode"))
-			return 0.0f;
+		return 0.0f;
 	}
 }
 
@@ -378,10 +376,7 @@ void USSTCharacterMovementComponent::PhysWallslide(float DeltaTime, int32 Iterat
 		bool FinishWallslide = false;
 		TArray<FHitResult> HitResultsWall;
 		FHitResult Floor;
-		if (!IsHeadedForwards()
-			|| !CanWallSlide
-			|| GetValidFloorBeneath(Floor)
-			|| !GetWallslideWall(HitResultsWall))
+		if (!IsHeadedForwards() || !CanWallSlide || GetValidFloorBeneath(Floor) || !GetWallslideWall(HitResultsWall))
 		{
 			FinishWallslide = true;
 		}
@@ -492,8 +487,8 @@ bool USSTCharacterMovementComponent::IsEligibleWallForSliding(FHitResult& Hit)
 
 	// Check whether wall is suitably long (e.g. ignore small platforms)
 	if (!CheckWallAtLeastCapsuleHeight(Hit))
-	{ 
-		return false; 
+	{
+		return false;
 	}
 
 	return true;
@@ -538,7 +533,6 @@ void USSTCharacterMovementComponent::PerformWallJump()
 	FVector LaunchVector = WallslideJumpOffForce * FVector::ForwardVector;
 	FRotator LaunchRotator(FacingRight ? WallslideJumpAngle : WallslideJumpAngle + 90.0f, 0.0f, 0.0f);
 	Launch(LaunchRotator.RotateVector(LaunchVector));
-
 }
 
 void USSTCharacterMovementComponent::EnterDash()
@@ -595,10 +589,10 @@ void USSTCharacterMovementComponent::PhysDash(float DeltaTime, int32 Iterations)
 
 	Iterations++;
 	bJustTeleported = false;
-	
+
 	FindFloor(UpdatedComponent->GetComponentLocation(), CurrentFloor, false);
-	if (CurrentFloor.IsWalkableFloor() 
-		&& (DashFollowsDownwardSlopes || CurrentFloor.HitResult.ImpactNormal.X * Velocity.X < 0)) 
+	if (CurrentFloor.IsWalkableFloor()
+		&& (DashFollowsDownwardSlopes || CurrentFloor.HitResult.ImpactNormal.X * Velocity.X < 0))
 	{
 		// if on ground, need to compensate for any slope
 		FStepDownResult StepDownResult;
@@ -618,7 +612,6 @@ void USSTCharacterMovementComponent::PhysDash(float DeltaTime, int32 Iterations)
 			Velocity = (UpdatedComponent->GetComponentLocation() - InitialLocation) / DeltaTime;
 		}
 	}
-
 }
 
 void USSTCharacterMovementComponent::PerformDash()
@@ -660,11 +653,11 @@ void USSTCharacterMovementComponent::AddInputVector(FVector WorldVector, bool bF
 	}
 }
 
-bool USSTCharacterMovementComponent::DoJump(bool bReplayingMoves)
+bool USSTCharacterMovementComponent::DoJump(bool bReplayingMoves, float DeltaTime)
 {
 	bool InWallslide = CanWalljump();
 	bool InDash = IsDashing;
-	if (Super::DoJump(bReplayingMoves))
+	if (Super::DoJump(bReplayingMoves, DeltaTime))
 	{
 		if (InWallslide)
 		{
@@ -681,6 +674,7 @@ bool USSTCharacterMovementComponent::DoJump(bool bReplayingMoves)
 	}
 	return false;
 }
+
 
 bool USSTCharacterMovementComponent::CanCrouchInCurrentState() const
 {
@@ -704,8 +698,16 @@ bool USSTCharacterMovementComponent::CanWalljump() const
 
 bool USSTCharacterMovementComponent::RequestTurnAround()
 {
-	if (Turning) { return false; }
-	if (IsDashing && !CanTurnWhileDashing) { return false; }
+	if (Turning)
+	{
+		return false;
+	}
+
+	if (IsDashing && !CanTurnWhileDashing)
+	{
+		return false;
+	}
+
 	Turning = true;
 	FacingRight = !FacingRight;
 	return true;

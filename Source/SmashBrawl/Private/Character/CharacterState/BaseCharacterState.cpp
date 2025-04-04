@@ -1,19 +1,10 @@
 #include "Character/CharacterState/BaseCharacterState.h"
 #include "Character/StateSystem.h"
-#include "Character/BaseSSTCharacter.h"
-#include "Net/UnrealNetwork.h"
+#include "Character/SmashCharacter.h"
 
 UBaseCharacterState::UBaseCharacterState()
 {
-	PlayerState = EPlayerStates::Idle;
-}
-
-void UBaseCharacterState::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
-{
-	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	// 상태 정보를 네트워크로 복제
-	DOREPLIFETIME(UBaseCharacterState, StateInfo);
+	PlayerState = ESmashPlayerStates::Idle;
 }
 
 void UBaseCharacterState::InitState_Implementation(UStateSystem* InStateSystem)
@@ -21,7 +12,7 @@ void UBaseCharacterState::InitState_Implementation(UStateSystem* InStateSystem)
 	if (InStateSystem)
 	{
 		OwnerStateSystem = InStateSystem;
-		OwnerCharacter = Cast<ABaseSSTCharacter>(InStateSystem->GetOwner());
+		OwnerCharacter = Cast<ASmashCharacter>(InStateSystem->GetOwner());
 	}
 }
 
@@ -55,23 +46,34 @@ bool UBaseCharacterState::CanState_Implementation()
 	return true;
 }
 
-void UBaseCharacterState::OnRep_StateInfo()
+const FSmashPlayerStateInfo& UBaseCharacterState::GetStateInfo() const
 {
-	// 상태 정보가 복제되면 실행할 로직
-	// 자식 클래스에서 필요시 구현
+	// 캐릭터의 상태 정보에 접근
+	if (OwnerCharacter)
+	{
+		return OwnerCharacter->GetStateInfo();
+	}
+
+	// 캐릭터가 없는 경우 기본값 반환
+	static const FSmashPlayerStateInfo DefaultStateInfo;
+	return DefaultStateInfo;
 }
 
-void UBaseCharacterState::SetStateInfo(const FPlayerStateInfo& NewStateInfo)
+void UBaseCharacterState::SetStateInfo(const FSmashPlayerStateInfo& NewStateInfo)
 {
-	// 서버에서만 상태 정보 변경
+	// 캐릭터의 상태 정보 설정 - 서버 권한 확인 추가
 	if (OwnerCharacter && OwnerCharacter->GetLocalRole() == ROLE_Authority)
 	{
-		StateInfo = NewStateInfo;
-		OnRep_StateInfo();
+		OwnerCharacter->SetStateInfo(NewStateInfo);
+	}
+	else if (OwnerCharacter)
+	{
+		// 클라이언트에서는 서버에 요청하는 로직이 필요함
+		// 이는 SmashCharacter에서 구현할 예정
 	}
 }
 
-EPlayerStates UBaseCharacterState::GetPlayerState() const
+ESmashPlayerStates UBaseCharacterState::GetPlayerState() const
 {
 	return PlayerState;
 }

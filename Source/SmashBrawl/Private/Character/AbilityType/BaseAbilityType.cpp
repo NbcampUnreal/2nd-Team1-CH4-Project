@@ -3,7 +3,7 @@
 
 #include "Character/AbilityType/BaseAbilityType.h"
 
-EAbilityTypes UBaseAbilityType::GetAbilityType() const
+ESmashAbilityTypes UBaseAbilityType::GetAbilityType() const
 {
 	return AbilityType;
 }
