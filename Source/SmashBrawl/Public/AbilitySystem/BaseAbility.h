@@ -81,10 +81,10 @@ public:
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_ReShield();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void RemoveDamagers();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void FlipOnStick();
 
 	UFUNCTION(BlueprintCallable)
@@ -102,160 +102,159 @@ public:
 	UFUNCTION()
 	void OnNotifyEnd(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void AnimNotifyStart(bool InDamager, FName NoteName);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void AnimNotifyEnd(bool InDamager, FName NoteName);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void DebugAbilityCall(int32 PlayerNumber, bool bDebug);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void FuncCharging();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SpecialAttackButton();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetBuffer();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void Land();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void TakeAHit();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void HitByProjectile(int32 Damage, bool bIsEnergy);
 	virtual void ShootProjectile();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetMovement(bool bCanMove);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetCanAttack(bool bCanAttack);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetJump(bool bCanJump);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetFlip(bool bCanFlip);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void DodgeDelay();
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_SetFlip(bool bCanFlip);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void CharacterCollision();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void GetCollisionInfo();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void WalkOffLedge(bool bCanWalkOff);
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_EndAnim(int32 InAnimNo);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ActivateOtherAbility(ABaseAbility* Ability);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void HitStates();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetAttackStage(int32 _AttackStage);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ChangeCollisionSet();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void OnCounter();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void AbsorbMode(bool bAbsorb);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ReflectMode(bool bReflect);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void TeleportCharacter(FVector Location, bool bSweep, bool bTeleport);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void OnReflect();
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_StartParticles(bool bAttached, UParticleSystem* EmitterTemplate, USceneComponent* AttachToComponent,
 	                              FName AttachPointName, FVector Location, FRotator Rotation, FVector Scale,
 	                              EAttachLocation::Type LocationType, bool bAutoDestroy);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void SetGravity(int32 Settings, float CustomValue);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void HealPlayer(int32 HealAmount);
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void SpecialButtonUp();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void SpecialButtonDown();
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void AbilityEvent();
 
 	UFUNCTION(BlueprintCallable,Category="BaseAbility")
 	void Charge(bool InChargeing) { bCharging = InChargeing; }
 
-	UPROPERTY()
+public:
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "BaseAbility|Timeline")
 	class UTimelineComponent* MainTimeline;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "BaseAbility|Timeline")
+	UCurveFloat* CurveFloat;
 
 	FOnTimelineFloat TimelineUpdate;
 	FOnTimelineEvent TimelineFinished;
 
-	UPROPERTY()
-	UCurveFloat* CurveFloat;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BaseAbility|Charge")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
 	float ChargeRatio;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BaseAbility|Charge")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
 	float ChargeMax;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BaseAbility|Charge")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
 	float ChargeLevel;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BaseAbility|Charge")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category= "BaseAbility|Charge")
 	float ChargeRate;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BaseAbility|Charge")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
 	bool bCharging;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "BaseAbility|Charge")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
 	bool bCharged;
 
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bActive;
-
-public:
-	UPROPERTY(BlueprintReadWrite,Category="BaseAbility")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	TObjectPtr<ACharacter> Parent;
-
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	FVector ParentLocation;
-
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bInputButter;
-	UPROPERTY()
-	bool bBufferClosed = true;
-	UPROPERTY()
-	bool bLandClosed = false;
-	UPROPERTY()
-	bool bTakeAHitClosed = false;
-	UPROPERTY()
-	bool bHitByProjectileClosed = false;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bIsUse;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bLanding;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	int32 AttackStage;
-	UPROPERTY()
-	int32 CollisionSetIndex;
-	UPROPERTY()
-	TArray<int32> CollisionSetArray;
-	UPROPERTY()
-	TArray<ACharacter*> ChildDamagers; //BPDamagerInfo �迭�� �����ؾ���
-	UPROPERTY()
-	int32 AnimNo;
-	UPROPERTY()
-	int32 CollisionSet;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
+	TArray<ACharacter*> ChildDamagers;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bActivateCollision;
-	
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	UDataTable* AttackData;
-	
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BaseAbility")
-	TArray<UAnimMontage*> Animations;
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="BaseAbility")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	TSet<FName> AttackContain;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bDamager;
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category="BaseAbility")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|DoOnce")
+	bool bBufferClosed = true;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|DoOnce")
+	bool bLandClosed = false;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|DoOnce")
+	bool bTakeAHitClosed = false;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|DoOnce")
+	bool bHitByProjectileClosed = false;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Collisions")
+	int32 CollisionSetIndex;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Collisions")
+	TArray<int32> CollisionSetArray;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Collisions")
+	int32 CollisionSet;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Animation")
+	int32 AnimNo;
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Animation")
+	TArray<UAnimMontage*> Animations;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Projectile")
 	TSubclassOf<AActor> Projectile;
 	
 	FTimerHandle ReShieldTimerHandle;
