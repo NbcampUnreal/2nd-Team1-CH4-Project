@@ -24,7 +24,17 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void TakeDamage(int32 NewDamage)
+	{
+	}
+
 public:
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "Smash Character Stats")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character Stats")
 	float DefaultGravityScale;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character Stats")
+	float Percent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character Stats")
+	float Weight;
 };

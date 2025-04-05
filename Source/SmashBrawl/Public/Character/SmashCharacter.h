@@ -37,7 +37,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	// 초기화 함수 개선
@@ -70,6 +69,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Smash Character|Movement")
 	void SpawnFeetFX();
 
+	void TauntAction(ESmashDirection ActionDirection);
+
 public:
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	float GetMoveInputValue() const { return MoveInputValue; }
@@ -80,11 +81,40 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	bool IsMovingRight() const { return MoveInputValue > 0.0f; }
 
+public:
+	void Dizzy();
+
+	float NockBackCalculate();
+
+	void ShieldHit(ESmashDirection NewDirection);
+
+	void LandedAction();
+
+	UFUNCTION()
+	void OnLandedSmash(const FHitResult& Hit);
+
+public:
 	virtual void Move(const struct FInputActionValue& Value) override;
+
+	void UpDownAxis(const FInputActionValue& InputActionValue);
 
 	virtual void JumpOrDrop_Implementation() override;
 
 	void ResetMoveInput(const FInputActionValue& Value);
+
+	void BasicAttack();
+
+
+	void BasicAttackPressed(const FInputActionValue& InputActionValue);
+	void BasicAttackReleased(const FInputActionValue& InputActionValue);
+
+	void SpecialAttackPressed(const FInputActionValue& InputActionValue);
+	void SpecialAttackReleased(const FInputActionValue& InputActionValue);
+
+	void TauntUpPressed(const FInputActionValue& InputActionValue);
+	void TauntRightPressed(const FInputActionValue& InputActionValue);
+	void TauntLeftPressed(const FInputActionValue& InputActionValue);
+	void TauntDownPressed(const FInputActionValue& InputActionValue);
 
 public:
 	UFUNCTION(BlueprintCallable, Category="Smash Character|Movement")
@@ -135,7 +165,7 @@ public:
 	/** 커스텀 캐릭터 이동 컴포넌트 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category ="Smash Character|Component")
 	TObjectPtr<class USmashCharacterMovementComponent> SmashCharacterMovementComponent;
-	
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category ="Smash Character|Component")
 	TObjectPtr<USmashCharacterStats> SmashCharacterStatsComponent;
 
@@ -165,14 +195,38 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config")
 	FName ShieldSocket;
-	
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config")
 	UParticleSystem* SprintFX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config")
+	UParticleSystem* P_Landed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_UpDown;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_BasicAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_SpecialAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_TauntUp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_TauntRight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_TauntLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_TauntDown;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Cosmetics")
 	TArray<TObjectPtr<UMaterialInstance>> TeamOptionMaterials;
 
-	// BaseCharacterState에서 옮겨온 StateInfo
 	UPROPERTY(ReplicatedUsing=OnRep_StateInfo, BlueprintReadWrite, Category="Smash Character|State")
 	FSmashPlayerStateInfo StateInfo;
 
@@ -181,6 +235,18 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	bool bIsSmashFlash;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Input")
+	bool bAttackButton;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Input")
+	bool bAttackButtonReleased;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Input")
+	bool bSpecialAttackButton;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Input")
+	bool bSpecialAttackButtonReleased;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character")
 	float InvonFlash;
@@ -197,6 +263,18 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	bool bAttachedAbil = false;
 
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	bool bLedgeCooldown = false;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	bool bLanded = false;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	bool bDizzied = false;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	bool bPushed = false;
+
 	UPROPERTY(ReplicatedUsing=OnRep_PlayerNo, BlueprintReadWrite, Category="Smash Character")
 	int32 PlayerNo;
 
@@ -207,7 +285,28 @@ public:
 	ESmashHitState HitStates;
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	ESmashAbilityTypes AbilityType;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	int32 Team;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	int32 Damage;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	int32 BaseKnock = 5;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	float DefaultCapsuleHeight;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	float Knockback = 1.0f;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	float DamRatios = 1.0f;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	float HitScale;
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Cosmetics")
 	UMaterialInstanceDynamic* Material;
@@ -220,7 +319,6 @@ public:
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	ESmashDirection Direction;
-	
 
 protected:
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Smash Character|Input")
@@ -251,4 +349,5 @@ private:
 	FDoOnce DoOnceMoveDirection;
 	FDoOnce DoOnceUpDirection;
 	FDoOnce DoOnceDownDirection;
+	FDoOnce DoOnceBasicAttackPressed;
 };
