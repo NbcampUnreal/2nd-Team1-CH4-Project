@@ -141,6 +141,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Smash Character|State")
 	const FSmashPlayerStateInfo& GetStateInfo() const { return StateInfo; }
 
+	UFUNCTION(BlueprintPure, Category = "Smash Character|State")
+	FSmashPlayerMovement GetMovementInfo() const{return StateInfo.PlayerMovement;}
+
 	// StateInfo 설정 함수 추가 - 권한 체크 개선
 	UFUNCTION(BlueprintCallable, Category = "Smash Character|State")
 	void SetStateInfo(const FSmashPlayerStateInfo& NewStateInfo);
