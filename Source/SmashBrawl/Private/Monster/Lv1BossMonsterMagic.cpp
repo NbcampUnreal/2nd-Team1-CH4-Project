@@ -1,0 +1,37 @@
+﻿// 
+
+
+#include "Monster/Lv1BossMonsterMagic.h"
+
+#include "NiagaraComponent.h"
+
+
+// Sets default values
+ALv1BossMonsterMagic::ALv1BossMonsterMagic()
+{
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = false;
+
+	NiagaraTrailEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailEffect"));
+	NiagaraTrailEffect->SetupAttachment(RootComponent);
+	NiagaraTrailEffect->bAutoActivate = false;
+
+	bReplicates = true;
+}
+
+
+void ALv1BossMonsterMagic::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (NiagaraEffectTemplate)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			NiagaraEffectTemplate,
+			GetActorLocation(),
+			FRotator(0, 0, 0),
+			FVector(1.0f, 1.0f, 1.0f) 
+		);
+	}
+}

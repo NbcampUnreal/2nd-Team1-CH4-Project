@@ -4,8 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseBossMonster.h"
-#include "Monster/Lv1BossMonsterBreathProjectile.h"
-#include "Monster/Lv1BossMonsterMeteor.h"
+#include "BaseBossPatternActor.h"
 #include "Lv1BossMonster.generated.h"
 
 UCLASS()
@@ -18,10 +17,13 @@ public:
 	ALv1BossMonster();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	TSubclassOf<ALv1BossMonsterBreathProjectile> BreathProjectile;
+	TSubclassOf<ABaseBossPatternActor> BreathProjectile;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	TSubclassOf<ALv1BossMonsterMeteor> FlyBreathProjectile;
+	TSubclassOf<ABaseBossPatternActor> LavaBurst;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> Magic;
 	
 	UFUNCTION(Server, Reliable)
 	void Server_BreathAttack() const;
@@ -31,4 +33,10 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void Server_FlyBreathAttack() const;
+
+	UFUNCTION(Server, Reliable)
+	void Server_LavaBurstAttack() const;
+
+	UFUNCTION(Server, Reliable)
+	void Server_MagicAttack();
 };

@@ -3,7 +3,10 @@
 
 #include "../../Public/Monster/BaseBossMonster.h"
 
+#include "Charactor/BaseCharacter.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Layers/LayersSubsystem.h"
 #include "Net/UnrealNetwork.h"
 
@@ -14,13 +17,31 @@ ABaseBossMonster::ABaseBossMonster()
 	PrimaryActorTick.bCanEverTick = false;
 
 	HeadCollision = CreateDefaultSubobject<USphereComponent>(TEXT("HeadComp"));
-	HeadCollision->SetupAttachment(GetMesh(), FName("Head"));
+	HeadCollision->SetupAttachment(GetMesh(), FName("head"));
 	HeadCollision->SetSphereRadius(20.f);
 	HeadCollision->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+
+	LeftArmCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("LeftArm"));
+	LeftArmCollision->SetupAttachment(GetMesh(), FName("hand_l"));
+	LeftArmCollision->SetCapsuleRadius(20.0f);
+	LeftArmCollision->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+
+	RightArmCollision = CreateDefaultSubobject<UCapsuleComponent>(TEXT("RightArm"));
+	RightArmCollision->SetupAttachment(GetMesh(), FName("hand_r"));
+	RightArmCollision->SetCapsuleRadius(20.0f);
+	RightArmCollision->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
+	
 
 	bReplicates = true;
 
 	Tags.Add("Boss");
+}
+
+void ABaseBossMonster::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CastPlayer();
 }
 
 void ABaseBossMonster::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -29,6 +50,36 @@ void ABaseBossMonster::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 
 	DOREPLIFETIME(ABaseBossMonster, BossState);
 	DOREPLIFETIME(ABaseBossMonster, bIsAttacking);
+}
+
+void ABaseBossMonster::CastPlayer()
+{
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), FoundActors);
+
+	for (AActor* Actor : FoundActors)
+	{
+		if (ABaseCharacter* Character = Cast<ABaseCharacter>(Actor))
+		{
+			PlayerArray.Add(Character);
+		}
+	}
+}
+
+ABaseCharacter* ABaseBossMonster::GetRandomPlayer()
+{
+	if (PlayerArray.Num() > 0)
+	{
+		int32 RandomIndex = FMath::RandRange(0, PlayerArray.Num() - 1);
+		ABaseCharacter* RandomCharacter = PlayerArray[RandomIndex];
+
+		return RandomCharacter;
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("PlayerArray에 Player 없음"));
+		return nullptr;
+	}
 }
 
 
@@ -44,8 +95,6 @@ void ABaseBossMonster::PerformAttack_Implementation(int32 MontageIndex)
 
 void ABaseBossMonster::Multicast_PerformAnimation_Implementation(UAnimMontage* Montage)
 {
-	//이 아래에서 공격 정의 필요
-
 	if (Montage && GetMesh())
 	{
 		GetMesh()->GetAnimInstance()->Montage_Play(Montage);

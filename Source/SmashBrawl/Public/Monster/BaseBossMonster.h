@@ -8,6 +8,8 @@
 #include "Core/SmashTypes.h"
 #include "BaseBossMonster.generated.h"
 
+class ABaseCharacter;
+
 UCLASS()
 class SMASHBRAWL_API ABaseBossMonster : public ACharacter, public IInterface_BossMonsterCombat
 {
@@ -16,6 +18,8 @@ class SMASHBRAWL_API ABaseBossMonster : public ACharacter, public IInterface_Bos
 public:
 	// Sets default values for this character's properties
 	ABaseBossMonster();
+
+	virtual void BeginPlay() override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
@@ -38,8 +42,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class USphereComponent* HeadCollision;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UCapsuleComponent* LeftArmCollision;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UCapsuleComponent* RightArmCollision;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
 	TArray<class UAnimMontage*> AnimMontages;
+
+	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Player")
+	TArray<TObjectPtr<ABaseCharacter>> PlayerArray;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "State")
 	ESmashBossState BossState = ESmashBossState::Phase1;
@@ -49,6 +62,12 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Value")
 	int32 GetRandomValueInMontageIndex() const;
+
+	UFUNCTION()
+	void CastPlayer();
+
+	UFUNCTION()
+	class ABaseCharacter* GetRandomPlayer();
 	
 	virtual void ReactToHit_Implementation() override;
 

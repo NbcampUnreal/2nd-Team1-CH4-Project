@@ -6,10 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "BaseBossPatternActor.h"
 #include "Lv1BossMonsterBreathProjectile.generated.h"
 
 UCLASS()
-class SMASHBRAWL_API ALv1BossMonsterBreathProjectile : public AActor
+class SMASHBRAWL_API ALv1BossMonsterBreathProjectile : public ABaseBossPatternActor
 {
 	GENERATED_BODY()
 
