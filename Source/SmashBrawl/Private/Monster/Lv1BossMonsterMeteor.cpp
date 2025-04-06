@@ -65,7 +65,6 @@ void ALv1BossMonsterMeteor::OnProjectileOverlapped(UPrimitiveComponent* Overlapp
 	{
 		if (!OtherActor->ActorHasTag(TEXT("Boss")) && !OtherActor->ActorHasTag(TEXT("Projectile")))
 		{
-			UE_LOG(LogTemp, Warning, TEXT("TT"));
 			//UGameplayStatics::ApplyPointDamage(OtherActor, Damage, GetActorForwardVector(), SweepResult, nullptr, this, nullptr);
 			Destroy();
 		}

@@ -4,6 +4,7 @@
 #include "Monster/Lv1BossMonster.h"
 
 #include "Charactor/BaseCharacter.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Monster/BaseBossPatternActor.h"
 
@@ -15,9 +16,24 @@ ALv1BossMonster::ALv1BossMonster()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void ALv1BossMonster::Server_SideLavaLAttack_Implementation()
+{
+	FVector LeftArmLocation = LeftArmCollision->GetComponentLocation();
+	FVector LeftSpawnLocation = FVector(0, LeftArmLocation.Y, LeftArmLocation.Z);
+	FRotator LeftSpawnRotation = FRotator(0, 0, 0);
+	GetWorld()->SpawnActor<ABaseBossPatternActor>(SideLavaBurstL, LeftSpawnLocation, LeftSpawnRotation);
+}
+
+void ALv1BossMonster::Server_SideLavaRAttack_Implementation()
+{
+	FVector RightArmLocation = RightArmCollision->GetComponentLocation();
+	FVector RightSpawnLocation = FVector(0, RightArmLocation.Y, RightArmLocation.Z);
+	FRotator RightSpawnRotation = FRotator(0, 0, 0);
+	GetWorld()->SpawnActor<ABaseBossPatternActor>(SideLavaBurstR, RightSpawnLocation, RightSpawnRotation);
+}
+
 void ALv1BossMonster::Server_MagicAttack_Implementation()
 {
-
 	ABaseCharacter* TargetPlayer = GetRandomPlayer();	
 	
 	FVector SpawnLocation = TargetPlayer->GetActorLocation();

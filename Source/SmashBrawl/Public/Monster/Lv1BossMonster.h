@@ -23,6 +23,12 @@ public:
 	TSubclassOf<ABaseBossPatternActor> LavaBurst;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> SideLavaBurstR;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> SideLavaBurstL;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TSubclassOf<ABaseBossPatternActor> Magic;
 	
 	UFUNCTION(Server, Reliable)
@@ -39,4 +45,10 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void Server_MagicAttack();
+
+	UFUNCTION(Server, Reliable)
+	void Server_SideLavaRAttack();
+
+	UFUNCTION(Server, Reliable)
+	void Server_SideLavaLAttack();
 };
