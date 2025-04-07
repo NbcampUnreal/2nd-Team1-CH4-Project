@@ -2,11 +2,14 @@
 
 
 #include "AbilitySystem/BaseAbility.h"
+
+#include "AbilitySystem/SmashAbilitySystemComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Character/SmashCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Interfaces/Interface_SmashCombat.h"
 
 // Sets default values
 ABaseAbility::ABaseAbility()
@@ -36,8 +39,8 @@ void ABaseAbility::BeginPlay()
 
 	if (CurveFloat)
 	{
-		TimelineUpdate.BindUFunction(this, FName("TickRep"));
-		TimelineFinished.BindUFunction(this, FName("StartTimelineReplicated"));
+		TimelineUpdate.BindUFunction(this, FName("Multicast_TickRep_Implementation"));
+		TimelineFinished.BindUFunction(this, FName("StartTimeline"));
 
 		MainTimeline->AddInterpFloat(CurveFloat, TimelineUpdate);
 		MainTimeline->SetTimelineFinishedFunc(TimelineFinished);
@@ -93,7 +96,7 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 					bIsUse = true;
 				}
 				//Then1
-				if (true) //Character�� �ɹ����� Landed(bool)�� ���
+				if (Parent && Parent->bLanded) //Character�� �ɹ����� Landed(bool)�� ���
 				{
 					if (!bLandClosed)
 					{
@@ -107,7 +110,7 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 					bLandClosed = false;
 				}
 				//Then2
-				if (true) //Character�� �ɹ����� HitButNoEffect(bool)�� ���
+				if (false) //Character�� �ɹ����� HitButNoEffect(bool)�� ���
 				{
 					if (!bTakeAHitClosed)
 					{
@@ -120,19 +123,22 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 					bTakeAHitClosed = false;
 				}
 				//Then3
-				if (true) //Character�� States(Enum)�� ���
+				if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Dead || IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Hit) //Character�� States(Enum)�� ���
 				{
 					Multicast_EndAbility();
 				}
 				//Then4
-
+				if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Ledge && !bDontEndOnLedge) //Character�� States(Enum)�� ���
+				{
+					Multicast_EndAbility();
+				}
 				//Then5
-				if (true) //
+				if (false) //
 				{
 					if (!bHitByProjectileClosed)
 					{
 						bHitByProjectileClosed = true;
-						//HitByProjectile(Character�� ProjectileDamage(int32)�� EnergyHit(bool)�� ���); 
+						HitByProjectile(10, false); 
 					}
 				}
 				else
@@ -160,6 +166,11 @@ void ABaseAbility::Multicast_SoftEnd_Implementation()
 }
 
 void ABaseAbility::Multicast_EndAbility_Implementation()
+{
+	BP_OnEndAbility();
+}
+
+void ABaseAbility::BP_OnEndAbility_Implementation()
 {
 	WalkOffLedge(true);
 	bActive = false;
@@ -195,7 +206,7 @@ void ABaseAbility::Reset()
 void ABaseAbility::Multicast_LandLeg_Implementation(UAnimMontage* LandAnimation, float PlayRate, float StartPosition,
                                                     FName StartSection, int32 InAnimNo)
 {
-	SetFlip(false);
+	Multicast_SetFlip(false);
 	SetJump(false);
 	SetMovement(false);
 	UAnimInstance* AnimInstance = Parent->GetMesh()->GetAnimInstance();
@@ -216,7 +227,7 @@ void ABaseAbility::Multicast_LandLeg_Implementation(UAnimMontage* LandAnimation,
 		{
 			if (Montage == LandAnimation)
 			{
-				SetFlip(true);
+				Multicast_SetFlip(true);
 				SetJump(true);
 				SetMovement(true);
 				Multicast_EndAnim(InAnimNo);
@@ -453,7 +464,6 @@ void ABaseAbility::SetMovement(bool bCanMove)
 		SmashPlayerStateInfo.PlayerMovement.bCanMove = bCanMove;
 		Parent->SetStateInfo(SmashPlayerStateInfo);
 	}
-	//Character�� CanMove�� ����
 }
 
 void ABaseAbility::SetCanAttack(bool bCanAttack)
@@ -464,7 +474,6 @@ void ABaseAbility::SetCanAttack(bool bCanAttack)
 		SmashPlayerStateInfo.PlayerMovement.bCanAttack = bCanAttack;
 		Parent->SetStateInfo(SmashPlayerStateInfo);
 	}
-	//Character�� CanAttack�� ����
 }
 
 void ABaseAbility::SetJump(bool bCanJump)
@@ -475,39 +484,39 @@ void ABaseAbility::SetJump(bool bCanJump)
 		SmashPlayerStateInfo.PlayerMovement.bCanJump = bCanJump;
 		Parent->SetStateInfo(SmashPlayerStateInfo);
 	}
-	//Character�� CanJump�� ����
-}
-
-void ABaseAbility::SetFlip(bool bCanFlip)
-{
-	if (Parent)
-	{
-		FSmashPlayerStateInfo SmashPlayerStateInfo = Parent->GetStateInfo();
-		SmashPlayerStateInfo.PlayerMovement.bCanFlipping = bCanFlip;
-		Parent->SetStateInfo(SmashPlayerStateInfo);
-	}
 }
 
 void ABaseAbility::DodgeDelay()
 {
-	//Character�� DodgeDelayEvent �Լ� ȣ��
+	// DodgeDelayEvent �Լ� ȣ��
 }
 
 void ABaseAbility::Multicast_SetFlip_Implementation(bool bCanFlip)
 {
+	if (!Parent)
+		return;
+	FSmashPlayerStateInfo SmashPlayerStateInfo = Parent->GetStateInfo();
+	SmashPlayerStateInfo.PlayerMovement.bCanFlipping = bCanFlip;
+	Parent->SetStateInfo(SmashPlayerStateInfo);
 }
 
 void ABaseAbility::CharacterCollision(ECollisionEnabled::Type Type)
 {
+	if (!Parent)
+		return;
+	Parent->GetCapsuleComponent()->SetCollisionEnabled(Type);
 }
 
 void ABaseAbility::WalkOffLedge(bool bCanWalkOff)
 {
-	//Charater�� CanWalkOffLedges�� ����
+	if (!Parent)
+		return;
+	Parent->GetCharacterMovement()->bCanWalkOffLedges = bCanWalkOff;
 }
 
 void ABaseAbility::Multicast_EndAnim_Implementation(int32 InAnimNo)
 {
+	BP_OnEndAnim(InAnimNo);
 }
 
 void ABaseAbility::ActivateOtherAbility(ABaseAbility* Ability)
@@ -602,4 +611,9 @@ void ABaseAbility::HealPlayer(int32 HealAmount)
 void ABaseAbility::Charge(bool InChargeing)
 {
 	bCharging = InChargeing;
+}
+
+void ABaseAbility::EndAllNonChargedAbilities(ABaseAbility* Caller)
+{
+	Parent->AbilitySystemComponent->EndAllNonChargedAbilities(Caller);
 }
