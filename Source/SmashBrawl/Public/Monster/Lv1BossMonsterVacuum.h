@@ -3,22 +3,27 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
-#include "NiagaraComponent.h"
-#include "NiagaraFunctionLibrary.h"
 #include "BaseBossPatternActor.h"
-#include "Lv1BossMonsterLavaBurst.generated.h"
+#include "NiagaraComponent.h"
+#include "Lv1BossMonsterVacuum.generated.h"
 
 UCLASS()
-class SMASHBRAWL_API ALv1BossMonsterLavaBurst : public ABaseBossPatternActor
+class SMASHBRAWL_API ALv1BossMonsterVacuum : public ABaseBossPatternActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	ALv1BossMonsterLavaBurst();
+	ALv1BossMonsterVacuum();
 
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void VacuumAction() const;
+
+	virtual void Tick(float DeltaSeconds) override;
+
+	void DestroyVacuum();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class USceneComponent* RootComp;
@@ -28,4 +33,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	UNiagaraSystem* NiagaraEffectTemplate;
+
+	UPROPERTY(EditAnywhere, Category = "Value")
+	float VacuumForce = 50.f;
+
+	FTimerHandle DestroyTimer;
+
+	
+	
 };

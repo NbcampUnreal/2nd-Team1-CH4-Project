@@ -3,6 +3,8 @@
 
 #include "../../Public/Monster/BaseBossMonster.h"
 
+#include "AIController.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Charactor/BaseCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
@@ -90,6 +92,19 @@ void ABaseBossMonster::PerformAttack_Implementation(int32 MontageIndex)
 	if (HasAuthority())
 	{
 		Multicast_PerformAnimation(Montage);
+	}
+}
+
+void ABaseBossMonster::SetState_Implementation(ESmashBossState const NewState)
+{
+	CurrentState = NewState;
+
+	if (AAIController* Ctr = Cast<AAIController>(GetController()))
+	{
+		if (UBlackboardComponent* BBC = Ctr->GetBlackboardComponent())
+		{
+			BBC->SetValueAsBool(FName("bDoChangeState"), true);
+		}
 	}
 }
 

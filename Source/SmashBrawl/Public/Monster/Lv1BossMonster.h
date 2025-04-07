@@ -30,6 +30,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TSubclassOf<ABaseBossPatternActor> Magic;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> Vacuum;
 	
 	UFUNCTION(Server, Reliable)
 	void Server_BreathAttack() const;
@@ -51,4 +54,7 @@ public:
 
 	UFUNCTION(Server, Reliable)
 	void Server_SideLavaLAttack();
+
+	UFUNCTION(Server, Reliable)
+	void Server_VacuumAttack();
 };

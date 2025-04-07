@@ -33,11 +33,17 @@ public:
 	UFUNCTION(NetMulticast, Reliable)
 	void Multicast_PerformAnimation(UAnimMontage* Montage);
 
-	UFUNCTION(BlueprintCallable)
-	void SetbIsAttacking(bool NewState) {bIsAttacking = NewState;}
+	UFUNCTION(BlueprintPure, Category = "State")
+	FORCEINLINE ESmashBossState GetState() const { return CurrentState; }
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	UDataTable* StatsTable;
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "State")
+	void SetState(ESmashBossState const NewState);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
+	ESmashBossState CurrentState = ESmashBossState::Phase1;
+
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	//UDataTable* StatsTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class USphereComponent* HeadCollision;

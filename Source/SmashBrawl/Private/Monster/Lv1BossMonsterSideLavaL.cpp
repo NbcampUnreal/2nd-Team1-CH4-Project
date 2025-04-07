@@ -8,6 +8,9 @@ ALv1BossMonsterSideLavaL::ALv1BossMonsterSideLavaL()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SetRootComponent(RootComp);
+
 	NiagaraTrailEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailEffect"));
 	NiagaraTrailEffect->SetupAttachment(RootComponent);
 	NiagaraTrailEffect->bAutoActivate = false;
@@ -26,7 +29,7 @@ void ALv1BossMonsterSideLavaL::BeginPlay()
 			NiagaraEffectTemplate,
 			GetActorLocation() + FVector(250.0f, 0, -150.0f),
 			FRotator(0, -90, 0),
-			FVector(5.0f, 13.0f, 5.0f) 
+			FVector(3.0f, 10.0f, 5.0f) 
 		);
 	}
 }

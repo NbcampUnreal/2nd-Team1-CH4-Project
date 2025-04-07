@@ -16,6 +16,9 @@ class SMASHBRAWL_API ALv1BossMonsterSideLavaL : public ABaseBossPatternActor
 public:
 	// Sets default values for this actor's properties
 	ALv1BossMonsterSideLavaL();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class USceneComponent* RootComp;
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -12,6 +12,12 @@ ALv1BossMonsterMagic::ALv1BossMonsterMagic()
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	RootComp = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	SetRootComponent(RootComp);
+
+	TelegraphMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TelegraphBoxComponent"));
+	TelegraphMeshComponent->SetupAttachment(RootComp);
+	
 	NiagaraTrailEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailEffect"));
 	NiagaraTrailEffect->SetupAttachment(RootComponent);
 	NiagaraTrailEffect->bAutoActivate = false;
@@ -24,14 +30,21 @@ void ALv1BossMonsterMagic::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GetWorldTimerManager().SetTimer(DoAttackTimerHandle, this, &ALv1BossMonsterMagic::DoAttack, 2.0f, false);
+}
+
+void ALv1BossMonsterMagic::DoAttack() const
+{
 	if (NiagaraEffectTemplate)
 	{
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(),
 			NiagaraEffectTemplate,
-			GetActorLocation(),
+			GetActorLocation() - FVector(0, 0, -50.0f),
 			FRotator(0, 0, 0),
-			FVector(1.0f, 1.0f, 1.0f) 
+			FVector(2.0f, 2.0f, 2.0f) 
 		);
 	}
+
+	TelegraphMeshComponent->SetHiddenInGame(true);
 }

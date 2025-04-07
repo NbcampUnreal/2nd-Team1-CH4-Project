@@ -17,6 +17,9 @@ public:
 	// Sets default values for this actor's properties
 	ALv1BossMonsterSideLavaR();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class USceneComponent* RootComp;
+
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(VisibleAnywhere, Category = "Effects")

@@ -16,6 +16,14 @@ ALv1BossMonster::ALv1BossMonster()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void ALv1BossMonster::Server_VacuumAttack_Implementation()
+{
+	FVector HeadLocation = HeadCollision->GetComponentLocation();
+	FVector SpawnLocation = FVector(HeadLocation.X, HeadLocation.Y, HeadLocation.Z);
+	FRotator SpawnRotation = FRotator(0, 90, 0);
+	GetWorld()->SpawnActor<ABaseBossPatternActor>(Vacuum, SpawnLocation, SpawnRotation);
+}
+
 void ALv1BossMonster::Server_SideLavaLAttack_Implementation()
 {
 	FVector LeftArmLocation = LeftArmCollision->GetComponentLocation();
