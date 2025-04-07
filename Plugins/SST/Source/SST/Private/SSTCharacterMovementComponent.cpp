@@ -245,7 +245,8 @@ void USSTCharacterMovementComponent::StartNewPhysics(float deltaTime, int32 Iter
 	*  in the opposite direction.
 	*/
 	FVector forward = SSTCharacterOwner->GetActorForwardVector();
-	if ((FacingRight && (forward.X < 1.f - FLT_EPSILON)) || (!FacingRight && (forward.X > -1.f + FLT_EPSILON)))
+	if ((FacingRight && (forward.X < 1.f - FLT_EPSILON))
+		|| (!FacingRight && (forward.X > -1.f + FLT_EPSILON)))
 	{
 		float angleFromXAxis = FMath::RadiansToDegrees(FMath::Acos(FVector::DotProduct(forward, (FacingRight ? 1 : -1) * FVector::ForwardVector)));
 
@@ -376,7 +377,10 @@ void USSTCharacterMovementComponent::PhysWallslide(float DeltaTime, int32 Iterat
 		bool FinishWallslide = false;
 		TArray<FHitResult> HitResultsWall;
 		FHitResult Floor;
-		if (!IsHeadedForwards() || !CanWallSlide || GetValidFloorBeneath(Floor) || !GetWallslideWall(HitResultsWall))
+		if (!IsHeadedForwards()
+			|| !CanWallSlide
+			|| GetValidFloorBeneath(Floor)
+			|| !GetWallslideWall(HitResultsWall))
 		{
 			FinishWallslide = true;
 		}
@@ -653,11 +657,11 @@ void USSTCharacterMovementComponent::AddInputVector(FVector WorldVector, bool bF
 	}
 }
 
-bool USSTCharacterMovementComponent::DoJump(bool bReplayingMoves, float DeltaTime)
+bool USSTCharacterMovementComponent::DoJump(bool bReplayingMoves)
 {
 	bool InWallslide = CanWalljump();
 	bool InDash = IsDashing;
-	if (Super::DoJump(bReplayingMoves, DeltaTime))
+	if (Super::DoJump(bReplayingMoves))
 	{
 		if (InWallslide)
 		{
@@ -674,7 +678,6 @@ bool USSTCharacterMovementComponent::DoJump(bool bReplayingMoves, float DeltaTim
 	}
 	return false;
 }
-
 
 bool USSTCharacterMovementComponent::CanCrouchInCurrentState() const
 {
@@ -698,16 +701,8 @@ bool USSTCharacterMovementComponent::CanWalljump() const
 
 bool USSTCharacterMovementComponent::RequestTurnAround()
 {
-	if (Turning)
-	{
-		return false;
-	}
-
-	if (IsDashing && !CanTurnWhileDashing)
-	{
-		return false;
-	}
-
+	if (Turning) { return false; }
+	if (IsDashing && !CanTurnWhileDashing) { return false; }
 	Turning = true;
 	FacingRight = !FacingRight;
 	return true;
