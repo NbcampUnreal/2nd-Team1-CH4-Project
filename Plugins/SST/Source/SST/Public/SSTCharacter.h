@@ -29,7 +29,7 @@ protected:
 	 * 이동 입력에 대한 처리
 	 * @param Value - 입력 액션 값, 좌우 이동의 방향과 강도 결정
 	 */
-	void Move(const struct FInputActionValue& Value);
+	virtual  void Move(const struct FInputActionValue& Value);
 
 	/** 
 	 * 웅크리기/낙하 입력에 대한 처리
@@ -135,6 +135,9 @@ public:
 	 * @return FCollisionQueryParams - 액터 자신과 모든 자식을 무시하는 충돌 쿼리 파라미터
 	 */
 	virtual FCollisionQueryParams GetIgnoreSelfParams() const;
+
+	UFUNCTION(BlueprintCallable,Category="Movement")
+	bool IsFacingRight();
 
 public:
 	/** 커스텀 캐릭터 이동 컴포넌트 */

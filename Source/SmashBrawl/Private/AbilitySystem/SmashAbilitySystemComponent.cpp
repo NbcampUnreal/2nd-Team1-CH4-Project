@@ -42,10 +42,10 @@ void USmashAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick Tic
 void USmashAbilitySystemComponent::MainTick()
 {
 	// 능력 상태이지만 특정 공격 타입이 없는 경우, 적절한 능력 활성화
-	if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Ability &&	IInterface_SmashCombat::Execute_GetAttackTypes(Parent) == ESmashAttacks::None)
-	{
-		Multicast_WitchAbility();
-	}
+	// if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Ability &&	IInterface_SmashCombat::Execute_GetAttackTypes(Parent) == ESmashAttacks::None)
+	// {
+	// 	Multicast_WitchAbility();
+	// }
 }
 
 void USmashAbilitySystemComponent::BufferCall(ESmashBuffer NewBuffer)

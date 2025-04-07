@@ -65,6 +65,7 @@ void UStateSystem::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 	{
 		CurrentState->TickState();
 	}
+	
 }
 
 UBaseCharacterState* UStateSystem::FindState(ESmashPlayerStates FindToState)

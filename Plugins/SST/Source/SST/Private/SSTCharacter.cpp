@@ -65,38 +65,22 @@ void ASSTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	}
 }
 
-void ASSTCharacter::Move(const FInputActionValue& Value)
-{
-	if (Controller && SSTCharacterMovementComponent)
-	{
-		float MovementValue = Value.Get<float>();
-		SSTCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MovementValue);
-	}
-}
-
-void ASSTCharacter::JumpOrDrop_Implementation()
-{
-	if (bIsCrouched) // attempt to drop through platform, if any
-	{
-		SSTCharacterMovementComponent->WantsToPlatformDrop = true;
-	}
-	else
-	{
-		Jump();
-	}
-}
+void ASSTCharacter::Move(const FInputActionValue& Value){}
 
 void ASSTCharacter::CrouchDrop_Implementation()
 {
-	if (CanCrouch())
-	{
-		Crouch();
-	}
 }
 
 void ASSTCharacter::StopCrouchDrop_Implementation()
 {
-	UnCrouch();
+}
+
+void ASSTCharacter::JumpOrDrop_Implementation()
+{
+}
+
+void ASSTCharacter::Dash_Implementation()
+{
 }
 
 bool ASSTCharacter::CanDash_Implementation() const
@@ -107,14 +91,8 @@ bool ASSTCharacter::CanDash_Implementation() const
 	return true;
 }
 
-void ASSTCharacter::Dash_Implementation()
-{
-	SSTCharacterMovementComponent->WantsToDash = true;
-}
-
 void ASSTCharacter::ReleaseJump_Implementation()
 {
-	StopJumping();
 }
 
 bool ASSTCharacter::CanCrouch() const
@@ -178,7 +156,7 @@ void ASSTCharacter::CheckJumpInput(float DeltaTime)
 					JumpCurrentCount++;
 				}
 
-				const bool bDidJump = CanJump() && SSTCharacterMovementComponent->DoJump(bClientUpdating,DeltaTime);
+				const bool bDidJump = CanJump() && SSTCharacterMovementComponent->DoJump(bClientUpdating, DeltaTime);
 				if (bDidJump)
 				{
 					// Transition from not (actively) jumping to jumping.
@@ -206,4 +184,9 @@ FCollisionQueryParams ASSTCharacter::GetIgnoreSelfParams() const
 	Params.AddIgnoredActor(this);
 
 	return Params;
+}
+
+bool ASSTCharacter::IsFacingRight()
+{
+	return SSTCharacterMovementComponent->IsFacingRight();
 }

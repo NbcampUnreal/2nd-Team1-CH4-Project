@@ -6,6 +6,17 @@
 
 
 UENUM(BlueprintType)
+enum class ESmashHitState : uint8
+{
+	Normal UMETA(DisplayName = "Normal"),
+	Intangible UMETA(DisplayName = "Intangible"),
+	Invincible UMETA(DisplayName = "Invincible"),
+	Armor UMETA(DisplayName = "Armor"),
+	Shield UMETA(DisplayName = "Shield")
+};
+
+
+UENUM(BlueprintType)
 enum class ESmashCharacter : uint8
 {
 	None UMETA(DisplayName = "None"),
@@ -181,12 +192,22 @@ struct FSmashPlayerMovement
 };
 
 USTRUCT(BlueprintType)
+struct FSmashPlayCondition
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Condition")
+	bool bCanSmash = false;
+};
+
+USTRUCT(BlueprintType)
 struct FSmashPlayerStateInfo
 {
 	GENERATED_BODY()
 
-	// 액션 가능 여부 플래그
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
 	FSmashPlayerMovement PlayerMovement;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
+	FSmashPlayCondition PlayCondition;
 };
