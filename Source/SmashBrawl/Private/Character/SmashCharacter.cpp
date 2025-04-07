@@ -6,7 +6,7 @@
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
 #include "Actors/Shield.h"
 #include "Character/FXComponent.h"
-#include "Character/StateSystem.h"
+#include "Character/SmashStateSystem.h"
 #include "Character/Components/SmashCharacterMovementComponent.h"
 #include "Character/Components/SmashCharacterStats.h"
 #include "Components/CapsuleComponent.h"
@@ -34,7 +34,7 @@ ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer) : 
 	// 컴포넌트 생성
 	SmashCharacterMovementComponent = Cast<USmashCharacterMovementComponent>(GetCharacterMovement());
 	AbilitySystemComponent = CreateDefaultSubobject<USmashAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-	StateSystem = CreateDefaultSubobject<UStateSystem>(TEXT("CharacterState"));
+	StateSystem = CreateDefaultSubobject<USmashStateSystem>(TEXT("CharacterState"));
 	SmashCharacterStatsComponent = CreateDefaultSubobject<USmashCharacterStats>(TEXT("SmashCharacterStatsComponent"));
 
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComponent"));
@@ -72,7 +72,6 @@ void ASmashCharacter::BeginPlay()
 
 	LandedDelegate.AddDynamic(this, &ASmashCharacter::OnLandedSmash);
 
-	// 초기화 지연 시간 단축 (이전 0.25초)
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASmashCharacter::StartUp, 0.1f, false);
 }
@@ -145,7 +144,7 @@ void ASmashCharacter::StartUp()
 		AttachShield();
 
 		// 이동 상태 초기화
-		SetMovementState(FSmashPlayerMovement(false, false, false, false));
+		SetMovementState(FSmashPlayerMovement(true, true, true, true));
 
 		// 능력 시스템 초기화 및 널 체크
 		if (AbilitySystemComponent)
@@ -166,7 +165,7 @@ void ASmashCharacter::StartUp()
 		// 상태 시스템 초기화 및 널 체크
 		if (StateSystem)
 		{
-			StateSystem->ChangeState(ESmashPlayerStates::Ability);
+			StateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		}
 		else
 		{
@@ -300,21 +299,23 @@ void ASmashCharacter::Tick(float DeltaSeconds)
 		return;
 	}
 
-	FacingCheck();
-
-	Multicast_SmashDetection();
-	UpdateLocations();
-	UpdateFlashing();
-
-	if (AbilitySystemComponent)
-	{
-		AbilitySystemComponent->MainTick();
-	}
-
-	if (FXComponent)
-	{
-		FXComponent->FXMainLoop();
-	}
+	// FacingCheck();
+	//
+	// Multicast_SmashDetection();
+	//
+	// UpdateLocations();
+	//
+	// UpdateFlashing();
+	//
+	// if (AbilitySystemComponent)
+	// {
+	// 	AbilitySystemComponent->MainTick();
+	// }
+	//
+	// if (FXComponent)
+	// {
+	// 	FXComponent->FXMainLoop();
+	// }
 }
 
 void ASmashCharacter::FacingCheck()
@@ -464,7 +465,7 @@ void ASmashCharacter::TauntAction(ESmashDirection ActionDirection)
 {
 	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
 	{
-		StateSystem->ChangeState(ESmashPlayerStates::Ability);
+		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Taunt;
 		Direction = ActionDirection;
 	}
@@ -478,7 +479,7 @@ void ASmashCharacter::Dizzy()
 	GetWorld()->GetTimerManager().SetTimer(DizzyHandle, [this]()
 	{
 		bDizzied = false;
-		StateSystem->ChangeState(ESmashPlayerStates::Idle);
+		StateSystem->TryChangeState(ESmashPlayerStates::Idle);
 	}, 2.0f, false);
 }
 
@@ -493,7 +494,7 @@ float ASmashCharacter::NockBackCalculate()
 
 	float Value5 = (Value3 * Value4) + 18.0f;
 	float Value6 = (SmashCharacterStatsComponent->Percent / 7.0f) * HitScale;
-	float Value7 = (Value5 *Value6) + BaseKnock;
+	float Value7 = (Value5 * Value6) + BaseKnock;
 
 	Knockback = Value7 * DamRatios;
 	return Knockback;
@@ -517,10 +518,10 @@ void ASmashCharacter::LandedAction()
 		StateSystem->GetCurrentState() == ESmashPlayerStates::Tumble))
 	{
 		SetCanFlip(true);
-		StateSystem->ChangeState(ESmashPlayerStates::Idle);
+		StateSystem->TryChangeState(ESmashPlayerStates::Idle);
 
 		if (bDizzied)
-			StateSystem->ChangeState(ESmashPlayerStates::Dizzy);
+			StateSystem->TryChangeState(ESmashPlayerStates::Dizzy);
 	}
 }
 
@@ -540,15 +541,12 @@ void ASmashCharacter::Move(const struct FInputActionValue& Value)
 {
 	if (Controller && SmashCharacterMovementComponent)
 	{
-		if (StateInfo.PlayerMovement.bCanMove)
+		MoveInputValue = Value.Get<float>();
+
+		if (StateSystem->TryChangeState(ESmashPlayerStates::WalkAndRun))
 		{
-			MoveInputValue = Value.Get<float>();
 			SmashCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MoveInputValue);
 			//FootStep->DetectFeet();
-			if (StateSystem->GetCurrentState() == ESmashPlayerStates::Idle && !bPushed && !(MoveInputValue == 0.0f))
-			{
-				StateSystem->ChangeState(ESmashPlayerStates::WalkAndRun);
-			}
 		}
 	}
 }
@@ -563,60 +561,18 @@ void ASmashCharacter::UpDownAxis(const FInputActionValue& InputActionValue)
 
 void ASmashCharacter::JumpOrDrop_Implementation()
 {
+	// Super::JumpOrDrop();
 	if (bIsCrouched) // attempt to drop through platform, if any
 	{
 		SSTCharacterMovementComponent->WantsToPlatformDrop = true;
 	}
 	else
 	{
-		Jump();
-
-		StateSystem->ChangeState(ESmashPlayerStates::Jump);
-
-		SmashCharacterMovementComponent->GravityScale = SmashCharacterStatsComponent->DefaultGravityScale;
-
-		bool bCondition = MoveInputValue > 0.0f && !IsFacingRight() || MoveInputValue < 0.0f && IsFacingRight() || MoveInputValue == 0.0f;
-		if (bCondition && SmashCharacterMovementComponent->IsFalling())
+		if (StateInfo.PlayerMovement.bCanJump)
 		{
-			GetMovementComponent()->StopMovementImmediately();
+			Jump();
+			StateSystem->TryChangeState(ESmashPlayerStates::Jump);
 		}
-
-		//아래로직은 2단점프일 경우 인것 같습니다.
-		int32 LocalDirection = 0;
-		if (IsFacingRight())
-		{
-			if (MoveInputValue < 0.0f)
-			{
-				LocalDirection = 1; //Right <
-			}
-			else
-			{
-				LocalDirection = 2; //Right >
-			}
-		}
-		else
-		{
-			if (MoveInputValue > 0.0f)
-			{
-				LocalDirection = 3; //Left <
-			}
-			else
-			{
-				LocalDirection = 4; //Left <
-			}
-		}
-
-
-		if (LocalDirection == 1 || LocalDirection == 3) Direction = ESmashDirection::Back;
-		else if (LocalDirection == 2 || LocalDirection == 4) Direction = ESmashDirection::Forward;
-
-		bLedgeCooldown = true;
-
-		FTimerHandle LedgeCooldownHandle;
-		GetWorld()->GetTimerManager().SetTimer(LedgeCooldownHandle, [this]()
-		{
-			bLedgeCooldown = false;
-		}, 0.2f, false);
 	}
 }
 
@@ -629,7 +585,7 @@ void ASmashCharacter::BasicAttack()
 {
 	if (StateSystem->GetCurrentState() == ESmashPlayerStates::Shield)
 	{
-		StateSystem->ChangeState(ESmashPlayerStates::Ability);
+		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Grab;
 		return;
 	}
@@ -638,14 +594,14 @@ void ASmashCharacter::BasicAttack()
 	{
 		if (GetCharacterMovement()->IsFalling())
 		{
-			StateSystem->ChangeState(ESmashPlayerStates::Ability);
+			StateSystem->TryChangeState(ESmashPlayerStates::Ability);
 			AbilityType = ESmashAbilityTypes::Air;
 			return;
 		}
 
 		if (StateInfo.PlayCondition.bCanSmash)
 		{
-			StateSystem->ChangeState(ESmashPlayerStates::Ability);
+			StateSystem->TryChangeState(ESmashPlayerStates::Ability);
 			AbilityType = ESmashAbilityTypes::Smash;
 			StateInfo.PlayCondition.bCanSmash = false;
 			return;
@@ -653,13 +609,24 @@ void ASmashCharacter::BasicAttack()
 
 		if (StateSystem->GetCurrentState() != ESmashPlayerStates::WalkAndRun)
 		{
-			StateSystem->ChangeState(ESmashPlayerStates::Ability);
+			StateSystem->TryChangeState(ESmashPlayerStates::Ability);
 			AbilityType = ESmashAbilityTypes::Other;
 			return;
 		}
 
-		StateSystem->ChangeState(ESmashPlayerStates::Ability);
+		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Basic;
+	}
+}
+
+void ASmashCharacter::CrouchDrop_Implementation()
+{
+	// Super::CrouchDrop_Implementation();
+
+	if (CanCrouch())
+	{
+		StateSystem->TryChangeState(ESmashPlayerStates::Crouch);
+		Crouch();
 	}
 }
 
@@ -687,7 +654,7 @@ void ASmashCharacter::SpecialAttackPressed(const FInputActionValue& InputActionV
 	bSpecialAttackButton = true;
 	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
 	{
-		StateSystem->ChangeState(ESmashPlayerStates::Ability);
+		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Special;
 	}
 }
@@ -781,6 +748,15 @@ void ASmashCharacter::Client_UpdateStateInfo_Implementation(const FSmashPlayerSt
 bool ASmashCharacter::CanFlip() const
 {
 	return StateInfo.PlayerMovement.bCanFlipping;
+}
+
+void ASmashCharacter::Server_RequestSetStateInfo_Implementation(const FSmashPlayerStateInfo& NewStateInfo)
+{
+	// 서버에서만 실행
+	if (GetLocalRole() == ROLE_Authority)
+	{
+		SetStateInfo(NewStateInfo);
+	}
 }
 
 void ASmashCharacter::SetStateInfo(const FSmashPlayerStateInfo& NewStateInfo)

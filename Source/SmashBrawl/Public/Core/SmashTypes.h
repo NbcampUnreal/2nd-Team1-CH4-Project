@@ -4,6 +4,19 @@
 #include "UObject/Object.h"
 #include "SmashTypes.generated.h"
 
+UENUM(BlueprintType)
+enum class ESmashActionType : uint8
+{
+	None UMETA(DisplayName = "None"),
+	BasicAttack UMETA(DisplayName = "BasicAttack"),
+	SpecialAttack UMETA(DisplayName = "SpecialAttack"),
+	Jump UMETA(DisplayName = "Jump"),
+	Dodge UMETA(DisplayName = "Dodge"),
+	Shield UMETA(DisplayName = "Shield"),
+	Grab UMETA(DisplayName = "Grab"),
+	Taunt UMETA(DisplayName = "Taunt"),
+	// 필요한 액션들 추가...
+};
 
 UENUM(BlueprintType)
 enum class ESmashHitState : uint8
