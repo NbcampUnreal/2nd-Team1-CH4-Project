@@ -3,7 +3,7 @@
 
 #include "AbilitySystem/BaseAbility.h"
 #include "Net/UnrealNetwork.h"
-#include "GameFramework/Character.h"
+#include "Character/SmashCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -447,21 +447,45 @@ void ABaseAbility::SetBuffer()
 
 void ABaseAbility::SetMovement(bool bCanMove)
 {
+	if (Parent)
+	{
+		FSmashPlayerStateInfo SmashPlayerStateInfo = Parent->GetStateInfo();
+		SmashPlayerStateInfo.PlayerMovement.bCanMove = bCanMove;
+		Parent->SetStateInfo(SmashPlayerStateInfo);
+	}
 	//Character�� CanMove�� ����
 }
 
 void ABaseAbility::SetCanAttack(bool bCanAttack)
 {
+	if (Parent)
+	{
+		FSmashPlayerStateInfo SmashPlayerStateInfo = Parent->GetStateInfo();
+		SmashPlayerStateInfo.PlayerMovement.bCanAttack = bCanAttack;
+		Parent->SetStateInfo(SmashPlayerStateInfo);
+	}
 	//Character�� CanAttack�� ����
 }
 
 void ABaseAbility::SetJump(bool bCanJump)
 {
+	if (Parent)
+	{
+		FSmashPlayerStateInfo SmashPlayerStateInfo = Parent->GetStateInfo();
+		SmashPlayerStateInfo.PlayerMovement.bCanJump = bCanJump;
+		Parent->SetStateInfo(SmashPlayerStateInfo);
+	}
 	//Character�� CanJump�� ����
 }
 
 void ABaseAbility::SetFlip(bool bCanFlip)
 {
+	if (Parent)
+	{
+		FSmashPlayerStateInfo SmashPlayerStateInfo = Parent->GetStateInfo();
+		SmashPlayerStateInfo.PlayerMovement.bCanFlipping = bCanFlip;
+		Parent->SetStateInfo(SmashPlayerStateInfo);
+	}
 }
 
 void ABaseAbility::DodgeDelay()

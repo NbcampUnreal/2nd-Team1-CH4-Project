@@ -19,7 +19,7 @@ void ASmashBaseDamager::Init(ACharacter* Parent, const FHitProperty HitProperty)
 	SpawningHitProperty = HitProperty;
 	SpawningPriority = 0;
 	// 캐릭터의 Faceing 추가할것 지금은 임시로 Left
-	SpawningDirection = EFaceing::Left;
+	SpawningDirection = ESmashFaceing::Left;
 }
 
 

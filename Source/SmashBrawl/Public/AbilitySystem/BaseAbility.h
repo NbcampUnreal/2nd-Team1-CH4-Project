@@ -8,6 +8,8 @@
 #include "Core/SmashTypes.h"
 #include "BaseAbility.generated.h"
 
+class ASmashCharacter;
+
 UCLASS()
 class SMASHBRAWL_API ABaseAbility : public AActor
 {
@@ -217,7 +219,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bActive;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
-	TObjectPtr<ACharacter> Parent;
+	TObjectPtr<ASmashCharacter> Parent;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	FVector ParentLocation;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")

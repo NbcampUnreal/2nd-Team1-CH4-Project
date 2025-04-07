@@ -5,6 +5,7 @@
 #include "Core/SmashTypes.h"
 #include "SmashAbilitySystemComponent.generated.h"
 
+class ASmashCharacter;
 class ABaseAbility;
 
 /**
@@ -222,7 +223,7 @@ public:
 	 * 부모 캐릭터 참조
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility System|References")
-	TObjectPtr<ACharacter> Parent;
+	TObjectPtr<ASmashCharacter> Parent;
 
 
 	//------------------------------------------------------------

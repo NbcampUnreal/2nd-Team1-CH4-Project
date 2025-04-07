@@ -1,7 +1,7 @@
 #include "SmashBrawl/Public/AbilitySystem/SmashAbilitySystemComponent.h"
 
 #include "AbilitySystem/BaseAbility.h"
-#include "GameFramework/Character.h"
+#include "Character/SmashCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "SmashBrawl/Public/Interfaces/Interface_SmashCombat.h"
 
@@ -26,7 +26,7 @@ void USmashAbilitySystemComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// 부모 캐릭터 참조 설정
-	Parent = Cast<ACharacter>(GetOwner());
+	Parent = Cast<ASmashCharacter>(GetOwner());
 	if (!Parent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("부모는 캐릭터가 아닙니다"));

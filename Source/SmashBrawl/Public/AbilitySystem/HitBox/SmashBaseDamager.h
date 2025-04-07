@@ -46,5 +46,5 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
 	int32 SpawningPriority;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	EFaceing SpawningDirection;
+	ESmashFaceing SpawningDirection;
 };
