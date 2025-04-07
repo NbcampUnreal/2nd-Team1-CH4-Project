@@ -50,6 +50,11 @@ bool UBaseCharacterState::CanState_Implementation()
 	return true;
 }
 
+bool UBaseCharacterState::IsCurrentPlayerState(ESmashPlayerStates CheckState)
+{
+	return OwnerStateSystem->GetCurrentState() == CheckState;
+}
+
 void UBaseCharacterState::InitActions()
 {
 	// 기존 액션 제거
