@@ -483,8 +483,6 @@ public:
 	// 리스폰 능력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Misc")
 	TSubclassOf<ABaseAbility> RespawnAbilityClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Misc")
-	TObjectPtr<ABaseAbility> RespawnAbility;
 
 	// 아이템 사용
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Misc")

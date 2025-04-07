@@ -4,7 +4,6 @@
 #include "SmashBrawl/Public/Character/BaseCharacter.h"
 #include "EnhancedInputComponent.h"
 #include "Character/StateSystem.h"
-#include "Character/BrawlPlayerController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Net/UnrealNetwork.h"
 

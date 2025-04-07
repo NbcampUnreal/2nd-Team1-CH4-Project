@@ -154,3 +154,11 @@ struct FSmashPlayerStateInfo
 	FSmashPlayerMovement PlayerMovement;
 	
 };
+
+UENUM(BlueprintType)
+enum class EFaceing : uint8
+{
+	Left UMETA(DisplayName = "Left"),
+	Right UMETA(DisplayName = "Right")
+};
+

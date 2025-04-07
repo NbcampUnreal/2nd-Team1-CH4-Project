@@ -165,7 +165,7 @@ void USmashAbilitySystemComponent::AttachAllAbilities()
 	LedgeAttack = AttachAbility(LedgeAttackClass);
 	ProneAttack = AttachAbility(ProneAttackClass);
 	ProneStand = AttachAbility(ProneStandClass);
-	RespawnAbility = AttachAbility(RespawnAbilityClass);
+//	RespawnAbility = AttachAbility(RespawnAbilityClass);
 	Ledge = AttachAbility(LedgeClass);
 	Items = AttachAbility(ItemsClass);
 
@@ -447,7 +447,8 @@ void USmashAbilitySystemComponent::Multicast_Prone_Implementation()
 void USmashAbilitySystemComponent::Multicast_Respawning_Implementation()
 {
 	if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Dead)
-		RespawnAbility->bActive = true;
+	{}
+		//RespawnAbility->bActive = true;
 }
 
 void USmashAbilitySystemComponent::Multicast_WitchAbility_Implementation()
