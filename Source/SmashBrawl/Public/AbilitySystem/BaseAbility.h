@@ -51,6 +51,9 @@ public:
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_EndAbility();
 
+	UFUNCTION(BlueprintNativeEvent, Category = "BaseAbility|Network")
+	void BP_OnEndAbility();
+	
 	UFUNCTION()
 	void Reset();
 
@@ -127,64 +130,97 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Land();
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void TakeAHit();
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void HitByProjectile(int32 Damage, bool bIsEnergy);
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShootProjectile();
+	
 	UFUNCTION(BlueprintCallable)
 	void SetMovement(bool bCanMove);
+	
 	UFUNCTION(BlueprintCallable)
 	void SetCanAttack(bool bCanAttack);
+	
 	UFUNCTION(BlueprintCallable)
 	void SetJump(bool bCanJump);
-	UFUNCTION(BlueprintCallable)
-	void SetFlip(bool bCanFlip);
+	
 	UFUNCTION(BlueprintCallable)
 	void DodgeDelay();
+	
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_SetFlip(bool bCanFlip);
+	
 	UFUNCTION(BlueprintCallable)
 	void CharacterCollision(ECollisionEnabled::Type Type);
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void GetCollisionInfo();
+
 	UFUNCTION(BlueprintCallable)
 	void WalkOffLedge(bool bCanWalkOff);
+
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_EndAnim(int32 InAnimNo);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "BaseAbility|Network")
+	void BP_OnEndAnim(int32 InAnimNo);
+	
 	UFUNCTION(BlueprintCallable)
 	void ActivateOtherAbility(ABaseAbility* Ability);
+
 	UFUNCTION(BlueprintCallable)
 	void HitStates(ESmashHitState SmashHitState);
+
 	UFUNCTION(BlueprintCallable)
 	void SetAttackStage(int32 _AttackStage);
+
 	UFUNCTION(BlueprintCallable)
 	void ChangeCollisionSet();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnCounter();
+
 	UFUNCTION(BlueprintCallable)
 	void AbsorbMode(bool bAbsorb);
+
 	UFUNCTION(BlueprintCallable)
 	void ReflectMode(bool bReflect);
+
 	UFUNCTION(BlueprintCallable)
 	void FullbodyLedge(bool bFullBodyLedgeGrab);
+
 	UFUNCTION(BlueprintCallable)
 	void TeleportCharacter(FVector Location, bool bSweep, bool bTeleport);
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnReflect();
+
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_StartParticles(bool bAttached, UParticleSystem* EmitterTemplate, USceneComponent* AttachToComponent,
 	                              FName AttachPointName, FVector Location, FRotator Rotation, FVector Scale,
 	                              EAttachLocation::Type LocationType, bool bAutoDestroy);
+
 	UFUNCTION(BlueprintCallable)
 	void SetGravity(int32 Settings, float CustomValue);
+
 	UFUNCTION(BlueprintCallable)
 	void HealPlayer(int32 HealAmount);
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void SpecialButtonUp();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void SpecialButtonDown();
+
+	UFUNCTION(BlueprintCallable)
+	void EndAllNonChargedAbilities(ABaseAbility* Caller);
+
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void AbilityEvent();
 

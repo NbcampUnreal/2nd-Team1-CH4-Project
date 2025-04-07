@@ -15,7 +15,6 @@ enum class ESmashHitState : uint8
 	Shield UMETA(DisplayName = "Shield")
 };
 
-
 UENUM(BlueprintType)
 enum class ESmashCharacter : uint8
 {
