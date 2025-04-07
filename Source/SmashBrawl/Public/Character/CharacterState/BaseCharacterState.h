@@ -67,6 +67,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character State")
 	TArray<USmashAction*> GetActions() const { return Actions; }
 
+	UFUNCTION(BlueprintPure, Category = "Character State")
+	bool IsCurrentPlayerState(ESmashPlayerStates CheckState);
+
 protected:
 	// 액션 초기화
 	void InitActions();
