@@ -14,8 +14,8 @@ AOneWayPlatform::AOneWayPlatform()
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
 	RootComponent = StaticMesh;
 	StaticMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	StaticMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-
+	StaticMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);	
+	
 	BelowTrigger = CreateDefaultSubobject<UBoxComponent>(TEXT("BelowTrigger"));
 	BelowTrigger->SetupAttachment(RootComponent);
 }

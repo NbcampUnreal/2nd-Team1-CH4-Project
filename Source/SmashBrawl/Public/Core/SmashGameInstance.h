@@ -14,6 +14,8 @@ UCLASS()
 class SMASHBRAWL_API USmashGameInstance : public UPlatformGameInstance
 {
 	GENERATED_BODY()
+public:
+	USmashGameInstance();
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="SmashGameInstance")
