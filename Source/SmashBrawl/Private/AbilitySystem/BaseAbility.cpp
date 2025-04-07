@@ -23,7 +23,7 @@ ABaseAbility::ABaseAbility()
 	CollisionSet =1;
 
 	// PlatformFighterKit/Blueprints/Projectiles/BP_ProjectileBase_C
-	 // ConstructorHelpers::FClassFinder<>
+	// ConstructorHelpers::FClassFinder<>
 
 	//AttackData = // ConstructorHelpers::FObjectFinder<>
 	
@@ -54,6 +54,7 @@ void ABaseAbility::BeginPlay()
 
 void ABaseAbility::Multicast_AbilityStart_Implementation()
 {
+	BP_OnAbilityStart();
 }
 
 void ABaseAbility::StartTimeline()
@@ -70,10 +71,6 @@ void ABaseAbility::EndTimeline()
 	{
 		MainTimeline->Stop();
 	}
-}
-
-void ABaseAbility::ActiveLoop()
-{
 }
 
 void ABaseAbility::Multicast_TickRep_Implementation()
@@ -125,7 +122,7 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 				//Then3
 				if (true) //Character�� States(Enum)�� ���
 				{
-					EndAbility();
+					Multicast_EndAbility();
 				}
 				//Then4
 
@@ -155,6 +152,11 @@ void ABaseAbility::Multicast_SoftEnd_Implementation()
 	SetJump(true);
 	SetMovement(true);
 	SetCanAttack(true);
+	RemoveDamagers();
+	AbsorbMode(false);
+	ReflectMode(false);
+	bIsUse = false;
+	bInputButter = false;
 }
 
 void ABaseAbility::Multicast_EndAbility_Implementation()
@@ -164,7 +166,16 @@ void ABaseAbility::Multicast_EndAbility_Implementation()
 	Multicast_SetFlip(true);
 	SetJump(true);
 	SetMovement(true);
-	SetCanAttack(true);
+	CharacterCollision(ECollisionEnabled::Type::QueryAndPhysics);
+	FullbodyLedge(false);
+	bIsUse = false;
+	//Parent->AbilityType = ESmashAbilityTypes::None;
+	//Parent->Attacks = ESmashAttacks::None;
+	if (bInputButter)
+	{
+		bInputButter = false;
+		//Parent->StopInputBuffer();
+	}
 }
 
 void ABaseAbility::Reset()
@@ -210,7 +221,7 @@ void ABaseAbility::Multicast_LandLeg_Implementation(UAnimMontage* LandAnimation,
 				SetMovement(true);
 				Multicast_EndAnim(InAnimNo);
 				bLanding = false;
-				EndAbility();
+				Multicast_EndAbility();
 			}
 		});
 		AnimInstance->Montage_SetBlendingOutDelegate(BlendOutDelegate, LandAnimation);
@@ -249,21 +260,20 @@ void ABaseAbility::Server_SpawnProjectile_Implementation(TSubclassOf<AActor> Pro
 {
 	if (ProjectileClass)
 	{
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = Parent;
-		SpawnParams.Instigator = Parent;
-		AActor* SpawnedProjectile = GetWorld()->SpawnActor<AActor>(
+		AActor* SpawnedProjectile = GetWorld()->SpawnActorDeferred<AActor>(
 			ProjectileClass,
-			SpawnTransform,
-			SpawnParams
+			SpawnTransform
 		);
-		//����ü ���� �ʱ�ȭ
+		SpawnedProjectile->Owner = Parent;
+		SpawnedProjectile->SetInstigator(Parent);
+		//Set Projectile Info
+		FinishSpawning(SpawnTransform,true);
 	}
 }
 
 void ABaseAbility::Multicast_Throw_Implementation(FName Name)
 {
-	//������ ���̺��� ������ �� ������ �÷������� Hit �Լ� ȣ��
+	
 }
 
 void ABaseAbility::Multicast_ReShield_Implementation()
@@ -435,26 +445,6 @@ void ABaseAbility::SetBuffer()
 	}
 }
 
-void ABaseAbility::Land()
-{
-	//�ڽ�Ŭ�������� ����
-}
-
-void ABaseAbility::TakeAHit()
-{
-	//�ڽ�Ŭ�������� ����
-}
-
-void ABaseAbility::HitByProjectile(int32 Damage, bool bIsEnergy)
-{
-	//�ڽ�Ŭ�������� ����
-}
-
-void ABaseAbility::ShootProjectile()
-{
-	//�ڽ�Ŭ�������� ����
-}
-
 void ABaseAbility::SetMovement(bool bCanMove)
 {
 	//Character�� CanMove�� ����
@@ -483,13 +473,8 @@ void ABaseAbility::Multicast_SetFlip_Implementation(bool bCanFlip)
 {
 }
 
-void ABaseAbility::CharacterCollision()
+void ABaseAbility::CharacterCollision(ECollisionEnabled::Type Type)
 {
-}
-
-void ABaseAbility::GetCollisionInfo()
-{
-	//�ڽ� Ŭ�������� ����
 }
 
 void ABaseAbility::WalkOffLedge(bool bCanWalkOff)
@@ -527,11 +512,6 @@ void ABaseAbility::ChangeCollisionSet()
 	
 }
 
-void ABaseAbility::OnCounter()
-{
-	//�ڽ� Ŭ�������� ����
-}
-
 void ABaseAbility::AbsorbMode(bool bAbsorb)
 {
 }
@@ -540,13 +520,14 @@ void ABaseAbility::ReflectMode(bool bReflect)
 {
 }
 
+void ABaseAbility::FullbodyLedge(bool bFullBodyLedgeGrab)
+{
+	
+}
+
 void ABaseAbility::TeleportCharacter(FVector Location, bool bSweep, bool bTeleport)
 {
 	Parent->GetCapsuleComponent()->SetWorldLocation(Location, bSweep);
-}
-
-void ABaseAbility::OnReflect()
-{
 }
 
 void ABaseAbility::Multicast_StartParticles_Implementation(bool bAttached, UParticleSystem* EmitterTemplate,
@@ -590,14 +571,7 @@ void ABaseAbility::HealPlayer(int32 HealAmount)
 {
 }
 
-void ABaseAbility::SpecialButtonUp()
+void ABaseAbility::Charge(bool InChargeing)
 {
-}
-
-void ABaseAbility::SpecialButtonDown()
-{
-}
-
-void ABaseAbility::AbilityEvent()
-{
+	bCharging = InChargeing;
 }
