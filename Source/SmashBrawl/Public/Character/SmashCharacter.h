@@ -5,6 +5,7 @@
 #include "SSTCharacter.h"
 #include "Core/SmashTypes.h"
 #include "Core/SmashUitilityLibrary.h"
+#include "Interfaces/Interface_SmashCombat.h"
 #include "SmashCharacter.generated.h"
 
 class USmashCharacterStats;
@@ -25,7 +26,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogSmashCharacter, Log, All);
  * 네트워크 복제, 상태 관리, 오류 처리 기능이 강화됨
  */
 UCLASS()
-class SMASHBRAWL_API ASmashCharacter : public ASSTCharacter
+class SMASHBRAWL_API ASmashCharacter : public ASSTCharacter, public IInterface_SmashCombat
 {
 	GENERATED_BODY()
 
@@ -71,6 +72,10 @@ public:
 
 	void TauntAction(ESmashDirection ActionDirection);
 
+	// Launch 함수
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement", Server, Reliable)
+	void Launch(FVector LaunchVector, bool bXYOver, bool bZOver);
+
 public:
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	float GetMoveInputValue() const { return MoveInputValue; }
@@ -93,6 +98,9 @@ public:
 	UFUNCTION()
 	void OnLandedSmash(const FHitResult& Hit);
 
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Input")
+	void UpdateDirection();
+
 public:
 	virtual void Move(const struct FInputActionValue& Value) override;
 
@@ -106,6 +114,7 @@ public:
 
 	virtual void CrouchDrop_Implementation() override;
 
+	virtual void StopCrouchDrop_Implementation() override;
 
 	void BasicAttackPressed(const FInputActionValue& InputActionValue);
 	void BasicAttackReleased(const FInputActionValue& InputActionValue);
@@ -168,6 +177,30 @@ public:
 	// PlayerNo 복제 시 호출되는 함수 추가
 	UFUNCTION()
 	void OnRep_PlayerNo();
+
+	// --------------Begin Iinterface_SmashCombat
+public:
+	virtual ESmashPlayerStates GetPlayerState_Implementation() override;
+
+	virtual ESmashAttacks GetAttackTypes_Implementation() override;
+
+	virtual ESmashAbilityTypes GetAbilityTypes_Implementation() override;
+
+	virtual ESmashDirection GetDirection_Implementation() override;
+
+	virtual int32 GetSuper_Implementation() override;
+
+	virtual FTransform GetAbilitySpawnTransform_Implementation() override;
+
+	virtual void SetSuper_Implementation(int32 NewSuper) override;
+
+	virtual void SetAttacks_Implementation(ESmashAttacks NewAttacks) override;
+
+	virtual void BufferButtons_Implementation() override;
+
+	virtual void ClearBuffer_Implementation() override;
+	// --------------End Iinterface_SmashCombat
+
 
 public:
 	/** 커스텀 캐릭터 이동 컴포넌트 */
@@ -283,6 +316,15 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	bool bPushed = false;
 
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	bool bCanSmash = false;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	bool bBufferdInput =true;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	bool bBufferdDirection =false;
+	
 	UPROPERTY(ReplicatedUsing=OnRep_PlayerNo, BlueprintReadWrite, Category="Smash Character")
 	int32 PlayerNo;
 
@@ -294,6 +336,15 @@ public:
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	ESmashAbilityTypes AbilityType;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	ESmashAttacks Attacks;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	ESmashBuffer BufferMove = ESmashBuffer::Attack;
+	
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	ESmashDirection BufferDirection = ESmashDirection::Up;
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	int32 Team;

@@ -48,7 +48,6 @@ enum class ESmashPlayerStates : uint8
 	Idle UMETA(DisplayName = "Idle"),
 	WalkAndRun UMETA(DisplayName = "Walk/Run"),
 	Crouch UMETA(DisplayName = "Crouch"),
-	Sprint UMETA(DisplayName = "Sprint"),
 	Jump UMETA(DisplayName = "Jump"),
 	Fall UMETA(DisplayName = "Fall"),
 	Hit UMETA(DisplayName = "Hit"),
