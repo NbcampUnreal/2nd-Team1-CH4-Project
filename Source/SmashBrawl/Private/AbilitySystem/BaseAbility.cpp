@@ -389,7 +389,7 @@ void ABaseAbility::AnimNotifyStart(bool InDamager, FName NoteName)
 	}
 	if (NoteName == "Counter")
 	{
-		HitStates();
+		HitStates(ESmashHitState::Intangible);
 	}
 	if (NoteName == "Event")
 	{
@@ -526,7 +526,7 @@ void ABaseAbility::HitStates(ESmashHitState SmashHitState)
 {
 	if (Parent)
 	{
-		Parent->HitStates(SmashHitState);
+		Parent->HitStates = SmashHitState;
 	}
 }
 
