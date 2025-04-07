@@ -546,7 +546,8 @@ void ABaseAbility::SetAttackStage(int32 _AttackStage)
 
 void ABaseAbility::ChangeCollisionSet()
 {
-	
+	CollisionSetIndex++;
+	CollisionSet = CollisionSets[CollisionSetIndex];
 }
 
 void ABaseAbility::AbsorbMode(bool bAbsorb)
@@ -606,6 +607,7 @@ void ABaseAbility::SetGravity(int32 Settings, float CustomValue)
 
 void ABaseAbility::HealPlayer(int32 HealAmount)
 {
+	
 }
 
 void ABaseAbility::Charge(bool InChargeing)
