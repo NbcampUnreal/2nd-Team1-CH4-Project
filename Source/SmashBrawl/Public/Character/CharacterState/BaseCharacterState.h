@@ -5,9 +5,9 @@
 #include "UObject/Object.h"
 #include "BaseCharacterState.generated.h"
 
-class UStateSystem;
+class USmashStateSystem;
 class ASmashCharacter;
-
+class USmashAction;
 
 /**
  * 캐릭터 상태를 나타내는 기본 클래스
@@ -25,7 +25,7 @@ public:
 public:
 	// 상태 초기화 - StateSystem과 연결
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
-	void InitState(UStateSystem* InStateSystem);
+	void InitState(USmashStateSystem* InStateSystem);
 
 	// 상태 진입 시 호출
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character State")
@@ -55,16 +55,40 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Character State")
 	void SetStateInfo(const FSmashPlayerStateInfo& NewStateInfo);
 
+	// 액션 타입으로 액션 찾기
+	UFUNCTION(BlueprintCallable, Category = "Character State")
+	USmashAction* FindActionByType(ESmashActionType ActionType);
+
+	// 액션 실행
+	UFUNCTION(BlueprintCallable, Category = "Character State")
+	bool ExecuteActionByType(ESmashActionType ActionType);
+
+	// 액션 리스트 반환
+	UFUNCTION(BlueprintCallable, Category = "Character State")
+	TArray<USmashAction*> GetActions() const { return Actions; }
+
 protected:
+	// 액션 초기화
+	void InitActions();
+
+public:
 	// 이 상태의 ID
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
 	ESmashPlayerStates PlayerState;
 
 	// 소유 상태 시스템 참조
 	UPROPERTY(BlueprintReadWrite, Category="Character State")
-	TObjectPtr<UStateSystem> OwnerStateSystem;
+	TObjectPtr<USmashStateSystem> OwnerStateSystem;
 
 	// 소유 캐릭터 참조
 	UPROPERTY(BlueprintReadWrite, Category="Character State")
 	TObjectPtr<ASmashCharacter> OwnerCharacter;
+
+	// 이 상태에서 사용 가능한 액션 클래스 목록
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
+	TArray<TSubclassOf<USmashAction>> ActionClasses;
+
+	// 생성된 액션 인스턴스 목록
+	UPROPERTY(BlueprintReadOnly, Category="Character State")
+	TArray<TObjectPtr<USmashAction>> Actions;
 };

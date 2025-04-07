@@ -1,3 +1,5 @@
+// Copyright 2024 NFB Makes Games. All Rights Reserved.
+
 #include "SSTCharacter.h"
 #include "SSTCharacterMovementComponent.h"
 #include "FollowCameraComponent.h"
@@ -12,7 +14,8 @@
 #include "InputActionValue.h"
 
 
-ASSTCharacter::ASSTCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<USSTCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
+ASSTCharacter::ASSTCharacter(const FObjectInitializer& ObjectInitializer)
+: Super(ObjectInitializer.SetDefaultSubobjectClass<USSTCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
 	SSTCharacterMovementComponent = Cast<USSTCharacterMovementComponent>(GetCharacterMovement());
 
@@ -48,7 +51,8 @@ void ASSTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
-	{
+		{
+
 		//Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ASSTCharacter::JumpOrDrop);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ASSTCharacter::ReleaseJump);
@@ -63,24 +67,41 @@ void ASSTCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		//Dashing
 		EnhancedInputComponent->BindAction(DashAction, ETriggerEvent::Started, this, &ASSTCharacter::Dash);
 	}
+
 }
 
-void ASSTCharacter::Move(const FInputActionValue& Value){}
-
-void ASSTCharacter::CrouchDrop_Implementation()
+void ASSTCharacter::Move(const FInputActionValue& Value)
 {
-}
-
-void ASSTCharacter::StopCrouchDrop_Implementation()
-{
+	if (Controller && SSTCharacterMovementComponent)
+	{
+		float MovementValue = Value.Get<float>();
+		SSTCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MovementValue);
+	}
 }
 
 void ASSTCharacter::JumpOrDrop_Implementation()
 {
+	if (bIsCrouched) // attempt to drop through platform, if any
+	{
+		SSTCharacterMovementComponent->WantsToPlatformDrop = true;
+	}
+	else
+	{
+		Jump();
+	}
 }
 
-void ASSTCharacter::Dash_Implementation()
+void ASSTCharacter::CrouchDrop_Implementation()
 {
+	if (CanCrouch())
+	{
+		Crouch();
+	}
+}
+
+void ASSTCharacter::StopCrouchDrop_Implementation()
+{
+	UnCrouch();
 }
 
 bool ASSTCharacter::CanDash_Implementation() const
@@ -91,8 +112,14 @@ bool ASSTCharacter::CanDash_Implementation() const
 	return true;
 }
 
+void ASSTCharacter::Dash_Implementation()
+{
+	SSTCharacterMovementComponent->WantsToDash = true;
+}
+
 void ASSTCharacter::ReleaseJump_Implementation()
 {
+	StopJumping();
 }
 
 bool ASSTCharacter::CanCrouch() const
@@ -156,7 +183,7 @@ void ASSTCharacter::CheckJumpInput(float DeltaTime)
 					JumpCurrentCount++;
 				}
 
-				const bool bDidJump = CanJump() && SSTCharacterMovementComponent->DoJump(bClientUpdating, DeltaTime);
+				const bool bDidJump = CanJump() && SSTCharacterMovementComponent->DoJump(bClientUpdating);
 				if (bDidJump)
 				{
 					// Transition from not (actively) jumping to jumping.
@@ -184,9 +211,4 @@ FCollisionQueryParams ASSTCharacter::GetIgnoreSelfParams() const
 	Params.AddIgnoredActor(this);
 
 	return Params;
-}
-
-bool ASSTCharacter::IsFacingRight()
-{
-	return SSTCharacterMovementComponent->IsFacingRight();
 }

@@ -15,7 +15,7 @@ class ASmashGameState;
 class USmashGameInstance;
 class ABaseAbility;
 class UWidgetComponent;
-class UStateSystem;
+class USmashStateSystem;
 class UParticleSystem;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogSmashCharacter, Log, All);
@@ -104,6 +104,8 @@ public:
 
 	void BasicAttack();
 
+	virtual void CrouchDrop_Implementation() override;
+
 
 	void BasicAttackPressed(const FInputActionValue& InputActionValue);
 	void BasicAttackReleased(const FInputActionValue& InputActionValue);
@@ -132,6 +134,9 @@ public:
 	UFUNCTION(Server, Reliable)
 	void Server_SetCanFlip(bool bNewCanFlip);
 
+	UFUNCTION(Server, Reliable)
+	void Server_RequestSetStateInfo(const FSmashPlayerStateInfo& NewStateInfo);
+
 	// 클라이언트 RPC 함수 추가 - 상태 정보 변경 전파
 	UFUNCTION(Client, Reliable)
 	void Client_UpdateStateInfo(const FSmashPlayerStateInfo& NewStateInfo);
@@ -142,7 +147,7 @@ public:
 	const FSmashPlayerStateInfo& GetStateInfo() const { return StateInfo; }
 
 	UFUNCTION(BlueprintPure, Category = "Smash Character|State")
-	FSmashPlayerMovement GetMovementInfo() const{return StateInfo.PlayerMovement;}
+	FSmashPlayerMovement GetMovementInfo() const { return StateInfo.PlayerMovement; }
 
 	// StateInfo 설정 함수 추가 - 권한 체크 개선
 	UFUNCTION(BlueprintCallable, Category = "Smash Character|State")
@@ -173,7 +178,7 @@ public:
 	TObjectPtr<USmashCharacterStats> SmashCharacterStatsComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character|Component")
-	TObjectPtr<class UStateSystem> StateSystem;
+	TObjectPtr<class USmashStateSystem> StateSystem;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character|Component")
 	TObjectPtr<class USmashAbilitySystemComponent> AbilitySystemComponent;
