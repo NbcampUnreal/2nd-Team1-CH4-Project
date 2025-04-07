@@ -30,10 +30,9 @@ ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer) : 
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	PrimaryActorTick.SetTickFunctionEnable(false);
 
-	SmashCharacterMovementComponent = Cast<USmashCharacterMovementComponent>(GetCharacterMovement());
-
 
 	// 컴포넌트 생성
+	SmashCharacterMovementComponent = Cast<USmashCharacterMovementComponent>(GetCharacterMovement());
 	AbilitySystemComponent = CreateDefaultSubobject<USmashAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	StateSystem = CreateDefaultSubobject<UStateSystem>(TEXT("CharacterState"));
 	SmashCharacterStatsComponent = CreateDefaultSubobject<USmashCharacterStats>(TEXT("SmashCharacterStatsComponent"));
@@ -61,11 +60,17 @@ void ASmashCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>
 	DOREPLIFETIME(ASmashCharacter, ZPos);
 	DOREPLIFETIME(ASmashCharacter, FootZPos);
 	DOREPLIFETIME(ASmashCharacter, LocationFeet);
+	DOREPLIFETIME(ASmashCharacter, bLedgeCooldown);
+	DOREPLIFETIME(ASmashCharacter, AbilityType);
+	DOREPLIFETIME(ASmashCharacter, bLanded);
+	DOREPLIFETIME(ASmashCharacter, bPushed);
 }
 
 void ASmashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	LandedDelegate.AddDynamic(this, &ASmashCharacter::OnLandedSmash);
 
 	// 초기화 지연 시간 단축 (이전 0.25초)
 	FTimerHandle TimerHandle;
@@ -81,6 +86,20 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	{
 		// 이동 액션 Completed 이벤트에 바인딩 추가
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ASmashCharacter::ResetMoveInput);
+
+		EnhancedInputComponent->BindAction(IA_UpDown, ETriggerEvent::Triggered, this, &ASmashCharacter::UpDownAxis);
+
+
+		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::BasicAttackPressed);
+		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Completed, this, &ASmashCharacter::BasicAttackReleased);
+
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::SpecialAttackPressed);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this, &ASmashCharacter::SpecialAttackReleased);
+
+		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntUpPressed);
+		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
+		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
+		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
 	}
 }
 
@@ -441,13 +460,104 @@ void ASmashCharacter::SpawnFeetFX()
 	UGameplayStatics::SpawnEmitterAtLocation(this, SprintFX, LocationFeet);
 }
 
+void ASmashCharacter::TauntAction(ESmashDirection ActionDirection)
+{
+	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
+	{
+		StateSystem->ChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Taunt;
+		Direction = ActionDirection;
+	}
+}
+
+void ASmashCharacter::Dizzy()
+{
+	SetMovementState(FSmashPlayerMovement(false, false, false, false));
+
+	FTimerHandle DizzyHandle;
+	GetWorld()->GetTimerManager().SetTimer(DizzyHandle, [this]()
+	{
+		bDizzied = false;
+		StateSystem->ChangeState(ESmashPlayerStates::Idle);
+	}, 2.0f, false);
+}
+
+float ASmashCharacter::NockBackCalculate()
+{
+	float Value0 = AbilitySystemComponent->DamageScale[AbilitySystemComponent->UsedMovesCount];
+	float Value1 = SmashCharacterStatsComponent->Percent / 10.0f;
+	float Value2 = (SmashCharacterStatsComponent->Percent * Damage) / 20.f;
+
+	float Value3 = Value0 * (Value1 + Value2);
+	float Value4 = (200.0f / (SmashCharacterStatsComponent->Weight + 100.0f)) * 1.4f;
+
+	float Value5 = (Value3 * Value4) + 18.0f;
+	float Value6 = (SmashCharacterStatsComponent->Percent / 7.0f) * HitScale;
+	float Value7 = (Value5 *Value6) + BaseKnock;
+
+	Knockback = Value7 * DamRatios;
+	return Knockback;
+}
+
+void ASmashCharacter::ShieldHit(ESmashDirection NewDirection)
+{
+	// float Knockback = NockBackCalculate();
+	// ApplyShieldKnockBack(Knockback, Direction);
+}
+
+void ASmashCharacter::LandedAction()
+{
+	UGameplayStatics::SpawnEmitterAtLocation(this, P_Landed, LocationFeet);
+	GetCapsuleComponent()->SetCapsuleHalfHeight(DefaultCapsuleHeight);
+	bLanded = true;
+	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+
+	if (!(StateSystem->GetCurrentState() == ESmashPlayerStates::Shield ||
+		StateSystem->GetCurrentState() == ESmashPlayerStates::Ability ||
+		StateSystem->GetCurrentState() == ESmashPlayerStates::Tumble))
+	{
+		SetCanFlip(true);
+		StateSystem->ChangeState(ESmashPlayerStates::Idle);
+
+		if (bDizzied)
+			StateSystem->ChangeState(ESmashPlayerStates::Dizzy);
+	}
+}
+
+void ASmashCharacter::OnLandedSmash(const FHitResult& Hit)
+{
+	LandedAction();
+
+	FTimerHandle LandedHandle;
+	GetWorld()->GetTimerManager().SetTimer(LandedHandle, [this]()
+	{
+		bLanded = false;
+		LastHit = this;
+	}, 0.01f, false);
+}
+
 void ASmashCharacter::Move(const struct FInputActionValue& Value)
 {
 	if (Controller && SmashCharacterMovementComponent)
 	{
-		MoveInputValue = Value.Get<float>();
+		if (StateInfo.PlayerMovement.bCanMove)
+		{
+			MoveInputValue = Value.Get<float>();
+			SmashCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MoveInputValue);
+			//FootStep->DetectFeet();
+			if (StateSystem->GetCurrentState() == ESmashPlayerStates::Idle && !bPushed && !(MoveInputValue == 0.0f))
+			{
+				StateSystem->ChangeState(ESmashPlayerStates::WalkAndRun);
+			}
+		}
+	}
+}
 
-		SmashCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MoveInputValue);
+void ASmashCharacter::UpDownAxis(const FInputActionValue& InputActionValue)
+{
+	if (Controller && SmashCharacterMovementComponent)
+	{
+		UpDownInputValue = InputActionValue.Get<float>();
 	}
 }
 
@@ -465,15 +575,147 @@ void ASmashCharacter::JumpOrDrop_Implementation()
 
 		SmashCharacterMovementComponent->GravityScale = SmashCharacterStatsComponent->DefaultGravityScale;
 
-		// SmashCharacterMovementComponent->IsFalling() &&
-		//
-		// 	MoveInputValue > 0.0f && IsFacingRight()
+		bool bCondition = MoveInputValue > 0.0f && !IsFacingRight() || MoveInputValue < 0.0f && IsFacingRight() || MoveInputValue == 0.0f;
+		if (bCondition && SmashCharacterMovementComponent->IsFalling())
+		{
+			GetMovementComponent()->StopMovementImmediately();
+		}
+
+		//아래로직은 2단점프일 경우 인것 같습니다.
+		int32 LocalDirection = 0;
+		if (IsFacingRight())
+		{
+			if (MoveInputValue < 0.0f)
+			{
+				LocalDirection = 1; //Right <
+			}
+			else
+			{
+				LocalDirection = 2; //Right >
+			}
+		}
+		else
+		{
+			if (MoveInputValue > 0.0f)
+			{
+				LocalDirection = 3; //Left <
+			}
+			else
+			{
+				LocalDirection = 4; //Left <
+			}
+		}
+
+
+		if (LocalDirection == 1 || LocalDirection == 3) Direction = ESmashDirection::Back;
+		else if (LocalDirection == 2 || LocalDirection == 4) Direction = ESmashDirection::Forward;
+
+		bLedgeCooldown = true;
+
+		FTimerHandle LedgeCooldownHandle;
+		GetWorld()->GetTimerManager().SetTimer(LedgeCooldownHandle, [this]()
+		{
+			bLedgeCooldown = false;
+		}, 0.2f, false);
 	}
 }
 
 void ASmashCharacter::ResetMoveInput(const FInputActionValue& Value)
 {
 	MoveInputValue = 0.0f;
+}
+
+void ASmashCharacter::BasicAttack()
+{
+	if (StateSystem->GetCurrentState() == ESmashPlayerStates::Shield)
+	{
+		StateSystem->ChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Grab;
+		return;
+	}
+
+	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Shield && StateInfo.PlayerMovement.bCanAttack)
+	{
+		if (GetCharacterMovement()->IsFalling())
+		{
+			StateSystem->ChangeState(ESmashPlayerStates::Ability);
+			AbilityType = ESmashAbilityTypes::Air;
+			return;
+		}
+
+		if (StateInfo.PlayCondition.bCanSmash)
+		{
+			StateSystem->ChangeState(ESmashPlayerStates::Ability);
+			AbilityType = ESmashAbilityTypes::Smash;
+			StateInfo.PlayCondition.bCanSmash = false;
+			return;
+		}
+
+		if (StateSystem->GetCurrentState() != ESmashPlayerStates::WalkAndRun)
+		{
+			StateSystem->ChangeState(ESmashPlayerStates::Ability);
+			AbilityType = ESmashAbilityTypes::Other;
+			return;
+		}
+
+		StateSystem->ChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Basic;
+	}
+}
+
+void ASmashCharacter::BasicAttackPressed(const FInputActionValue& InputActionValue)
+{
+	bAttackButton = true;
+
+	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
+	{
+		BasicAttack();
+
+		if (DoOnceBasicAttackPressed.Execute())
+			bAttackButtonReleased = false;
+	}
+}
+
+void ASmashCharacter::BasicAttackReleased(const FInputActionValue& InputActionValue)
+{
+	bAttackButton = false;
+	bAttackButtonReleased = true;
+}
+
+void ASmashCharacter::SpecialAttackPressed(const FInputActionValue& InputActionValue)
+{
+	bSpecialAttackButton = true;
+	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
+	{
+		StateSystem->ChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Special;
+	}
+}
+
+void ASmashCharacter::SpecialAttackReleased(const FInputActionValue& InputActionValue)
+{
+	bSpecialAttackButton = false;
+	bSpecialAttackButtonReleased = true;
+}
+
+void ASmashCharacter::TauntUpPressed(const FInputActionValue& InputActionValue)
+{
+	TauntAction(ESmashDirection::Up);
+}
+
+void ASmashCharacter::TauntRightPressed(const FInputActionValue& InputActionValue)
+{
+	TauntAction(ESmashDirection::Forward);
+}
+
+void ASmashCharacter::TauntLeftPressed(const FInputActionValue& InputActionValue)
+{
+	TauntAction(ESmashDirection::Back);
+}
+
+void ASmashCharacter::TauntDownPressed(const FInputActionValue& InputActionValue)
+{
+	TauntAction(ESmashDirection::Down);
 }
 
 void ASmashCharacter::SetMovementState(FSmashPlayerMovement SetMovement)
