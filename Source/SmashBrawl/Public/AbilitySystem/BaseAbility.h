@@ -156,7 +156,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ActivateOtherAbility(ABaseAbility* Ability);
 	UFUNCTION(BlueprintCallable)
-	void HitStates();
+	void HitStates(ESmashHitState SmashHitState);
 	UFUNCTION(BlueprintCallable)
 	void SetAttackStage(int32 _AttackStage);
 	UFUNCTION(BlueprintCallable)

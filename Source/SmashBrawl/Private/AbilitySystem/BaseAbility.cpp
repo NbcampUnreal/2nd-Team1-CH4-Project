@@ -522,8 +522,12 @@ void ABaseAbility::ActivateOtherAbility(ABaseAbility* Ability)
 	}
 }
 
-void ABaseAbility::HitStates()
+void ABaseAbility::HitStates(ESmashHitState SmashHitState)
 {
+	if (Parent)
+	{
+		Parent->HitStates(SmashHitState);
+	}
 }
 
 void ABaseAbility::SetAttackStage(int32 _AttackStage)
