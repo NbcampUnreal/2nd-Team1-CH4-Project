@@ -118,6 +118,42 @@ enum class ESmashDirection : uint8
 	None UMETA(DisplayName = "None")
 };
 
+UENUM(BlueprintType)
+enum class ESmashFaceing : uint8
+{
+	Left UMETA(DisplayName = "Left"),
+	Right UMETA(DisplayName = "Right")
+};
+
+UENUM(BlueprintType)
+enum class ESmashCollisionType : uint8
+{
+	Normal UMETA(DisplayName = "Normal"),
+	Sweet UMETA(DisplayName = "Sweet"),
+	Sour UMETA(DisplayName = "Sour"),
+	Spike UMETA(DisplayName = "Spike"),
+	Metior UMETA(DisplayName = "Metior"),
+	Multi UMETA(DisplayName = "Multi")
+};
+
+UENUM(BlueprintType)
+enum class ESmashShape : uint8
+{
+	Sphere UMETA(DisplayName = "Sphere"),
+	Box UMETA(DisplayName = "Box"),
+	Pill UMETA(DisplayName = "Pill")
+};
+
+UENUM(BlueprintType)
+enum class ESmashHitStates : uint8
+{
+	Normal UMETA(DisplayName = "Normal"),
+	Intangible UMETA(DisplayName = "Intangible"),
+	Invincible UMETA(DisplayName = "Invincible"),
+	Armor UMETA(DisplayName = "Armor"),
+	Shield UMETA(DisplayName = "Shield")
+};
+
 USTRUCT(BlueprintType)
 struct FSmashPlayerMovement
 {
@@ -154,11 +190,3 @@ struct FSmashPlayerStateInfo
 	FSmashPlayerMovement PlayerMovement;
 	
 };
-
-UENUM(BlueprintType)
-enum class EFaceing : uint8
-{
-	Left UMETA(DisplayName = "Left"),
-	Right UMETA(DisplayName = "Right")
-};
-

@@ -81,7 +81,7 @@ void USmashAbilitySystemComponent::EndAllNonChargedAbilities(ABaseAbility* Calle
 
 		if (Ability->Parent == Parent && Ability->ChargeLevel == 0.0f && Caller != Ability)
 		{
-			Ability->EndAbility();
+			Ability->Multicast_EndAbility();
 		}
 	}
 }
