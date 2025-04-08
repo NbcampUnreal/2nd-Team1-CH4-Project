@@ -14,7 +14,7 @@ void UAnimNotify_AttackEnd::Notify(USkeletalMeshComponent* MeshComp, UAnimSequen
 
 		if (IsValid(BossMonster))
 		{
-			BossMonster->bIsAttacking = false;
+			BossMonster->EndAttack();
 		}
 	}
 }

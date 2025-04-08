@@ -17,6 +17,12 @@ public:
 	ALv1BossMonster();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UNiagaraComponent* LeftEyeNiagaraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UNiagaraComponent* RightEyeNiagaraComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TSubclassOf<ABaseBossPatternActor> BreathProjectile;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
@@ -33,6 +39,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TSubclassOf<ABaseBossPatternActor> Vacuum;
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
+	void Multicast_FireEye();
 	
 	UFUNCTION(Server, Reliable)
 	void Server_BreathAttack() const;

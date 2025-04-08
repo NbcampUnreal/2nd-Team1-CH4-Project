@@ -30,7 +30,7 @@ void ALv1BossMonsterMagic::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetWorldTimerManager().SetTimer(DoAttackTimerHandle, this, &ALv1BossMonsterMagic::DoAttack, 2.0f, false);
+	GetWorldTimerManager().SetTimer(DoAttackTimerHandle, this, &ALv1BossMonsterMagic::DoAttack, 1.5f, false);
 }
 
 void ALv1BossMonsterMagic::DoAttack() const
@@ -40,10 +40,18 @@ void ALv1BossMonsterMagic::DoAttack() const
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(),
 			NiagaraEffectTemplate,
-			GetActorLocation() - FVector(0, 0, -50.0f),
-			FRotator(0, 0, 0),
-			FVector(2.0f, 2.0f, 2.0f) 
+			GetActorLocation() - FVector(0, 0, 0),
+			FRotator(0, FMath::RandRange(0, 360), 0),
+			FVector(5.0f, 5.0f, 5.0f) 
 		);
+
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+	GetWorld(),
+	NiagaraEffectTemplate,
+	GetActorLocation() - FVector(0, 0, 0),
+	FRotator(180, FMath::RandRange(0, 360), 0),
+	FVector(2.0f, 2.0f, 2.0f) 
+);
 	}
 
 	TelegraphMeshComponent->SetHiddenInGame(true);

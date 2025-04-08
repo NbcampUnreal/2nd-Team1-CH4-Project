@@ -39,11 +39,23 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "State")
 	void SetState(ESmashBossState const NewState);
 
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Components")
+	void StartAttack();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Components")
+	void EndAttack();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 	ESmashBossState CurrentState = ESmashBossState::Phase1;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	//UDataTable* StatsTable;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class USphereComponent* LeftEyeComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class USphereComponent* RightEyeComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class USphereComponent* HeadCollision;

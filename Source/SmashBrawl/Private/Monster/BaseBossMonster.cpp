@@ -33,7 +33,14 @@ ABaseBossMonster::ABaseBossMonster()
 	RightArmCollision->SetCapsuleRadius(20.0f);
 	RightArmCollision->SetCollisionProfileName(TEXT("OverlapAllDynamic"));
 	
+	LeftEyeComp = CreateDefaultSubobject<USphereComponent>(TEXT("LeftEyeComponent"));
+	LeftEyeComp->SetupAttachment(GetMesh(), FName("head"));
+	LeftEyeComp->SetCollisionProfileName("OverlapAllDynamic");
 
+	RightEyeComp = CreateDefaultSubobject<USphereComponent>(TEXT("RightEyeComponent"));
+	RightEyeComp->SetupAttachment(GetMesh(), FName("head"));
+	RightEyeComp->SetCollisionProfileName("OverlapAllDynamic");
+	
 	bReplicates = true;
 
 	Tags.Add("Boss");
@@ -93,6 +100,20 @@ void ABaseBossMonster::PerformAttack_Implementation(int32 MontageIndex)
 	{
 		Multicast_PerformAnimation(Montage);
 	}
+}
+
+void ABaseBossMonster::StartAttack_Implementation()
+{
+	HeadCollision->SetCollisionProfileName("NoCollision");
+	LeftArmCollision->SetCollisionProfileName("NoCollision");
+	RightArmCollision->SetCollisionProfileName("NoCollision");
+}
+
+void ABaseBossMonster::EndAttack_Implementation()
+{
+	HeadCollision->SetCollisionProfileName("BlockAllDynamic");
+	LeftArmCollision->SetCollisionProfileName("BlockAllDynamic");
+	RightArmCollision->SetCollisionProfileName("BlockAllDynamic");
 }
 
 void ABaseBossMonster::SetState_Implementation(ESmashBossState const NewState)

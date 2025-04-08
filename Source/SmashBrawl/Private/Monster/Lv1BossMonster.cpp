@@ -3,6 +3,7 @@
 
 #include "Monster/Lv1BossMonster.h"
 
+#include "NiagaraComponent.h"
 #include "Charactor/BaseCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
@@ -14,7 +15,27 @@ ALv1BossMonster::ALv1BossMonster()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+
+	LeftEyeNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("LeftEye"));
+	LeftEyeNiagaraComponent->SetupAttachment(LeftEyeComp);
+	LeftEyeNiagaraComponent->bAutoActivate = false;
+
+	RightEyeNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("RightEye"));
+	RightEyeNiagaraComponent->SetupAttachment(RightEyeComp);
+	RightEyeNiagaraComponent->bAutoActivate = false;
+
+	// LeftEye->bAutoActivate = false;
+	// RightEye->bAutoActivate = false;
 }
+
+void ALv1BossMonster::Multicast_FireEye_Implementation()
+{
+	LeftEyeNiagaraComponent->Activate();
+	RightEyeNiagaraComponent->Activate();
+	// LeftEye->Activate();
+	// RightEye->Activate();
+}
+
 
 void ALv1BossMonster::Server_VacuumAttack_Implementation()
 {
@@ -71,7 +92,7 @@ void ALv1BossMonster::Server_BiteAttack_Implementation() const
 //이 아래는 각 공격 구현 목록
 void ALv1BossMonster::Server_BreathAttack_Implementation() const
 {
-	for (int i = 0; i < 5; ++i)
+	for (int i = 0; i < 3; ++i)
 	{
 		FVector HeadLocation = HeadCollision->GetComponentLocation();
 		FVector SpawnLocation = FVector(0, HeadLocation.Y, HeadLocation.Z);
