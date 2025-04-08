@@ -19,6 +19,15 @@ enum class ESmashActionType : uint8
 };
 
 UENUM(BlueprintType)
+enum class ESmashInGameMode : uint8
+{
+	Stock UMETA(DisplayName = "Stock"),
+	Time UMETA(DisplayName = "Time"),
+	MiniGame UMETA(DisplayName = "MiniGame"),
+	BossFight UMETA(DisplayName = "BossFight")
+};
+
+UENUM(BlueprintType)
 enum class ESmashHitState : uint8
 {
 	Normal UMETA(DisplayName = "Normal"),

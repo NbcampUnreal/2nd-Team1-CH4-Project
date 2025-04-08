@@ -8,6 +8,8 @@
 #include "Interfaces/Interface_SmashCombat.h"
 #include "SmashCharacter.generated.h"
 
+class AProjectileBase;
+class UUW_HUD_CharacterInfo;
 class USmashCharacterStats;
 class ASmashPlatFighterGameMode;
 class UFXComponent;
@@ -72,9 +74,7 @@ public:
 
 	void TauntAction(ESmashDirection ActionDirection);
 
-	// Launch 함수
-	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement", Server, Reliable)
-	void Launch(FVector LaunchVector, bool bXYOver, bool bZOver);
+
 
 public:
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
@@ -85,6 +85,35 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	bool IsMovingRight() const { return MoveInputValue > 0.0f; }
+
+public:
+	UFUNCTION(BlueprintPure, Category = "Smash Character|Damage")
+	bool CanTakeDamage();
+
+	void SmashTakeDamage(int32 InDamage);
+
+	// Launch 함수
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement", Server, Reliable)
+	void Server_Launch(FVector LaunchVector, bool bXYOver, bool bZOver);
+
+	UFUNCTION(Server, Reliable, Category = "Smash Character|Damage")
+	void Server_Hit(bool bRight, int32 InDamage, int32 InShieldDamage, int32 InBaseKnock, float InScale, float InAngle, float InStop, float InStun, ASmashCharacter* InLastHit, AProjectileBase* InProjectile, bool InEnergy);
+
+	UFUNCTION(Server, Reliable, blueprintCallable, Category = "Smash Character|Damage")
+	void Server_ApplyKnockback(bool bRight, float InAngle, float InStun);
+
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "Smash Character|Hit")
+	void Multicast_ResetHit();
+
+protected:
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Smash Character|Damage")
+	void Hit(bool bRight, int32 InDamage, int32 InShieldDamage, int32 InBaseKnock, float InScale, float InAngle, float InStop, float InStun, ASmashCharacter* InLastHit, AProjectileBase* InProjectile, bool InEnergy);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Smash Character|Damage")
+	void ApplyKnockback(bool bRight, float InAngle, float InStun);
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Smash Character|Damage")
+	void ResetHit();
 
 public:
 	void Dizzy();
@@ -264,12 +293,29 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
 	UInputAction* IA_TauntDown;
 
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Cosmetics")
 	TArray<TObjectPtr<UMaterialInstance>> TeamOptionMaterials;
 
 	UPROPERTY(ReplicatedUsing=OnRep_StateInfo, BlueprintReadWrite, Category="Smash Character|State")
 	FSmashPlayerStateInfo StateInfo;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	bool bEnergyHit;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	bool bHitByProjectile;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	bool bReflectMode;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	bool bAbsorbMode;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	bool bJustHit;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	bool bHitButNoEffect;
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	bool bFlashing;
@@ -320,13 +366,19 @@ public:
 	bool bCanSmash = false;
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
-	bool bBufferdInput =true;
+	bool bBufferdInput = true;
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
-	bool bBufferdDirection =false;
-	
+	bool bBufferdDirection = false;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
+	bool bHitRest = true;
+
 	UPROPERTY(ReplicatedUsing=OnRep_PlayerNo, BlueprintReadWrite, Category="Smash Character")
 	int32 PlayerNo;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	int32 ProjectileDamage;
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	ESmashCharacter Character;
@@ -342,7 +394,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	ESmashBuffer BufferMove = ESmashBuffer::Attack;
-	
+
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	ESmashDirection BufferDirection = ESmashDirection::Up;
 
@@ -378,6 +430,9 @@ public:
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	ESmashDirection Direction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Widget")
+	TObjectPtr<UUW_HUD_CharacterInfo> UW_HUDCharacterInfo;
 
 protected:
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Smash Character|Input")

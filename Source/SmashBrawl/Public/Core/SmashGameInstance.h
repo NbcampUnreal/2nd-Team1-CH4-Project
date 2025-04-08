@@ -1,5 +1,3 @@
-
-
 #pragma once
 
 #include "CoreMinimal.h"
@@ -14,10 +12,14 @@ UCLASS()
 class SMASHBRAWL_API USmashGameInstance : public UPlatformGameInstance
 {
 	GENERATED_BODY()
+
 public:
 	USmashGameInstance();
 
 public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="SmashGameInstance")
+	ESmashInGameMode SubMode = ESmashInGameMode::Stock;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="SmashGameInstance")
 	TArray<bool> CPU;
 
@@ -29,4 +31,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="SmashGameInstance")
 	TArray<int32> PlayerTeam;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category="SmashGameInstance")
+	int32 StockCount = 3;
 };

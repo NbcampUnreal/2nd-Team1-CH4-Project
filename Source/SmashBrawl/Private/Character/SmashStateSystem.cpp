@@ -9,6 +9,8 @@ USmashStateSystem::USmashStateSystem()
 	// Tick을 활성화하여 상태 업데이트가 제대로 동작하도록 함
 	PrimaryComponentTick.bCanEverTick = true;
 
+	SetIsReplicated(true);
+
 	// 기본 상태를 설정
 	DefaultState = ESmashPlayerStates::Idle;
 	CurrentStateID = DefaultState;
