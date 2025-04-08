@@ -36,15 +36,6 @@ ABaseAbility::ABaseAbility()
 void ABaseAbility::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (CurveFloat)
-	{
-		TimelineUpdate.BindUFunction(this, FName("Multicast_TickRep_Implementation"));
-		TimelineFinished.BindUFunction(this, FName("StartTimeline"));
-
-		MainTimeline->AddInterpFloat(CurveFloat, TimelineUpdate);
-		MainTimeline->SetTimelineFinishedFunc(TimelineFinished);
-	}
 	if (IsValid(Parent))
 	{
 		//AttackData = Parent(BP_Fighter�� AttackData)
@@ -60,21 +51,22 @@ void ABaseAbility::Multicast_AbilityStart_Implementation()
 	BP_OnAbilityStart();
 }
 
-void ABaseAbility::StartTimeline()
-{
-	if (MainTimeline)
-	{
-		MainTimeline->PlayFromStart();
-	}
-}
+// void ABaseAbility::StartTimeline()
+// {
+// 	if (MainTimeline)
+// 	{
+// 		UE_LOG(LogTemp, Error, TEXT("StartTimeLine"));
+// 		MainTimeline->PlayFromStart();
+// 	}
+// }
 
-void ABaseAbility::EndTimeline()
-{
-	if (MainTimeline)
-	{
-		MainTimeline->Stop();
-	}
-}
+// void ABaseAbility::EndTimeline()
+// {
+// 	if (MainTimeline)
+// 	{
+// 		MainTimeline->Stop();
+// 	}
+// }
 
 void ABaseAbility::Multicast_TickRep_Implementation()
 {
@@ -92,7 +84,7 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 				SetBuffer();
 				if (!bIsUse)
 				{
-					Multicast_AbilityStart();
+					Multicast_AbilityStart_Implementation();
 					bIsUse = true;
 				}
 				//Then1
@@ -315,7 +307,7 @@ void ABaseAbility::FlipOnStick()
 
 void ABaseAbility::PlayAnimation(int32 InAnimNo)
 {
-	Multicast_PlayAnimationClient(InAnimNo, Animations[InAnimNo]);
+	//Multicast_PlayAnimationClient(InAnimNo, Animations[InAnimNo]);
 	Server_PlayAnimationServer(InAnimNo, Animations[InAnimNo]);
 }
 
@@ -330,6 +322,7 @@ void ABaseAbility::Multicast_PlayAnimationClient_Implementation(int32 InAnimNo, 
 		BlendOutDelegate.BindLambda([this, InAnimNo](UAnimMontage* Montage, bool bInterrupted)
 		{
 			Multicast_EndAnim(InAnimNo);
+			UE_LOG(LogTemp, Error, TEXT("EndPlayAnim_Multicast"));
 			if (bInterrupted)
 			{
 				AnimNotifyEnd(bDamager, "None");
@@ -351,6 +344,7 @@ void ABaseAbility::Server_PlayAnimationServer_Implementation(int32 InAnimNo, UAn
 		BlendOutDelegate.BindLambda([this,InAnimNo](UAnimMontage* Montage, bool bInterrupted)
 		{
 			Multicast_EndAnim(InAnimNo);
+			UE_LOG(LogTemp, Error, TEXT("EndPlayAnimServer"));
 			if (bInterrupted)
 			{
 				AnimNotifyEnd(bDamager, "None");

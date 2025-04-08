@@ -24,7 +24,7 @@ USmashAbilitySystemComponent::USmashAbilitySystemComponent()
 void USmashAbilitySystemComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	UE_LOG(LogTemp, Error, TEXT("Begin"));
 	// 부모 캐릭터 참조 설정
 	Parent = Cast<ASmashCharacter>(GetOwner());
 	if (!Parent)
@@ -41,11 +41,10 @@ void USmashAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick Tic
 
 void USmashAbilitySystemComponent::MainTick()
 {
-	// 능력 상태이지만 특정 공격 타입이 없는 경우, 적절한 능력 활성화
-	// if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Ability &&	IInterface_SmashCombat::Execute_GetAttackTypes(Parent) == ESmashAttacks::None)
-	// {
-	// 	Multicast_WitchAbility();
-	// }
+	if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Ability &&	IInterface_SmashCombat::Execute_GetAttackTypes(Parent) == ESmashAttacks::None)
+	{
+		Multicast_WitchAbility();
+	}
 }
 
 void USmashAbilitySystemComponent::BufferCall(ESmashBuffer NewBuffer)
@@ -261,7 +260,7 @@ void USmashAbilitySystemComponent::ProcessDirectionalAbility(ABaseAbility* UpAbi
 {
 	// 현재 방향 가져오기
 	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
-
+	
 	// 방향에 따라 적절한 능력 활성화
 	switch (CurrentDirection)
 	{
@@ -289,6 +288,7 @@ void USmashAbilitySystemComponent::ProcessDirectionalAbility(ABaseAbility* UpAbi
 
 	case ESmashDirection::None:
 		if (NeutralAbility)
+			UE_LOG(LogTemp, Error, TEXT("NetralAbility"));
 			ActivateDirectionalAbility(CurrentDirection, NeutralAttackType, NeutralAbility);
 		break;
 
@@ -454,6 +454,8 @@ void USmashAbilitySystemComponent::Multicast_Respawning_Implementation()
 void USmashAbilitySystemComponent::Multicast_WitchAbility_Implementation()
 {
 	const ESmashAbilityTypes CurrentAbilityTypes = IInterface_SmashCombat::Execute_GetAbilityTypes(Parent);
+	FString AbilityName = UEnum::GetValueAsString(CurrentAbilityTypes);
+	UE_LOG(LogTemp, Error, TEXT("%s"), *AbilityName);
 	switch (CurrentAbilityTypes)
 	{
 	case ESmashAbilityTypes::Basic:

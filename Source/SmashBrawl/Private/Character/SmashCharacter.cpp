@@ -313,23 +313,23 @@ void ASmashCharacter::Tick(float DeltaSeconds)
 		return;
 	}
 
-	// FacingCheck();
-	//
-	// Multicast_SmashDetection();
-	//
-	// UpdateLocations();
-	//
-	// UpdateFlashing();
-	//
-	// if (AbilitySystemComponent)
-	// {
-	// 	AbilitySystemComponent->MainTick();
-	// }
-	//
-	// if (FXComponent)
-	// {
-	// 	FXComponent->FXMainLoop();
-	// }
+	 FacingCheck();
+	
+	 Multicast_SmashDetection();
+	
+	 UpdateLocations();
+	
+	 UpdateFlashing();
+	
+	 if (AbilitySystemComponent)
+	 {
+	 	AbilitySystemComponent->MainTick();
+	 }
+	
+	 if (FXComponent)
+	 {
+	 	FXComponent->FXMainLoop();
+	 }
 }
 
 void ASmashCharacter::FacingCheck()

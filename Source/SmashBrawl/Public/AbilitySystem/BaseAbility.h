@@ -30,10 +30,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "BaseAbility|Network")
 	void BP_OnAbilityStart();
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable,Category = "BaseAbility|TimeLine")
 	void StartTimeline();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable,Category = "BaseAbility|TimeLine")
 	void EndTimeline();
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -243,7 +243,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
 	float ChargeMax;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
-	float ChargeLevel;
+	double ChargeLevel;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
 	float ChargeRate;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
@@ -337,6 +337,7 @@ public:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Animation")
 	int32 AnimNo;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Animation")
 	TArray<UAnimMontage*> Animations;
 	
