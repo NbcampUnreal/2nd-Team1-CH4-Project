@@ -4,6 +4,7 @@
 #include "EnhancedInputComponent.h"
 #include "AbilitySystem/BaseAbility.h"
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
+#include "Actors/ProjectileBase.h"
 #include "Actors/Shield.h"
 #include "Character/FXComponent.h"
 #include "Character/SmashStateSystem.h"
@@ -44,6 +45,7 @@ ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer) : 
 
 	// 초기화 상태
 	bInitialized = false;
+	Attacks = ESmashAttacks::None;
 }
 
 void ASmashCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -303,6 +305,16 @@ void ASmashCharacter::UpdateCamera()
 	UE_LOG(LogSmashCharacter, Display, TEXT("SST 플러그인의 카메라 로직을 사용할 생각입니다. 미 구현"));
 }
 
+void ASmashCharacter::SmashTakeDamage(int32 InDamage)
+{
+	SmashCharacterStatsComponent->TakeDamage(InDamage);
+}
+
+void ASmashCharacter::Multicast_ResetHit_Implementation()
+{
+	ResetHit();
+}
+
 void ASmashCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
@@ -313,23 +325,19 @@ void ASmashCharacter::Tick(float DeltaSeconds)
 		return;
 	}
 
-	// FacingCheck();
-	//
-	// Multicast_SmashDetection();
-	//
-	// UpdateLocations();
-	//
-	// UpdateFlashing();
-	//
-	// if (AbilitySystemComponent)
-	// {
-	// 	AbilitySystemComponent->MainTick();
-	// }
-	//
-	// if (FXComponent)
-	// {
-	// 	FXComponent->FXMainLoop();
-	// }
+	FacingCheck();
+
+	Multicast_SmashDetection();
+
+	UpdateLocations();
+
+	UpdateFlashing();
+
+	if (AbilitySystemComponent)
+		AbilitySystemComponent->MainTick();
+
+	if (FXComponent)
+		FXComponent->FXMainLoop();
 }
 
 void ASmashCharacter::FacingCheck()
@@ -486,9 +494,28 @@ void ASmashCharacter::TauntAction(ESmashDirection ActionDirection)
 	}
 }
 
-void ASmashCharacter::Launch_Implementation(FVector LaunchVector, bool bXYOver, bool bZOver)
+void ASmashCharacter::Server_Launch_Implementation(FVector LaunchVector, bool bXYOver, bool bZOver)
 {
 	LaunchCharacter(LaunchVector, bXYOver, bZOver);
+}
+
+void ASmashCharacter::Server_Hit_Implementation(bool bRight, int32 InDamage, int32 InShieldDamage, int32 InBaseKnock, float InScale, float InAngle, float InStop, float InStun, ASmashCharacter* InLastHit, AProjectileBase* InProjectile, bool InEnergy)
+{
+	Hit(bRight, InDamage, InShieldDamage, InBaseKnock, InScale, InAngle, InStop, InStun, InLastHit, InProjectile, InEnergy);
+}
+
+bool ASmashCharacter::CanTakeDamage()
+{
+	bool bHitCanState = HitStates == ESmashHitState::Intangible || HitStates == ESmashHitState::Invincible || bJustHit;
+	bool bHitMode = bHitByProjectile || bAbsorbMode || bEnergyHit;
+	bool bHitCan = bHitByProjectile || bReflectMode;
+
+	return !(bHitCanState || bHitMode || bHitCan);
+}
+
+void ASmashCharacter::Server_ApplyKnockback_Implementation(bool bRight, float InAngle, float InStun)
+{
+	ApplyKnockback(bRight, InAngle, InStun);
 }
 
 void ASmashCharacter::Dizzy()
