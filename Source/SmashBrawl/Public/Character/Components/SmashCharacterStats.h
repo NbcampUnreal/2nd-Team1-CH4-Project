@@ -37,4 +37,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character Stats")
 	float Weight;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character Stats")
+	int SuperIndex;
 };

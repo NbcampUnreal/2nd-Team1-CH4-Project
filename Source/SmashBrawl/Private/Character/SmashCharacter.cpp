@@ -23,7 +23,9 @@ class ABrawlPlayerController;
 DEFINE_LOG_CATEGORY(LogSmashCharacter);
 
 
-ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer.SetDefaultSubobjectClass<USmashCharacterMovementComponent>(ASSTCharacter::CharacterMovementComponentName))
+ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer) : Super(
+	ObjectInitializer.SetDefaultSubobjectClass<USmashCharacterMovementComponent>(
+		ASSTCharacter::CharacterMovementComponentName))
 {
 	// Enable ticking but initially set to false during StartUp
 	PrimaryActorTick.bCanEverTick = true;
@@ -64,6 +66,8 @@ void ASmashCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>
 	DOREPLIFETIME(ASmashCharacter, AbilityType);
 	DOREPLIFETIME(ASmashCharacter, bLanded);
 	DOREPLIFETIME(ASmashCharacter, bPushed);
+	DOREPLIFETIME(ASmashCharacter, Attacks);
+	DOREPLIFETIME(ASmashCharacter, bCanSmash);
 }
 
 void ASmashCharacter::BeginPlay()
@@ -84,21 +88,29 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// 이동 액션 Completed 이벤트에 바인딩 추가
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ASmashCharacter::ResetMoveInput);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this,
+		                                   &ASmashCharacter::ResetMoveInput);
 
 		EnhancedInputComponent->BindAction(IA_UpDown, ETriggerEvent::Triggered, this, &ASmashCharacter::UpDownAxis);
 
+		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::BasicAttackPressed);
+		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Completed, this,
+		                                   &ASmashCharacter::BasicAttackReleased);
 
-		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::BasicAttackPressed);
-		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Completed, this, &ASmashCharacter::BasicAttackReleased);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::SpecialAttackPressed);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this,
+		                                   &ASmashCharacter::SpecialAttackReleased);
 
-		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::SpecialAttackPressed);
-		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this, &ASmashCharacter::SpecialAttackReleased);
-
-		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntUpPressed);
-		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
-		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
-		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
+		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::TauntUpPressed);
+		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::TauntRightPressed);
+		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::TauntLeftPressed);
+		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::TauntDownPressed);
 	}
 }
 
@@ -270,10 +282,12 @@ void ASmashCharacter::AttachShield()
 	// Spawn 전 유효성 체크
 	if (HasAuthority() && ShieldClass && GetWorld())
 	{
-		Shield = GetWorld()->SpawnActorDeferred<AShield>(ShieldClass, GetMesh()->GetComponentToWorld(), this, nullptr, ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding);
+		Shield = GetWorld()->SpawnActorDeferred<AShield>(ShieldClass, GetMesh()->GetComponentToWorld(), this, nullptr,
+		                                                 ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding);
 		if (Shield)
 		{
-			Shield->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), ShieldSocket);
+			Shield->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true),
+			                          ShieldSocket);
 			Shield->FinishSpawning(GetMesh()->GetComponentToWorld());
 		}
 		else
@@ -427,7 +441,8 @@ void ASmashCharacter::UpdateFlashing()
 	Material->SetScalarParameterValue(FName("Hit"), HitFlash);
 	Material->SetScalarParameterValue(FName("FreeFall"), FreeFallFlash);
 
-	if (StateSystem->GetCurrentState() == ESmashPlayerStates::FreeFall || StateSystem->GetCurrentState() == ESmashPlayerStates::Hit || bIsSmashFlash ||
+	if (StateSystem->GetCurrentState() == ESmashPlayerStates::FreeFall || StateSystem->GetCurrentState() ==
+		ESmashPlayerStates::Hit || bIsSmashFlash ||
 		(HitStates == ESmashHitState::Intangible || HitStates == ESmashHitState::Invincible))
 	{
 		bFlashing = true;
@@ -469,6 +484,11 @@ void ASmashCharacter::TauntAction(ESmashDirection ActionDirection)
 		AbilityType = ESmashAbilityTypes::Taunt;
 		Direction = ActionDirection;
 	}
+}
+
+void ASmashCharacter::Launch_Implementation(FVector LaunchVector, bool bXYOver, bool bZOver)
+{
+	LaunchCharacter(LaunchVector, bXYOver, bZOver);
 }
 
 void ASmashCharacter::Dizzy()
@@ -535,6 +555,44 @@ void ASmashCharacter::OnLandedSmash(const FHitResult& Hit)
 		bLanded = false;
 		LastHit = this;
 	}, 0.01f, false);
+}
+
+void ASmashCharacter::UpdateDirection()
+{
+	if (UpDownInputValue >= 0.5)
+	{
+		Direction = ESmashDirection::Up;
+	}
+	else if (UpDownInputValue <= -0.5)
+	{
+		Direction = ESmashDirection::Down;
+	}
+	else if (MoveInputValue >= 0.5)
+	{
+		if (SmashCharacterMovementComponent->IsFacingRight())
+		{
+			Direction = ESmashDirection::Forward;
+		}
+		else
+		{
+			Direction = ESmashDirection::Back;
+		}
+	}
+	else if (MoveInputValue <= -0.5)
+	{
+		if (SmashCharacterMovementComponent->IsFacingRight())
+		{
+			Direction = ESmashDirection::Back;
+		}
+		else
+		{
+			Direction = ESmashDirection::Forward;
+		}
+	}
+	else
+	{
+		Direction = ESmashDirection::None;
+	}
 }
 
 void ASmashCharacter::Move(const struct FInputActionValue& Value)
@@ -607,7 +665,7 @@ void ASmashCharacter::BasicAttack()
 			return;
 		}
 
-		if (StateSystem->GetCurrentState() != ESmashPlayerStates::WalkAndRun)
+		if (StateSystem->GetCurrentState() == ESmashPlayerStates::WalkAndRun)
 		{
 			StateSystem->TryChangeState(ESmashPlayerStates::Ability);
 			AbilityType = ESmashAbilityTypes::Other;
@@ -630,12 +688,19 @@ void ASmashCharacter::CrouchDrop_Implementation()
 	}
 }
 
+void ASmashCharacter::StopCrouchDrop_Implementation()
+{
+	Super::StopCrouchDrop_Implementation();
+	StateSystem->TryChangeState(ESmashPlayerStates::Idle);
+}
+
 void ASmashCharacter::BasicAttackPressed(const FInputActionValue& InputActionValue)
 {
 	bAttackButton = true;
 
 	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
 	{
+		UpdateDirection();
 		BasicAttack();
 
 		if (DoOnceBasicAttackPressed.Execute())
@@ -652,11 +717,10 @@ void ASmashCharacter::BasicAttackReleased(const FInputActionValue& InputActionVa
 void ASmashCharacter::SpecialAttackPressed(const FInputActionValue& InputActionValue)
 {
 	bSpecialAttackButton = true;
-	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
-	{
-		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
-		AbilityType = ESmashAbilityTypes::Special;
-	}
+
+	UpdateDirection();
+	StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+	AbilityType = ESmashAbilityTypes::Special;
 }
 
 void ASmashCharacter::SpecialAttackReleased(const FInputActionValue& InputActionValue)
@@ -804,4 +868,58 @@ void ASmashCharacter::OnRep_PlayerNo()
 			HUD_PlayerName->PlayerNo = PlayerNo;
 		}
 	}
+}
+
+ESmashPlayerStates ASmashCharacter::GetPlayerState_Implementation()
+{
+	return StateSystem->GetCurrentState();
+}
+
+ESmashAttacks ASmashCharacter::GetAttackTypes_Implementation()
+{
+	return Attacks;
+}
+
+ESmashAbilityTypes ASmashCharacter::GetAbilityTypes_Implementation()
+{
+	return AbilityType;
+}
+
+ESmashDirection ASmashCharacter::GetDirection_Implementation()
+{
+	return Direction;
+}
+
+int32 ASmashCharacter::GetSuper_Implementation()
+{
+	return SmashCharacterStatsComponent->SuperIndex;
+}
+
+FTransform ASmashCharacter::GetAbilitySpawnTransform_Implementation()
+{
+	return IInterface_SmashCombat::GetAbilitySpawnTransform_Implementation();
+}
+
+void ASmashCharacter::SetSuper_Implementation(int32 NewSuper)
+{
+	SmashCharacterStatsComponent->SuperIndex = NewSuper;
+}
+
+void ASmashCharacter::SetAttacks_Implementation(ESmashAttacks NewAttacks)
+{
+	Attacks = NewAttacks;
+}
+
+void ASmashCharacter::BufferButtons_Implementation()
+{
+	bAttackButtonReleased = !bAttackButton;
+	bSpecialAttackButtonReleased = !bSpecialAttackButton;
+}
+
+void ASmashCharacter::ClearBuffer_Implementation()
+{
+	BufferMove = ESmashBuffer::None;
+	BufferDirection = ESmashDirection::None;
+	bBufferdInput = false;
+	bBufferdDirection = false;
 }
