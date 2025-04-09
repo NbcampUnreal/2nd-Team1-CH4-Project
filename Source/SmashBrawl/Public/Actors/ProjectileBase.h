@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Shield.generated.h"
+#include "ProjectileBase.generated.h"
 
 UCLASS()
-class SMASHBRAWL_API AShield : public AActor
+class SMASHBRAWL_API AProjectileBase : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	AShield();
+	AProjectileBase();
 
 protected:
 	// Called when the game starts or when spawned

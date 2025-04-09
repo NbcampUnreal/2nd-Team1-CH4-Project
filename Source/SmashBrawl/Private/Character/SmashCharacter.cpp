@@ -1,14 +1,13 @@
 #include "SmashBrawl/Public/Character//SmashCharacter.h"
 
-
 #include "EnhancedInputComponent.h"
 #include "AbilitySystem/BaseAbility.h"
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
-#include "Actors/Shield.h"
-#include "Character/FXComponent.h"
-#include "Character/SmashStateSystem.h"
+#include "Character/Components/FXComponent.h"
+#include "Character/Components/SmashStateSystem.h"
 #include "Character/Components/SmashCharacterMovementComponent.h"
 #include "Character/Components/SmashCharacterStats.h"
+#include "Character/Components/SmashCombatComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
 #include "Core/SmashGameInstance.h"
@@ -18,86 +17,134 @@
 #include "Net/UnrealNetwork.h"
 #include "Widgets/HUD/InGame/UW_HUD_PlayerName.h"
 
-class ABrawlPlayerController;
-
 DEFINE_LOG_CATEGORY(LogSmashCharacter);
 
+//---------------------------------------------------------------------
+// 생성자 및 기본 엔진 오버라이드 함수
+//---------------------------------------------------------------------
 
-ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer) : Super(
-	ObjectInitializer.SetDefaultSubobjectClass<USmashCharacterMovementComponent>(
-		ASSTCharacter::CharacterMovementComponentName))
+ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<USmashCharacterMovementComponent>(ASSTCharacter::CharacterMovementComponentName))
 {
-	// Enable ticking but initially set to false during StartUp
+	// Tick 설정 - 초기에는 비활성화, StartUp에서 활성화
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	PrimaryActorTick.SetTickFunctionEnable(false);
 
-
-	// 컴포넌트 생성
+	// 컴포넌트 생성 및 초기화
 	SmashCharacterMovementComponent = Cast<USmashCharacterMovementComponent>(GetCharacterMovement());
-	AbilitySystemComponent = CreateDefaultSubobject<USmashAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
-	StateSystem = CreateDefaultSubobject<USmashStateSystem>(TEXT("CharacterState"));
+	SmashStateSystem = CreateDefaultSubobject<USmashStateSystem>(TEXT("SmashCharacterState"));
 	SmashCharacterStatsComponent = CreateDefaultSubobject<USmashCharacterStats>(TEXT("SmashCharacterStatsComponent"));
-
+	SmashCombatComponent = CreateDefaultSubobject<USmashCombatComponent>(TEXT("SmashCombatComponent"));
+	AbilitySystemComponent = CreateDefaultSubobject<USmashAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("WidgetComponent"));
 	FXComponent = CreateDefaultSubobject<UFXComponent>(TEXT("FXComponent"));
 
-	// 초기화 상태
+	// 초기화 상태 및 기본값 설정
 	bInitialized = false;
+	Attacks = ESmashAttacks::None;
+	Direction = ESmashDirection::None;
+	AbilityType = ESmashAbilityTypes::None;
 }
 
 void ASmashCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ASmashCharacter, LastHit);
+	// 상태 및 메타데이터
 	DOREPLIFETIME(ASmashCharacter, StateInfo);
+	DOREPLIFETIME(ASmashCharacter, LastHit);
 	DOREPLIFETIME(ASmashCharacter, PlayerNo);
-	DOREPLIFETIME(ASmashCharacter, bAttachedAbil);
 	DOREPLIFETIME(ASmashCharacter, Team);
+
+	// 입력 및 위치 데이터
 	DOREPLIFETIME(ASmashCharacter, MoveInputValue);
+	DOREPLIFETIME(ASmashCharacter, UpDownInputValue);
 	DOREPLIFETIME(ASmashCharacter, Direction);
 	DOREPLIFETIME(ASmashCharacter, Location);
 	DOREPLIFETIME(ASmashCharacter, YPos);
 	DOREPLIFETIME(ASmashCharacter, ZPos);
 	DOREPLIFETIME(ASmashCharacter, FootZPos);
 	DOREPLIFETIME(ASmashCharacter, LocationFeet);
+
+	// 상태 플래그
+	DOREPLIFETIME(ASmashCharacter, bAttachedAbil);
 	DOREPLIFETIME(ASmashCharacter, bLedgeCooldown);
-	DOREPLIFETIME(ASmashCharacter, AbilityType);
 	DOREPLIFETIME(ASmashCharacter, bLanded);
+	DOREPLIFETIME(ASmashCharacter, bDizzied);
 	DOREPLIFETIME(ASmashCharacter, bPushed);
-	DOREPLIFETIME(ASmashCharacter, Attacks);
 	DOREPLIFETIME(ASmashCharacter, bCanSmash);
+	DOREPLIFETIME(ASmashCharacter, bBufferdInput);
+	DOREPLIFETIME(ASmashCharacter, bBufferdDirection);
+	DOREPLIFETIME(ASmashCharacter, bHitRest);
+
+	// 전투 관련
+	DOREPLIFETIME(ASmashCharacter, AbilityType);
+	DOREPLIFETIME(ASmashCharacter, Attacks);
 }
 
 void ASmashCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	// 땅에 닿았을 때 이벤트 핸들러 등록
 	LandedDelegate.AddDynamic(this, &ASmashCharacter::OnLandedSmash);
 
+	// 약간의 딜레이 후에 초기화 시작 (0.1초)
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASmashCharacter::StartUp, 0.1f, false);
+}
+
+void ASmashCharacter::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	// 초기화 완료 확인
+	if (!bInitialized)
+	{
+		return;
+	}
+
+	// 주요 틱 로직
+	FacingCheck();
+	Multicast_SmashDetection();
+	UpdateLocations();
+	UpdateFlashing();
+
+	// 컴포넌트 틱 호출
+	if (AbilitySystemComponent)
+	{
+		AbilitySystemComponent->MainTick();
+	}
+
+	if (FXComponent)
+	{
+		FXComponent->FXMainLoop();
+	}
 }
 
 void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	// 추가 입력 바인딩
+	// 입력 컴포넌트가 EnhancedInputComponent인지 확인
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
-		// 이동 액션 Completed 이벤트에 바인딩 추가
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this,
-		                                   &ASmashCharacter::ResetMoveInput);
-
+		// 기본 이동 입력 바인딩
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ASmashCharacter::ResetMoveInput);
 		EnhancedInputComponent->BindAction(IA_UpDown, ETriggerEvent::Triggered, this, &ASmashCharacter::UpDownAxis);
 
-		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Triggered, this,
-		                                   &ASmashCharacter::BasicAttackPressed);
-		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Completed, this,
-		                                   &ASmashCharacter::BasicAttackReleased);
+		// 공격 입력 바인딩
+		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::BasicAttackPressed);
+		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Completed, this, &ASmashCharacter::BasicAttackReleased);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::SpecialAttackPressed);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this, &ASmashCharacter::SpecialAttackReleased);
 
+		// 도발 입력 바인딩
+		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntUpPressed);
+		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
+		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
+		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
 		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this,
 		                                   &ASmashCharacter::SpecialAttackPressed);
 		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this,
@@ -120,7 +167,42 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void ASmashCharacter::StartUp()
 {
-	// 위젯 설정 및 널 체크
+	// 위젯 설정
+	SetupHUDWidget();
+
+	// 기본 설정 초기화
+	SetUp();
+
+	// 코스튬 설정
+	SetCostume();
+
+	// Tick 활성화를 위한 타이머
+	FTimerHandle TickActivationHandle;
+	GetWorld()->GetTimerManager().SetTimer(TickActivationHandle, [this]()
+	{
+		// Tick 활성화
+		SetActorTickEnabled(true);
+
+		// LastHit 초기화 (서버에서만)
+		if (HasAuthority())
+		{
+			LastHit = this;
+		}
+
+		// 이동 상태 초기화
+		SetMovementState(FSmashPlayerMovement(true, true, true, true));
+
+		// 능력 시스템 초기화
+		InitializeAbilitySystem();
+
+		// 초기화 완료 표시
+		bInitialized = true;
+	}, 0.5f, false);
+}
+
+void ASmashCharacter::SetupHUDWidget()
+{
+	// 위젯 컴포넌트 확인 및 설정
 	if (WidgetComponent)
 	{
 		if (UUW_HUD_PlayerName* HUD_PlayerName = Cast<UUW_HUD_PlayerName>(WidgetComponent->GetUserWidgetObject()))
@@ -137,106 +219,106 @@ void ASmashCharacter::StartUp()
 	{
 		UE_LOG(LogSmashCharacter, Error, TEXT("WidgetComponent가 설정되지 않았습니다."));
 	}
+}
 
-	// 기본 설정
-	SetUp();
-
-	// 코스튬 설정 및 널 체크
-	SetCostume();
-
-	// Tick 활성화를 위한 타이머 시간 단축 (이전 1.0초)
-	FTimerHandle TickActivationHandle;
-	GetWorld()->GetTimerManager().SetTimer(TickActivationHandle, [this]()
+void ASmashCharacter::InitializeAbilitySystem()
+{
+	// 능력 시스템 컴포넌트 널 체크
+	if (!AbilitySystemComponent)
 	{
-		SetActorTickEnabled(true);
+		UE_LOG(LogSmashCharacter, Error, TEXT("AbilitySystemComponent가 설정되지 않았습니다."));
+		return;
+	}
 
-		// LastHit 초기화
-		if (GetLocalRole() == ROLE_Authority)
-		{
-			LastHit = this;
-		}
+	// 레벨 인트로 설정
+	if (IsValid(AbilitySystemComponent->LevelIntro))
+	{
+		AbilitySystemComponent->LevelIntro->bActive = true;
+	}
 
-		// 방패 부착 및 널 체크
-		AttachShield();
-
-		// 이동 상태 초기화
-		SetMovementState(FSmashPlayerMovement(true, true, true, true));
-
-		// 능력 시스템 초기화 및 널 체크
-		if (AbilitySystemComponent)
-		{
-			if (IsValid(AbilitySystemComponent->LevelIntro))
-			{
-				AbilitySystemComponent->LevelIntro->bActive = true;
-
-				// AI 로직 (미구현)
-				UE_LOG(LogSmashCharacter, Warning, TEXT("AI코드 로직 미구현입니다.."));
-			}
-		}
-		else
-		{
-			UE_LOG(LogSmashCharacter, Error, TEXT("AbilitySystemComponent가 설정되지 않았습니다."));
-		}
-
-		// 상태 시스템 초기화 및 널 체크
-		if (StateSystem)
-		{
-			StateSystem->TryChangeState(ESmashPlayerStates::Ability);
-		}
-		else
-		{
-			UE_LOG(LogSmashCharacter, Error, TEXT("StateSystem이 설정되지 않았습니다."));
-		}
-
-		// 초기화 완료 표시
-		bInitialized = true;
-	}, 0.5f, false); // 1.0초에서 0.5초로 단축
+	// 상태 시스템 초기화 및 널 체크
+	if (SmashStateSystem)
+	{
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
+	}
+	else
+	{
+		UE_LOG(LogSmashCharacter, Error, TEXT("StateSystem이 설정되지 않았습니다."));
+	}
 }
 
 void ASmashCharacter::SetUp()
 {
-	// 게임 인스턴스 설정 및 널 체크
-	SmashGameInstance = Cast<USmashGameInstance>(GetGameInstance());
-	if (!SmashGameInstance)
-	{
-		UE_LOG(LogSmashCharacter, Error, TEXT("맵 프로젝트에서 USmashGameInstance를 설정해주세요!!!"));
-		return;
-	}
+	// 게임 인스턴스 설정
+	SetupGameInstance();
 
-	// 게임 상태 설정 및 널 체크
-	SmashGameState = Cast<ASmashGameState>(UGameplayStatics::GetGameState(this));
-	if (!SmashGameState)
-	{
-		UE_LOG(LogSmashCharacter, Error, TEXT("게임모드에서 USmashGameInstance를 설정해주세요!!!"));
-		return;
-	}
+	// 게임 상태 설정
+	SetupGameState();
 
 	// 서버에서만 수행해야 하는 작업
 	if (HasAuthority())
 	{
-		SmashGameMode = Cast<ASmashPlatFighterGameMode>(UGameplayStatics::GetGameMode(this));
-		if (!SmashGameMode)
-		{
-			UE_LOG(LogSmashCharacter, Error, TEXT("게임모드에를 GM_SmashPlatFighterGameMode로 설정해주세요."));
-			return;
-		}
-
-		// 캐릭터 설정
-		Character = SmashGameInstance->PlayerCharacters[PlayerNo];
-
-		// 능력 부착
-		AttachAbilities();
-
-		// 카메라 업데이트
-		UpdateCamera();
+		SetupGameMode();
 	}
 
-	// 모든 클라이언트에서 수행할 작업 (클라이언트-서버 동기화 문제)
-	// HasAuthority() 체크가 없는 작업은 모든 클라이언트에서 실행됨
+	// 모든 클라이언트에서 수행할 작업
+	SyncClientPlayerData();
+}
+
+void ASmashCharacter::SetupGameInstance()
+{
+	// 게임 인스턴스 가져오기
+	SmashGameInstance = Cast<USmashGameInstance>(GetGameInstance());
+	if (!SmashGameInstance)
+	{
+		UE_LOG(LogSmashCharacter, Error, TEXT("맵 프로젝트에서 USmashGameInstance를 설정해주세요!!!"));
+	}
+}
+
+void ASmashCharacter::SetupGameState()
+{
+	// 게임 상태 가져오기
+	SmashGameState = Cast<ASmashGameState>(UGameplayStatics::GetGameState(this));
+	if (!SmashGameState)
+	{
+		UE_LOG(LogSmashCharacter, Error, TEXT("게임모드에서 USmashGameInstance를 설정해주세요!!!"));
+	}
+}
+
+void ASmashCharacter::SetupGameMode()
+{
+	// 게임 모드 가져오기 (서버에서만)
+	SmashGameMode = Cast<ASmashPlatFighterGameMode>(UGameplayStatics::GetGameMode(this));
+	if (!SmashGameMode)
+	{
+		UE_LOG(LogSmashCharacter, Error, TEXT("게임모드에를 GM_SmashPlatFighterGameMode로 설정해주세요."));
+		return;
+	}
+
+	// 캐릭터 설정
+	if (SmashGameInstance && PlayerNo >= 0 && PlayerNo < SmashGameInstance->PlayerCharacters.Num())
+	{
+		Character = SmashGameInstance->PlayerCharacters[PlayerNo];
+	}
+
+	// 능력 부착
+	AttachAbilities();
+
+	// 카메라 업데이트
+	UpdateCamera();
+}
+
+void ASmashCharacter::SyncClientPlayerData()
+{
+	// 클라이언트-서버 동기화 (모든 클라이언트에서 실행)
 	if (SmashGameInstance && PlayerNo >= 0 && PlayerNo < SmashGameInstance->AliveArray.Num())
 	{
 		SmashGameInstance->AliveArray[PlayerNo] = true;
-		Team = SmashGameInstance->PlayerTeam[PlayerNo];
+
+		if (PlayerNo < SmashGameInstance->PlayerTeam.Num())
+		{
+			Team = SmashGameInstance->PlayerTeam[PlayerNo];
+		}
 	}
 	else
 	{
@@ -246,11 +328,14 @@ void ASmashCharacter::SetUp()
 
 void ASmashCharacter::SetCostume()
 {
-	// 재질 설정 및 널 체크
+	// 재질 설정 (팀별 색상)
 	if (TeamOptionMaterials.IsValidIndex(PlayerNo) && TeamOptionMaterials[PlayerNo])
 	{
 		UMaterialInstance* TeamMaterial = TeamOptionMaterials[PlayerNo];
-		Material = GetMesh() ? GetMesh()->CreateDynamicMaterialInstance(0, TeamMaterial) : nullptr;
+		if (GetMesh())
+		{
+			Material = GetMesh()->CreateDynamicMaterialInstance(0, TeamMaterial);
+		}
 	}
 	else
 	{
@@ -268,95 +353,37 @@ void ASmashCharacter::AttachAbilities()
 	}
 }
 
-void ASmashCharacter::AttachShield()
-{
-	// 방패 설정 및 널 체크
-	if (!ShieldClass)
-	{
-		UE_LOG(LogSmashCharacter, Display, TEXT("Config|ShieldClass를 설정해주세요"));
-		return;
-	}
-
-	if (!GetMesh())
-	{
-		UE_LOG(LogSmashCharacter, Error, TEXT("Mesh 컴포넌트가 없어 Shield를 부착할 수 없습니다."));
-		return;
-	}
-
-	// Spawn 전 유효성 체크
-	if (HasAuthority() && ShieldClass && GetWorld())
-	{
-		Shield = GetWorld()->SpawnActorDeferred<AShield>(ShieldClass, GetMesh()->GetComponentToWorld(), this, nullptr,
-		                                                 ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding);
-		if (Shield)
-		{
-			Shield->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true),
-			                          ShieldSocket);
-			Shield->FinishSpawning(GetMesh()->GetComponentToWorld());
-		}
-		else
-		{
-			UE_LOG(LogSmashCharacter, Error, TEXT("Shield 생성에 실패했습니다."));
-		}
-	}
-}
-
 void ASmashCharacter::UpdateCamera()
 {
 	// SST 플러그인의 카메라 로직 (미구현)
-	UE_LOG(LogSmashCharacter, Display, TEXT("SST 플러그인의 카메라 로직을 사용할 생각입니다. 미 구현"));
+	UE_LOG(LogSmashCharacter, Display, TEXT("SST 플러그인의 카메라 로직을 사용할 예정입니다. 미구현"));
 }
 
-void ASmashCharacter::Tick(float DeltaSeconds)
-{
-	Super::Tick(DeltaSeconds);
-
-	// 초기화 완료 체크
-	if (!bInitialized)
-	{
-		return;
-	}
-
-	// FacingCheck();
-	//
-	// Multicast_SmashDetection();
-	//
-	// UpdateLocations();
-	//
-	// UpdateFlashing();
-	//
-	// if (AbilitySystemComponent)
-	// {
-	// 	AbilitySystemComponent->MainTick();
-	// }
-	//
-	// if (FXComponent)
-	// {
-	// 	FXComponent->FXMainLoop();
-	// }
-}
+//---------------------------------------------------------------------
+// 상태 및 움직임 관리
+//---------------------------------------------------------------------
 
 void ASmashCharacter::FacingCheck()
 {
+	// 움직임 컴포넌트 확인
 	if (!SmashCharacterMovementComponent)
 	{
 		return;
 	}
 
-	// 현재 값과 다를 때만 업데이트 (성능 최적화)
+	// 방향 전환 속성 동기화 (현재 값과 다를 때만 업데이트)
 	if (SmashCharacterMovementComponent->bCanFlip != StateInfo.PlayerMovement.bCanFlipping)
 	{
 		SmashCharacterMovementComponent->bCanFlip = StateInfo.PlayerMovement.bCanFlipping;
 	}
-
-	// 여기에 추가적인 방향 확인 로직 구현
-	// 예: 대상 방향으로 캐릭터 모델 회전, 애니메이션 처리 등
 }
 
 void ASmashCharacter::Multicast_SmashDetection_Implementation()
 {
+	// 스매시 공격 감지 로직 (모든 클라이언트에서 실행)
 	if (StateInfo.PlayerMovement.bCanAttack)
 	{
+		// 우측 이동 감지
 		if (MoveInputValue >= 0.8f)
 		{
 			if (DoOnceMoveDirection.Execute())
@@ -365,6 +392,7 @@ void ASmashCharacter::Multicast_SmashDetection_Implementation()
 				Direction = ESmashDirection::Forward;
 			}
 		}
+		// 좌측 이동 감지
 		else if (MoveInputValue <= -0.8f)
 		{
 			if (DoOnceMoveDirection.Execute())
@@ -373,12 +401,13 @@ void ASmashCharacter::Multicast_SmashDetection_Implementation()
 				Direction = ESmashDirection::Forward;
 			}
 		}
+		// 중립 상태일 때 DoOnce 리셋
 		else if (!(MoveInputValue >= 0.8f || MoveInputValue <= -0.8f))
 		{
 			DoOnceMoveDirection.Reset();
 		}
 
-
+		// 위 방향 입력 감지
 		if (UpDownInputValue >= 0.8f)
 		{
 			if (DoOnceUpDirection.Execute())
@@ -387,6 +416,7 @@ void ASmashCharacter::Multicast_SmashDetection_Implementation()
 				StateInfo.PlayCondition.bCanSmash = true;
 			}
 		}
+		// 아래 방향 입력 감지
 		else if (UpDownInputValue <= -0.8f)
 		{
 			if (DoOnceDownDirection.Execute())
@@ -395,15 +425,16 @@ void ASmashCharacter::Multicast_SmashDetection_Implementation()
 				StateInfo.PlayCondition.bCanSmash = true;
 			}
 		}
+		// 중립 상태일 때 DoOnce 리셋
 		else if (UpDownInputValue >= 0.8f || UpDownInputValue <= -0.8f)
 		{
 			DoOnceUpDirection.Reset();
 			DoOnceDownDirection.Reset();
 		}
 
+		// 스매시 가능 상태 리셋 타이머
 		if (StateInfo.PlayCondition.bCanSmash)
 		{
-			// 0.1초 딜레이 추가
 			FTimerHandle DelayHandle;
 			GetWorld()->GetTimerManager().SetTimer(DelayHandle, [this]()
 			{
@@ -419,18 +450,33 @@ void ASmashCharacter::Multicast_SmashDetection_Implementation()
 
 void ASmashCharacter::UpdateLocations()
 {
+	// 위치 정보 업데이트
 	Location = GetActorLocation();
 	YPos = Location.Y;
 	ZPos = Location.Z;
-	FootZPos = Location.Z - GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+
+	// 캡슐 컴포넌트가 있는지 확인
+	if (GetCapsuleComponent())
+	{
+		FootZPos = Location.Z - GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+	}
+	else
+	{
+		FootZPos = Location.Z;
+	}
+
 	LocationFeet = FVector(Location.X, Location.Y, FootZPos);
 }
 
 void ASmashCharacter::UpdateFlashing()
 {
+	// 재질이 유효한지 확인
 	if (!IsValid(Material))
+	{
 		return;
+	}
 
+	// 깜박임 상태에 따라 플래시 파라미터 설정
 	if (bFlashing)
 	{
 		Material->SetScalarParameterValue(FName("Flash"), 0.0f);
@@ -440,14 +486,19 @@ void ASmashCharacter::UpdateFlashing()
 		Material->SetScalarParameterValue(FName("Flash"), 1.0f);
 	}
 
+	// 이펙트 파라미터 설정
 	Material->SetScalarParameterValue(FName("Invon"), InvonFlash);
 	Material->SetScalarParameterValue(FName("Smash"), SmashFlash);
 	Material->SetScalarParameterValue(FName("Hit"), HitFlash);
 	Material->SetScalarParameterValue(FName("FreeFall"), FreeFallFlash);
 
-	if (StateSystem->GetCurrentState() == ESmashPlayerStates::FreeFall || StateSystem->GetCurrentState() ==
-		ESmashPlayerStates::Hit || bIsSmashFlash ||
-		(HitStates == ESmashHitState::Intangible || HitStates == ESmashHitState::Invincible))
+	// 상태에 따른 깜박임 로직
+	if (SmashStateSystem && (
+		SmashStateSystem->GetCurrentState() == ESmashPlayerStates::FreeFall ||
+		SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Hit ||
+		bIsSmashFlash ||
+		(HitStates == ESmashHitState::Intangible || HitStates == ESmashHitState::Invincible)
+	))
 	{
 		bFlashing = true;
 	}
@@ -456,14 +507,19 @@ void ASmashCharacter::UpdateFlashing()
 		bFlashing = false;
 	}
 
-	if (StateSystem->GetCurrentState() == ESmashPlayerStates::FreeFall)
+	// 상태별 색상 설정
+	if (SmashStateSystem)
 	{
-		Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.008f, 0.02f, 0.02f, 1.0f));
+		if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::FreeFall)
+		{
+			Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.008f, 0.02f, 0.02f, 1.0f));
+		}
+		if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Hit)
+		{
+			Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.6f, 0.0f, 0.03f, 1.0f));
+		}
 	}
-	if (StateSystem->GetCurrentState() == ESmashPlayerStates::Hit)
-	{
-		Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.6f, 0.0f, 0.03f, 1.0f));
-	}
+
 	if (HitStates == ESmashHitState::Intangible || HitStates == ESmashHitState::Invincible)
 	{
 		Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.7f, 0.93f, 0.77f, 1.0f));
@@ -475,16 +531,131 @@ void ASmashCharacter::UpdateFlashing()
 	}
 }
 
+void ASmashCharacter::SetMovementState(FSmashPlayerMovement SetMovement)
+{
+	// 서버에서만 상태 변경 (권한 체크)
+	if (HasAuthority())
+	{
+		StateInfo.PlayerMovement = SetMovement;
+
+		// 방향 전환 상태를 Movement 컴포넌트에 즉시 반영
+		if (SmashCharacterMovementComponent)
+		{
+			SmashCharacterMovementComponent->bCanFlip = SetMovement.bCanFlipping;
+		}
+	}
+}
+
+void ASmashCharacter::SetCanFlip(bool bNewCanFlip)
+{
+	// 서버에서 실행되는 경우
+	if (HasAuthority())
+	{
+		// 현재 상태 정보를 유지하며 방향 전환 속성만 업데이트
+		StateInfo.PlayerMovement.bCanFlipping = bNewCanFlip;
+
+		// 나머지 PlayerMovement 값 유지하며 업데이트
+		SetMovementState(StateInfo.PlayerMovement);
+
+		// Movement 컴포넌트에 즉시 반영
+		if (SmashCharacterMovementComponent)
+		{
+			SmashCharacterMovementComponent->bCanFlip = bNewCanFlip;
+		}
+	}
+	else
+	{
+		// 클라이언트에서는 서버에 RPC로 요청
+		Server_SetCanFlip(bNewCanFlip);
+	}
+}
+
+bool ASmashCharacter::CanFlip() const
+{
+	return StateInfo.PlayerMovement.bCanFlipping;
+}
+
+void ASmashCharacter::Server_SetCanFlip_Implementation(bool bNewCanFlip)
+{
+	SetCanFlip(bNewCanFlip);
+}
+
+void ASmashCharacter::SetStateInfo(const FSmashPlayerStateInfo& NewStateInfo)
+{
+	// 서버에서만 상태 정보 변경
+	if (HasAuthority())
+	{
+		StateInfo = NewStateInfo;
+		OnRep_StateInfo();
+	}
+}
+
+void ASmashCharacter::Server_RequestSetStateInfo_Implementation(const FSmashPlayerStateInfo& NewStateInfo)
+{
+	// 서버에서만 실행
+	if (HasAuthority())
+	{
+		SetStateInfo(NewStateInfo);
+	}
+}
+
+void ASmashCharacter::Client_UpdateStateInfo_Implementation(const FSmashPlayerStateInfo& NewStateInfo)
+{
+	// 서버에서 클라이언트로 상태 정보 업데이트 (권한이 없는 클라이언트에서는 직접 수정 불가)
+	if (!HasAuthority())
+	{
+		StateInfo = NewStateInfo;
+		OnRep_StateInfo();
+	}
+}
+
+void ASmashCharacter::OnRep_StateInfo()
+{
+	// Movement 컴포넌트에 방향 전환 속성 업데이트
+	if (SmashCharacterMovementComponent)
+	{
+		SmashCharacterMovementComponent->bCanFlip = StateInfo.PlayerMovement.bCanFlipping;
+	}
+}
+
+void ASmashCharacter::OnRep_LastHit()
+{
+	// LastHit이 변경되었을 때 필요한 처리
+}
+
+void ASmashCharacter::OnRep_PlayerNo()
+{
+	// PlayerNo가 변경되었을 때 UI 업데이트
+	if (WidgetComponent)
+	{
+		if (UUW_HUD_PlayerName* HUD_PlayerName = Cast<UUW_HUD_PlayerName>(WidgetComponent->GetUserWidgetObject()))
+		{
+			HUD_PlayerName->PlayerNo = PlayerNo;
+		}
+	}
+}
+
+//---------------------------------------------------------------------
+// 이펙트 및 액션 처리
+//---------------------------------------------------------------------
+
 void ASmashCharacter::SpawnFeetFX()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(this, SprintFX, LocationFeet);
+	// 달리기 이펙트 재생
+	if (SprintFX)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(this, SprintFX, LocationFeet);
+	}
 }
 
 void ASmashCharacter::TauntAction(ESmashDirection ActionDirection)
 {
-	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
+	// 도발 액션 처리 (특정 상태일 때만 가능)
+	if (SmashStateSystem &&
+		SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Ability &&
+		StateInfo.PlayerMovement.bCanAttack)
 	{
-		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Taunt;
 		Direction = ActionDirection;
 	}
@@ -516,62 +687,73 @@ void ASmashCharacter::Launch_Implementation(FVector LaunchVector, bool bXYOver, 
 
 void ASmashCharacter::Dizzy()
 {
+	// 캐릭터를 어지러움 상태로 설정
 	SetMovementState(FSmashPlayerMovement(false, false, false, false));
 
+	// 어지러움 상태 타이머 설정
 	FTimerHandle DizzyHandle;
 	GetWorld()->GetTimerManager().SetTimer(DizzyHandle, [this]()
 	{
 		bDizzied = false;
-		StateSystem->TryChangeState(ESmashPlayerStates::Idle);
+
+		if (SmashStateSystem)
+		{
+			SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
+		}
 	}, 2.0f, false);
-}
-
-float ASmashCharacter::NockBackCalculate()
-{
-	float Value0 = AbilitySystemComponent->DamageScale[AbilitySystemComponent->UsedMovesCount];
-	float Value1 = SmashCharacterStatsComponent->Percent / 10.0f;
-	float Value2 = (SmashCharacterStatsComponent->Percent * Damage) / 20.f;
-
-	float Value3 = Value0 * (Value1 + Value2);
-	float Value4 = (200.0f / (SmashCharacterStatsComponent->Weight + 100.0f)) * 1.4f;
-
-	float Value5 = (Value3 * Value4) + 18.0f;
-	float Value6 = (SmashCharacterStatsComponent->Percent / 7.0f) * HitScale;
-	float Value7 = (Value5 * Value6) + BaseKnock;
-
-	Knockback = Value7 * DamRatios;
-	return Knockback;
-}
-
-void ASmashCharacter::ShieldHit(ESmashDirection NewDirection)
-{
-	// float Knockback = NockBackCalculate();
-	// ApplyShieldKnockBack(Knockback, Direction);
 }
 
 void ASmashCharacter::LandedAction()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(this, P_Landed, LocationFeet);
-	GetCapsuleComponent()->SetCapsuleHalfHeight(DefaultCapsuleHeight);
-	bLanded = true;
-	GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-
-	if (!(StateSystem->GetCurrentState() == ESmashPlayerStates::Shield ||
-		StateSystem->GetCurrentState() == ESmashPlayerStates::Ability ||
-		StateSystem->GetCurrentState() == ESmashPlayerStates::Tumble))
+	// 착지 이펙트 재생
+	if (P_Landed)
 	{
-		SetCanFlip(true);
-		StateSystem->TryChangeState(ESmashPlayerStates::Idle);
+		UGameplayStatics::SpawnEmitterAtLocation(this, P_Landed, LocationFeet);
+	}
 
-		if (bDizzied)
-			StateSystem->TryChangeState(ESmashPlayerStates::Dizzy);
+	// 캡슐 높이 설정
+	if (GetCapsuleComponent())
+	{
+		GetCapsuleComponent()->SetCapsuleHalfHeight(DefaultCapsuleHeight);
+	}
+
+	// 착지 상태 설정
+	bLanded = true;
+
+	// 이동 모드 설정
+	if (GetCharacterMovement())
+	{
+		GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+	}
+
+	// 상태 시스템이 있는지 확인
+	if (SmashStateSystem)
+	{
+		ESmashPlayerStates CurrentState = SmashStateSystem->GetCurrentState();
+
+		// 특정 상태가 아닐 때만 상태 변경
+		if (!(CurrentState == ESmashPlayerStates::Shield ||
+			CurrentState == ESmashPlayerStates::Ability ||
+			CurrentState == ESmashPlayerStates::Tumble))
+		{
+			SetCanFlip(true);
+			SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
+
+			// 어지러움 상태 체크
+			if (bDizzied)
+			{
+				SmashStateSystem->TryChangeState(ESmashPlayerStates::Dizzy);
+			}
+		}
 	}
 }
 
 void ASmashCharacter::OnLandedSmash(const FHitResult& Hit)
 {
+	// 착지 액션 실행
 	LandedAction();
 
+	// 착지 후 짧은 딜레이 설정
 	FTimerHandle LandedHandle;
 	GetWorld()->GetTimerManager().SetTimer(LandedHandle, [this]()
 	{
@@ -580,8 +762,72 @@ void ASmashCharacter::OnLandedSmash(const FHitResult& Hit)
 	}, 0.01f, false);
 }
 
+//---------------------------------------------------------------------
+// 입력 처리
+//---------------------------------------------------------------------
+
+void ASmashCharacter::Move(const struct FInputActionValue& Value)
+{
+	// 컨트롤러와 이동 컴포넌트 확인
+	if (!Controller || !SmashCharacterMovementComponent)
+	{
+		return;
+	}
+
+	// 이동 입력 처리
+	MoveInputValue = Value.Get<float>();
+
+	// 상태 변경 시도 (걷기/달리기 상태로)
+	if (SmashStateSystem && SmashStateSystem->TryChangeState(ESmashPlayerStates::WalkAndRun))
+	{
+		// 입력 방향 설정
+		SmashCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MoveInputValue);
+	}
+}
+
+void ASmashCharacter::UpDownAxis(const FInputActionValue& InputActionValue)
+{
+	// 컨트롤러와 이동 컴포넌트 확인
+	if (Controller && SmashCharacterMovementComponent)
+	{
+		UpDownInputValue = InputActionValue.Get<float>();
+	}
+}
+
+void ASmashCharacter::JumpOrDrop_Implementation()
+{
+	// 웅크린 상태에서는 플랫폼 아래로 떨어지기 시도
+	if (bIsCrouched)
+	{
+		if (SSTCharacterMovementComponent)
+		{
+			SSTCharacterMovementComponent->WantsToPlatformDrop = true;
+		}
+	}
+	else
+	{
+		// 점프 가능한 상태일 때만 점프 실행
+		if (StateInfo.PlayerMovement.bCanJump)
+		{
+			Jump();
+
+			if (SmashStateSystem)
+			{
+				SmashStateSystem->TryChangeState(ESmashPlayerStates::Jump);
+			}
+		}
+	}
+}
+
+void ASmashCharacter::ResetMoveInput(const FInputActionValue& Value)
+{
+	// 이동 입력 값 리셋
+	MoveInputValue = 0.0f;
+}
+
 void ASmashCharacter::UpdateDirection()
 {
+	// 입력 값에 따라 방향 설정
 	if (UpDownInputValue >= 0.5)
 	{
 		Direction = ESmashDirection::Up;
@@ -592,7 +838,8 @@ void ASmashCharacter::UpdateDirection()
 	}
 	else if (MoveInputValue >= 0.5)
 	{
-		if (SmashCharacterMovementComponent->IsFacingRight())
+		// 캐릭터가 오른쪽을 보고 있는지 확인
+		if (SmashCharacterMovementComponent && SmashCharacterMovementComponent->IsFacingRight())
 		{
 			Direction = ESmashDirection::Forward;
 		}
@@ -603,7 +850,8 @@ void ASmashCharacter::UpdateDirection()
 	}
 	else if (MoveInputValue <= -0.5)
 	{
-		if (SmashCharacterMovementComponent->IsFacingRight())
+		// 캐릭터가 오른쪽을 보고 있는지 확인
+		if (SmashCharacterMovementComponent && SmashCharacterMovementComponent->IsFacingRight())
 		{
 			Direction = ESmashDirection::Back;
 		}
@@ -618,95 +866,59 @@ void ASmashCharacter::UpdateDirection()
 	}
 }
 
-void ASmashCharacter::Move(const struct FInputActionValue& Value)
-{
-	if (Controller && SmashCharacterMovementComponent)
-	{
-		MoveInputValue = Value.Get<float>();
-
-		if (StateSystem->TryChangeState(ESmashPlayerStates::WalkAndRun))
-		{
-			SmashCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MoveInputValue);
-			//FootStep->DetectFeet();
-		}
-	}
-}
-
-void ASmashCharacter::UpDownAxis(const FInputActionValue& InputActionValue)
-{
-	if (Controller && SmashCharacterMovementComponent)
-	{
-		UpDownInputValue = InputActionValue.Get<float>();
-	}
-}
-
-void ASmashCharacter::JumpOrDrop_Implementation()
-{
-	// Super::JumpOrDrop();
-	if (bIsCrouched) // attempt to drop through platform, if any
-	{
-		SSTCharacterMovementComponent->WantsToPlatformDrop = true;
-	}
-	else
-	{
-		if (StateInfo.PlayerMovement.bCanJump)
-		{
-			Jump();
-			StateSystem->TryChangeState(ESmashPlayerStates::Jump);
-		}
-	}
-}
-
-void ASmashCharacter::ResetMoveInput(const FInputActionValue& Value)
-{
-	MoveInputValue = 0.0f;
-}
-
 void ASmashCharacter::BasicAttack()
 {
-	if (StateSystem->GetCurrentState() == ESmashPlayerStates::Shield)
+	// 방패 상태일 때는 잡기로 변경
+	if (SmashStateSystem && SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Shield)
 	{
-		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Grab;
 		return;
 	}
 
-	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Shield && StateInfo.PlayerMovement.bCanAttack)
+	// 방패 상태가 아니고 공격 가능한 상태일 때
+	if (SmashStateSystem && SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Shield && StateInfo.PlayerMovement.bCanAttack)
 	{
-		if (GetCharacterMovement()->IsFalling())
+		// 공중 상태일 때는 공중 공격
+		if (GetCharacterMovement() && GetCharacterMovement()->IsFalling())
 		{
-			StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+			SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 			AbilityType = ESmashAbilityTypes::Air;
 			return;
 		}
 
+		// 스매시 공격 가능 상태일 때
 		if (StateInfo.PlayCondition.bCanSmash)
 		{
-			StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+			SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 			AbilityType = ESmashAbilityTypes::Smash;
 			StateInfo.PlayCondition.bCanSmash = false;
 			return;
 		}
 
-		if (StateSystem->GetCurrentState() == ESmashPlayerStates::WalkAndRun)
+		// 걷기/달리기 상태일 때는 기타 공격
+		if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::WalkAndRun)
 		{
-			StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+			SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 			AbilityType = ESmashAbilityTypes::Other;
 			return;
 		}
 
-		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		// 기본 상태에서는 기본 공격
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Basic;
 	}
 }
 
 void ASmashCharacter::CrouchDrop_Implementation()
 {
-	// Super::CrouchDrop_Implementation();
-
+	// 웅크리기 가능한 상태일 때
 	if (CanCrouch())
 	{
-		StateSystem->TryChangeState(ESmashPlayerStates::Crouch);
+		if (SmashStateSystem)
+		{
+			SmashStateSystem->TryChangeState(ESmashPlayerStates::Crouch);
+		}
 		Crouch();
 	}
 }
@@ -714,40 +926,62 @@ void ASmashCharacter::CrouchDrop_Implementation()
 void ASmashCharacter::StopCrouchDrop_Implementation()
 {
 	Super::StopCrouchDrop_Implementation();
-	StateSystem->TryChangeState(ESmashPlayerStates::Idle);
+
+	// 웅크리기 해제 시 상태 변경
+	if (SmashStateSystem)
+	{
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
+	}
 }
 
 void ASmashCharacter::BasicAttackPressed(const FInputActionValue& InputActionValue)
 {
+	// 공격 버튼 상태 설정
 	bAttackButton = true;
 
-	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
+	// 공격 가능한 상태일 때만 처리
+	if (SmashStateSystem && SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
 	{
+		// 방향 업데이트
 		UpdateDirection();
+
+		// 기본 공격 실행
 		BasicAttack();
 
+		// 한 번만 실행되도록 DoOnce 사용
 		if (DoOnceBasicAttackPressed.Execute())
+		{
 			bAttackButtonReleased = false;
+		}
 	}
 }
 
 void ASmashCharacter::BasicAttackReleased(const FInputActionValue& InputActionValue)
 {
+	// 공격 버튼 릴리즈 상태 설정
 	bAttackButton = false;
 	bAttackButtonReleased = true;
 }
 
 void ASmashCharacter::SpecialAttackPressed(const FInputActionValue& InputActionValue)
 {
+	// 특수 공격 버튼 상태 설정
 	bSpecialAttackButton = true;
 
+	// 방향 업데이트
 	UpdateDirection();
-	StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+
+	// 특수 공격 상태로 변경
+	if (SmashStateSystem)
+	{
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
+	}
 	AbilityType = ESmashAbilityTypes::Special;
 }
 
 void ASmashCharacter::SpecialAttackReleased(const FInputActionValue& InputActionValue)
 {
+	// 특수 공격 버튼 릴리즈 상태 설정
 	bSpecialAttackButton = false;
 	bSpecialAttackButtonReleased = true;
 }
@@ -815,130 +1049,13 @@ void ASmashCharacter::TauntDownPressed(const FInputActionValue& InputActionValue
 	TauntAction(ESmashDirection::Down);
 }
 
-void ASmashCharacter::SetMovementState(FSmashPlayerMovement SetMovement)
-{
-	// 서버에서만 상태 변경 (권한 체크)
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		StateInfo.PlayerMovement = SetMovement;
-
-		// 즉시 방향 전환 상태를 Movement 컴포넌트에 반영
-		if (SmashCharacterMovementComponent)
-		{
-			SmashCharacterMovementComponent->bCanFlip = SetMovement.bCanFlipping;
-		}
-
-		// 클라이언트에 상태 정보 업데이트 전파 (OnRep_StateInfo가 호출됨)
-	}
-	else
-	{
-		// 클라이언트에서는 서버에 요청
-		// (여기서는 SetCanFlip과 같은 개별 필드 변경 메서드를 통해 처리)
-	}
-}
-
-void ASmashCharacter::SetCanFlip(bool bNewCanFlip)
-{
-	// 서버에서만 실행되도록 변경
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		StateInfo.PlayerMovement.bCanFlipping = bNewCanFlip;
-
-		// 나머지 PlayerMovement 값은 유지하며 값 업데이트
-		SetMovementState(StateInfo.PlayerMovement);
-
-		// 즉시 movement 컴포넌트에도 반영
-		if (SmashCharacterMovementComponent)
-		{
-			SmashCharacterMovementComponent->bCanFlip = bNewCanFlip;
-		}
-	}
-	else
-	{
-		// 클라이언트에서는 서버에 RPC로 요청
-		Server_SetCanFlip(bNewCanFlip);
-	}
-}
-
-void ASmashCharacter::Server_SetCanFlip_Implementation(bool bNewCanFlip)
-{
-	SetCanFlip(bNewCanFlip);
-}
-
-void ASmashCharacter::Client_UpdateStateInfo_Implementation(const FSmashPlayerStateInfo& NewStateInfo)
-{
-	// 서버에서 클라이언트로 상태 정보 업데이트 (권한이 없는 클라이언트에서는 직접 수정 불가)
-	if (GetLocalRole() != ROLE_Authority)
-	{
-		StateInfo = NewStateInfo;
-		OnRep_StateInfo();
-	}
-}
-
-bool ASmashCharacter::CanFlip() const
-{
-	return StateInfo.PlayerMovement.bCanFlipping;
-}
-
-void ASmashCharacter::Server_RequestSetStateInfo_Implementation(const FSmashPlayerStateInfo& NewStateInfo)
-{
-	// 서버에서만 실행
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		SetStateInfo(NewStateInfo);
-	}
-}
-
-void ASmashCharacter::SetStateInfo(const FSmashPlayerStateInfo& NewStateInfo)
-{
-	// 서버에서만 상태 정보 변경
-	if (GetLocalRole() == ROLE_Authority)
-	{
-		StateInfo = NewStateInfo;
-		OnRep_StateInfo();
-
-		// 모든 클라이언트에 상태 정보 업데이트 (필요시)
-		// Client_UpdateStateInfo(NewStateInfo);
-	}
-}
-
-void ASmashCharacter::OnRep_StateInfo()
-{
-	// Movement 컴포넌트에 방향 전환 속성 업데이트
-	if (SmashCharacterMovementComponent)
-	{
-		SmashCharacterMovementComponent->bCanFlip = StateInfo.PlayerMovement.bCanFlipping;
-	}
-
-	// 추가적인 상태 처리 (애니메이션, 이펙트 등)
-	// UpdateCharacterVisuals();
-}
-
-void ASmashCharacter::OnRep_LastHit()
-{
-	// LastHit이 변경되었을 때 처리할 코드
-	if (LastHit)
-	{
-		// 추가 처리 (사운드, 파티클 등)
-	}
-}
-
-void ASmashCharacter::OnRep_PlayerNo()
-{
-	// PlayerNo가 변경되었을 때 처리할 코드
-	// UI 업데이트 등
-	if (WidgetComponent)
-	{
-		if (UUW_HUD_PlayerName* HUD_PlayerName = Cast<UUW_HUD_PlayerName>(WidgetComponent->GetUserWidgetObject()))
-		{
-			HUD_PlayerName->PlayerNo = PlayerNo;
-		}
-	}
-}
+//---------------------------------------------------------------------
+// 인터페이스 구현 - IInterface_SmashCombat
+//---------------------------------------------------------------------
 
 ESmashPlayerStates ASmashCharacter::GetPlayerState_Implementation()
 {
-	return StateSystem->GetCurrentState();
+	return SmashStateSystem ? SmashStateSystem->GetCurrentState() : ESmashPlayerStates::Idle;
 }
 
 ESmashAttacks ASmashCharacter::GetAttackTypes_Implementation()
@@ -958,7 +1075,7 @@ ESmashDirection ASmashCharacter::GetDirection_Implementation()
 
 int32 ASmashCharacter::GetSuper_Implementation()
 {
-	return SmashCharacterStatsComponent->SuperIndex;
+	return SmashCharacterStatsComponent ? SmashCharacterStatsComponent->SuperIndex : 0;
 }
 
 FTransform ASmashCharacter::GetAbilitySpawnTransform_Implementation()
@@ -968,7 +1085,10 @@ FTransform ASmashCharacter::GetAbilitySpawnTransform_Implementation()
 
 void ASmashCharacter::SetSuper_Implementation(int32 NewSuper)
 {
-	SmashCharacterStatsComponent->SuperIndex = NewSuper;
+	if (SmashCharacterStatsComponent)
+	{
+		SmashCharacterStatsComponent->SuperIndex = NewSuper;
+	}
 }
 
 void ASmashCharacter::SetAttacks_Implementation(ESmashAttacks NewAttacks)

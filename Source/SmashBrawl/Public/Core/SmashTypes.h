@@ -4,6 +4,16 @@
 #include "UObject/Object.h"
 #include "SmashTypes.generated.h"
 
+
+// 공격 유형 열거형
+UENUM(BlueprintType)
+enum class ESmashAttackType : uint8
+{
+	Normal, // 일반 공격 (피격게이지만 증가)
+	Knockback // 넉백 공격 (피격게이지 증가 + 날려보냄)
+};
+
+
 UENUM(BlueprintType)
 enum class ESmashActionType : uint8
 {
@@ -14,8 +24,17 @@ enum class ESmashActionType : uint8
 	Dodge UMETA(DisplayName = "Dodge"),
 	Shield UMETA(DisplayName = "Shield"),
 	Grab UMETA(DisplayName = "Grab"),
-	Taunt UMETA(DisplayName = "Taunt"),
+	Taunt UMETA(DisplayName = "Taunt")
 	// 필요한 액션들 추가...
+};
+
+UENUM(BlueprintType)
+enum class ESmashInGameMode : uint8
+{
+	Stock UMETA(DisplayName = "Stock"),
+	Time UMETA(DisplayName = "Time"),
+	MiniGame UMETA(DisplayName = "MiniGame"),
+	BossFight UMETA(DisplayName = "BossFight")
 };
 
 UENUM(BlueprintType)
