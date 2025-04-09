@@ -77,6 +77,7 @@ void ASmashCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>
 	DOREPLIFETIME(ASmashCharacter, bBufferdInput);
 	DOREPLIFETIME(ASmashCharacter, bBufferdDirection);
 	DOREPLIFETIME(ASmashCharacter, bHitRest);
+	DOREPLIFETIME(ASmashCharacter, bSpiked);
 
 	// 전투 관련
 	DOREPLIFETIME(ASmashCharacter, AbilityType);

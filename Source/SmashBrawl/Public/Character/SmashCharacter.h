@@ -371,6 +371,10 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	float DodgeDelayTimer = 0.2f;
 
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	float ProneTime = 0.0f;
+	
+
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Cosmetics")
 	UMaterialInstanceDynamic* Material;
 
@@ -427,6 +431,9 @@ public:
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	bool bHitRest = true;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	bool bSpiked = false;
 
 	/** 전투 관련 */
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
