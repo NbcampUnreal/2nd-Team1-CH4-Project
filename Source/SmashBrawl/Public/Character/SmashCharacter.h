@@ -76,9 +76,18 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement", Server, Reliable)
 	void Launch(FVector LaunchVector, bool bXYOver, bool bZOver);
 
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
+	void DodgeDelayEvent();
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
+	void ScreenShake(float RumbleInten, float RumbleDuration);
+
 public:
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	float GetMoveInputValue() const { return MoveInputValue; }
+
+	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
+	float GetUpDownInputValue() const { return UpDownInputValue; }
 
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	bool HasMoveInput() const { return !FMath::IsNearlyZero(MoveInputValue); }
@@ -121,6 +130,10 @@ public:
 
 	void SpecialAttackPressed(const FInputActionValue& InputActionValue);
 	void SpecialAttackReleased(const FInputActionValue& InputActionValue);
+
+	void DodgePressed(const FInputActionValue& InputActionValue);
+
+	void GrabPressed(const FInputActionValue& InputActionValue);
 
 	void TauntUpPressed(const FInputActionValue& InputActionValue);
 	void TauntRightPressed(const FInputActionValue& InputActionValue);
@@ -253,6 +266,12 @@ public:
 	UInputAction* IA_SpecialAttack;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_Dodge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_Grab;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
 	UInputAction* IA_TauntUp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
@@ -324,6 +343,9 @@ public:
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
 	bool bBufferdDirection =false;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	bool bDodgeDelay = false;
 	
 	UPROPERTY(ReplicatedUsing=OnRep_PlayerNo, BlueprintReadWrite, Category="Smash Character")
 	int32 PlayerNo;
@@ -366,6 +388,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
 	float HitScale;
+
+	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
+	float DodgeDelayTimer = 0.2f;
 
 	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Cosmetics")
 	UMaterialInstanceDynamic* Material;

@@ -103,6 +103,10 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this,
 		                                   &ASmashCharacter::SpecialAttackReleased);
 
+		EnhancedInputComponent->BindAction(IA_Dodge, ETriggerEvent::Started, this, &ASmashCharacter::DodgePressed);
+
+		EnhancedInputComponent->BindAction(IA_Grab, ETriggerEvent::Started, this, &ASmashCharacter::GrabPressed);
+
 		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this,
 		                                   &ASmashCharacter::TauntUpPressed);
 		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this,
@@ -486,6 +490,25 @@ void ASmashCharacter::TauntAction(ESmashDirection ActionDirection)
 	}
 }
 
+void ASmashCharacter::DodgeDelayEvent()
+{
+	bDodgeDelay = true;
+
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindLambda([this]()
+	{
+		bDodgeDelay = false;
+	});
+
+	FTimerHandle DelayHandle;
+	GetWorld()->GetTimerManager().SetTimer(DelayHandle, TimerDelegate, DodgeDelayTimer, false);
+}
+
+void ASmashCharacter::ScreenShake(float RumbleInten, float RumbleDuration)
+{
+	// SmashCharacterStatsComponent->S
+}
+
 void ASmashCharacter::Launch_Implementation(FVector LaunchVector, bool bXYOver, bool bZOver)
 {
 	LaunchCharacter(LaunchVector, bXYOver, bZOver);
@@ -727,6 +750,49 @@ void ASmashCharacter::SpecialAttackReleased(const FInputActionValue& InputAction
 {
 	bSpecialAttackButton = false;
 	bSpecialAttackButtonReleased = true;
+}
+
+void ASmashCharacter::DodgePressed(const FInputActionValue& InputActionValue)
+{
+	// SetMovementState(FSmashPlayerMovement(false, true, true, true));
+
+	if (StateSystem->GetCurrentState() == ESmashPlayerStates::Jump || StateSystem->GetCurrentState() ==
+		ESmashPlayerStates::Fall)
+	{
+		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Dodge;
+		Direction = ESmashDirection::Up;
+	}
+
+	if (bDodgeDelay) return;
+
+	if (GetMoveInputValue() >= 0.3f || GetMoveInputValue() <= -0.3f)
+	{
+		if (SmashCharacterMovementComponent->IsFacingRight())
+		{
+			Direction = ESmashDirection::Forward;
+		}
+		else
+		{
+			Direction = ESmashDirection::Back;
+		}
+		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Dodge;
+	}
+	else if (GetUpDownInputValue() <= -0.4f)
+	{
+		Direction = ESmashDirection::Down;
+		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Dodge;
+	}
+}
+
+void ASmashCharacter::GrabPressed(const FInputActionValue& InputActionValue)
+{
+	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Idle) return;
+	
+	StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+	AbilityType = ESmashAbilityTypes::Grab;
 }
 
 void ASmashCharacter::TauntUpPressed(const FInputActionValue& InputActionValue)
