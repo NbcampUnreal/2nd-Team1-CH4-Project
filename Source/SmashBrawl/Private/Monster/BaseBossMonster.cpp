@@ -116,18 +116,22 @@ void ABaseBossMonster::EndAttack_Implementation()
 	RightArmCollision->SetCollisionProfileName("BlockAllDynamic");
 }
 
-void ABaseBossMonster::SetState_Implementation(ESmashBossState const NewState)
+void ABaseBossMonster::Server_DoPhase2_Implementation()
 {
-	CurrentState = NewState;
-
 	if (AAIController* Ctr = Cast<AAIController>(GetController()))
 	{
 		if (UBlackboardComponent* BBC = Ctr->GetBlackboardComponent())
 		{
-			BBC->SetValueAsBool(FName("bDoChangeState"), true);
+			BBC->SetValueAsBool(FName("bPhase2"), true);
 		}
 	}
 }
+
+void ABaseBossMonster::Server_PlatformDestroy_Implementation()
+{
+	OnTriggerDestruction.Broadcast();
+}
+
 
 void ABaseBossMonster::Multicast_PerformAnimation_Implementation(UAnimMontage* Montage)
 {
@@ -157,6 +161,9 @@ int32 ABaseBossMonster::GetRandomValueInMontageIndex() const
 void ABaseBossMonster::ReactToHit_Implementation()
 {
 	IInterface_BossMonsterCombat::ReactToHit_Implementation();
+
+	//만약 체력이 적으면
+	Server_DoPhase2();
 }
 
 void ABaseBossMonster::OnDeath_Implementation()

@@ -10,6 +10,8 @@
 
 class ABaseCharacter;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDestructionDelegate);
+
 UCLASS()
 class SMASHBRAWL_API ABaseBossMonster : public ACharacter, public IInterface_BossMonsterCombat
 {
@@ -22,6 +24,8 @@ public:
 	virtual void BeginPlay() override;
 
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+
+	FDestructionDelegate OnTriggerDestruction;
 
 	UFUNCTION(BlueprintPure, Category = "Anim")
 	FORCEINLINE class UAnimMontage* GetMontage(int32 MontageIndex) const { return AnimMontages[MontageIndex]; }
@@ -37,7 +41,10 @@ public:
 	FORCEINLINE ESmashBossState GetState() const { return CurrentState; }
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "State")
-	void SetState(ESmashBossState const NewState);
+	void Server_DoPhase2();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "State")
+	void Server_PlatformDestroy();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Components")
 	void StartAttack();

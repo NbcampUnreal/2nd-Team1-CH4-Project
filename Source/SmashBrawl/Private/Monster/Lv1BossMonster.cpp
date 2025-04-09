@@ -28,7 +28,7 @@ ALv1BossMonster::ALv1BossMonster()
 	// RightEye->bAutoActivate = false;
 }
 
-void ALv1BossMonster::Multicast_FireEye_Implementation()
+void ALv1BossMonster::Server_FireEye_Implementation()
 {
 	LeftEyeNiagaraComponent->Activate();
 	RightEyeNiagaraComponent->Activate();
@@ -92,7 +92,7 @@ void ALv1BossMonster::Server_BiteAttack_Implementation() const
 //이 아래는 각 공격 구현 목록
 void ALv1BossMonster::Server_BreathAttack_Implementation() const
 {
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 5; ++i)
 	{
 		FVector HeadLocation = HeadCollision->GetComponentLocation();
 		FVector SpawnLocation = FVector(0, HeadLocation.Y, HeadLocation.Z);

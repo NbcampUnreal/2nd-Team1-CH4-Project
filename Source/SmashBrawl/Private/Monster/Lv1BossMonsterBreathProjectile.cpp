@@ -31,8 +31,8 @@ ALv1BossMonsterBreathProjectile::ALv1BossMonsterBreathProjectile()
 
 	ProjectileComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileComp->SetUpdatedComponent(RootComp);
-	ProjectileComp->InitialSpeed = 500;
-	ProjectileComp->MaxSpeed = 500;
+	ProjectileComp->InitialSpeed = 700;
+	ProjectileComp->MaxSpeed = 700;
 	ProjectileComp->bRotationFollowsVelocity = true;
 	ProjectileComp->ProjectileGravityScale = 0.0f;
 

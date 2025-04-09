@@ -40,8 +40,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	TSubclassOf<ABaseBossPatternActor> Vacuum;
 
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
-	void Multicast_FireEye();
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void Server_FireEye();
 	
 	UFUNCTION(Server, Reliable)
 	void Server_BreathAttack() const;
