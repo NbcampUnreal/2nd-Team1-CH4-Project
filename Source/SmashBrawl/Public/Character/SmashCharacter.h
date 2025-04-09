@@ -164,9 +164,7 @@ public:
 	/** 방향 및 위치 업데이트 */
 	void FacingCheck();
 	void UpdateLocations();
-
-	/** 이펙트 및 피격 처리 */
-	void UpdateFlashing();
+	
 	void Dizzy();
 	void LandedAction();
 
@@ -364,13 +362,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	bool bHitButNoEffect;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bFlashing;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bIsSmashFlash;
-
+	
 	/** 입력 상태 */
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
 	bool bAttackButton;
@@ -383,20 +375,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
 	bool bSpecialAttackButtonReleased;
-
-	/** 이펙트 및 시각효과 관련 */
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character")
-	float InvonFlash;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character")
-	float SmashFlash;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character")
-	float HitFlash;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character")
-	float FreeFallFlash;
-
+	
 	/** 전투 관련 */
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	int32 ProjectileDamage;
