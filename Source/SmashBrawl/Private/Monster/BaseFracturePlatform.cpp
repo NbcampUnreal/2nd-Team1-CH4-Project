@@ -40,6 +40,11 @@ void ABaseFracturePlatform::MultiCast_Destruction_Implementation()
 		GCComponent->SetNotifyRigidBodyCollision(true);
 		GCComponent->SetCollisionProfileName("OverlapOnlyPawn");
 		GCComponent->SetCollisionObjectType(ECC_WorldDynamic);
+
+		FVector const LaunchDirection = FVector(1.0f, 0.0f, 0.0f).GetSafeNormal();
+		float const ImpulseStrength = 100.0f;
+
+		GCComponent->AddImpulse(LaunchDirection * ImpulseStrength, NAME_None, true);
 		// 일정 시간 후 제거
 		GetWorldTimerManager().SetTimer(
 			PlatformDestroyTimerHandle,
@@ -53,7 +58,7 @@ void ABaseFracturePlatform::MultiCast_Destruction_Implementation()
 
 void ABaseFracturePlatform::DestroyPlatform()
 {
-	Destroy();
+	//Destroy();
 }
 
 
