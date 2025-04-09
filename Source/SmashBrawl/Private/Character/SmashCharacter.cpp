@@ -990,10 +990,10 @@ void ASmashCharacter::DodgePressed(const FInputActionValue& InputActionValue)
 {
 	// SetMovementState(FSmashPlayerMovement(false, true, true, true));
 
-	if (StateSystem->GetCurrentState() == ESmashPlayerStates::Jump || StateSystem->GetCurrentState() ==
+	if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Jump || SmashStateSystem->GetCurrentState() ==
 		ESmashPlayerStates::Fall)
 	{
-		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Dodge;
 		Direction = ESmashDirection::Up;
 	}
@@ -1010,22 +1010,22 @@ void ASmashCharacter::DodgePressed(const FInputActionValue& InputActionValue)
 		{
 			Direction = ESmashDirection::Back;
 		}
-		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Dodge;
 	}
 	else if (GetUpDownInputValue() <= -0.4f)
 	{
 		Direction = ESmashDirection::Down;
-		StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Dodge;
 	}
 }
 
 void ASmashCharacter::GrabPressed(const FInputActionValue& InputActionValue)
 {
-	if (StateSystem->GetCurrentState() != ESmashPlayerStates::Idle) return;
+	if (SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Idle) return;
 	
-	StateSystem->TryChangeState(ESmashPlayerStates::Ability);
+	SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 	AbilityType = ESmashAbilityTypes::Grab;
 }
 
