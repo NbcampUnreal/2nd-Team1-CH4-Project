@@ -3,6 +3,8 @@
 
 #include "AbilitySystem/BaseAbility.h"
 
+#include <Character/SmashStateSystem.h>
+
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Character/SmashCharacter.h"
@@ -172,8 +174,16 @@ void ABaseAbility::BP_OnEndAbility_Implementation()
 	CharacterCollision(ECollisionEnabled::Type::QueryAndPhysics);
 	FullbodyLedge(false);
 	bIsUse = false;
-	//Parent->AbilityType = ESmashAbilityTypes::None;
-	//Parent->Attacks = ESmashAttacks::None;
+	if(Parent->GetMovementComponent()->IsFalling())
+	{
+		Parent->StateSystem->TryChangeState(ESmashPlayerStates::Fall,false);
+	}
+	else
+	{
+		Parent->StateSystem->TryChangeState(ESmashPlayerStates::Idle,false);
+	}
+	Parent->AbilityType = ESmashAbilityTypes::None;
+	IInterface_SmashCombat::Execute_SetAttacks(Parent,ESmashAttacks::None);
 	if (bInputButter)
 	{
 		bInputButter = false;

@@ -24,7 +24,6 @@ USmashAbilitySystemComponent::USmashAbilitySystemComponent()
 void USmashAbilitySystemComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Error, TEXT("Begin"));
 	// 부모 캐릭터 참조 설정
 	Parent = Cast<ASmashCharacter>(GetOwner());
 	if (!Parent)
@@ -113,6 +112,7 @@ void USmashAbilitySystemComponent::OnLedge()
 
 void USmashAbilitySystemComponent::AttachAllAbilities()
 {
+	UE_LOG(LogTemp, Error, TEXT("Attach"));
 	// 기본 공격 능력 부착
 	NeutralAttack = AttachAbility(NeutralAttackClass);
 	TiltUp = AttachAbility(TiltUpClass);
@@ -455,7 +455,7 @@ void USmashAbilitySystemComponent::Multicast_WitchAbility_Implementation()
 {
 	const ESmashAbilityTypes CurrentAbilityTypes = IInterface_SmashCombat::Execute_GetAbilityTypes(Parent);
 	FString AbilityName = UEnum::GetValueAsString(CurrentAbilityTypes);
-	UE_LOG(LogTemp, Error, TEXT("%s"), *AbilityName);
+	//(LogTemp, Error, TEXT("%s"), *AbilityName);
 	switch (CurrentAbilityTypes)
 	{
 	case ESmashAbilityTypes::Basic:

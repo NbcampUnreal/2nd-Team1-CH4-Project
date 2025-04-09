@@ -167,6 +167,7 @@ void ASmashCharacter::StartUp()
 			{
 				AbilitySystemComponent->LevelIntro->bActive = true;
 
+				
 				// AI 로직 (미구현)
 				UE_LOG(LogSmashCharacter, Warning, TEXT("AI코드 로직 미구현입니다.."));
 			}
@@ -223,6 +224,7 @@ void ASmashCharacter::SetUp()
 		Character = SmashGameInstance->PlayerCharacters[PlayerNo];
 
 		// 능력 부착
+		UE_LOG(LogTemp, Error, TEXT("CallCharacterAttach"));
 		AttachAbilities();
 
 		// 카메라 업데이트
@@ -259,6 +261,7 @@ void ASmashCharacter::SetCostume()
 void ASmashCharacter::AttachAbilities()
 {
 	// 서버에서만 능력 부착 (권한 체크)
+	UE_LOG(LogTemp, Error, TEXT("CharacterAttach"));
 	if (HasAuthority() && !bAttachedAbil && AbilitySystemComponent)
 	{
 		AbilitySystemComponent->AttachAllAbilities();
