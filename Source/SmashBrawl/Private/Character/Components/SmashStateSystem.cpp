@@ -1,4 +1,4 @@
-#include "Character/SmashStateSystem.h"
+#include "Character/Components/SmashStateSystem.h"
 #include "Character/CharacterState/BaseCharacterState.h"
 #include "Net/UnrealNetwork.h"
 

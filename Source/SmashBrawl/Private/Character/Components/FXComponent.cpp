@@ -1,8 +1,8 @@
-// 
 
 
-#include "Character/FXComponent.h"
+#include "Character/Components/FXComponent.h"
 
+#include "Kismet/GameplayStatics.h"
 #include "SmashBrawl/SmashBrawl.h"
 
 
@@ -37,4 +37,17 @@ void UFXComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 void UFXComponent::FXMainLoop()
 {
 	UE_LOG(LogSmash, Warning, TEXT("구현해야합니다"));
+}
+
+void UFXComponent::PlayHitEffect(FVector Location)
+{
+	if (HitParticleSystem)
+	{
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticleSystem, Location);
+	}
+
+	if (HitSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, Location);
+	}
 }
