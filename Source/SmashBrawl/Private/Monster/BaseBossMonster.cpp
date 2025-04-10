@@ -59,6 +59,8 @@ void ABaseBossMonster::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 
 	DOREPLIFETIME(ABaseBossMonster, BossState);
 	DOREPLIFETIME(ABaseBossMonster, bIsAttacking);
+	DOREPLIFETIME(ABaseBossMonster, HealthPoint);
+	DOREPLIFETIME(ABaseBossMonster, MaxHealthPoint);
 }
 
 void ABaseBossMonster::CastPlayer()
@@ -126,7 +128,7 @@ void ABaseBossMonster::EndAttack_Implementation()
 	RightArmCollision->SetCollisionProfileName("BlockAllDynamic");
 }
 
-void ABaseBossMonster::Server_DoPhase2_Implementation()
+void ABaseBossMonster::Multicast_DoPhase2_Implementation()
 {
 	if (AAIController* Ctr = Cast<AAIController>(GetController()))
 	{
@@ -171,13 +173,34 @@ int32 ABaseBossMonster::GetRandomValueInMontageIndex() const
 void ABaseBossMonster::ReactToHit_Implementation()
 {
 	IInterface_BossMonsterCombat::ReactToHit_Implementation();
-
-	//만약 체력이 적으면
-	Server_DoPhase2();
 }
 
 void ABaseBossMonster::OnDeath_Implementation()
 {
 	IInterface_BossMonsterCombat::OnDeath_Implementation();
+}
+
+float ABaseBossMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
+	class AController* EventInstigator, AActor* DamageCauser)
+{
+
+	HealthPoint -= DamageAmount;
+
+	UE_LOG(LogTemp, Error, TEXT("Health Point: %f"), HealthPoint);
+
+	if (HealthPoint <= MaxHealthPoint / 2)
+	{
+		if (HasAuthority())
+		{
+			Multicast_DoPhase2();
+		}
+	}
+
+	if (HealthPoint <= 0)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Die"));
+	}
+	
+	return 0;
 }
 

@@ -44,8 +44,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "State")
 	FORCEINLINE ESmashBossState GetState() const { return CurrentState; }
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "State")
-	void Server_DoPhase2();
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "State")
+	void Multicast_DoPhase2();
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "State")
 	void Server_PlatformDestroy();
@@ -95,6 +95,12 @@ public:
 	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category = "State")
 	bool bIsAttacking = false;
 
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float HealthPoint = 1000.0f;
+
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float MaxHealthPoint = 1000.0f;
+
 	UFUNCTION(BlueprintPure, Category = "Value")
 	int32 GetRandomValueInMontageIndex() const;
 
@@ -107,4 +113,6 @@ public:
 	virtual void ReactToHit_Implementation() override;
 
 	virtual  void OnDeath_Implementation() override;
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 };

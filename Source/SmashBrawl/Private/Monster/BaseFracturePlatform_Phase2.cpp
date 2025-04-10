@@ -45,7 +45,7 @@ void ABaseFracturePlatform_Phase2::MultiCast_Destruction_Implementation()
 		GCComponent->SetCollisionProfileName("OverlapOnlyPawn");
 		GCComponent->SetCollisionObjectType(ECC_WorldDynamic);
 
-		FVector const LaunchDirection = FVector(0.1f, 0.0f, -0.1f).GetSafeNormal();
+		FVector const LaunchDirection = FVector(0.1f, 0.0f, -1.0f).GetSafeNormal();
 		float const ImpulseStrength = 1000.0f;
 
 		GCComponent->AddImpulse(LaunchDirection * ImpulseStrength, NAME_None, true);
