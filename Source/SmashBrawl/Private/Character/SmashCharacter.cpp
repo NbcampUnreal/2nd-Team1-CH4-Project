@@ -696,9 +696,7 @@ void ASmashCharacter::LandedAction()
 		ESmashPlayerStates CurrentState = SmashStateSystem->GetCurrentState();
 
 		// 특정 상태가 아닐 때만 상태 변경
-		if (!(CurrentState == ESmashPlayerStates::Shield ||
-			CurrentState == ESmashPlayerStates::Ability ||
-			CurrentState == ESmashPlayerStates::Tumble))
+		if (!(CurrentState == ESmashPlayerStates::Ability || CurrentState == ESmashPlayerStates::Tumble))
 		{
 			SetCanFlip(true);
 			SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
@@ -832,16 +830,8 @@ void ASmashCharacter::UpdateDirection()
 
 void ASmashCharacter::BasicAttack()
 {
-	// 방패 상태일 때는 잡기로 변경
-	if (SmashStateSystem && SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Shield)
-	{
-		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
-		AbilityType = ESmashAbilityTypes::Grab;
-		return;
-	}
-
 	// 방패 상태가 아니고 공격 가능한 상태일 때
-	if (SmashStateSystem && SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Shield && StateInfo.PlayerMovement.bCanAttack)
+	if (StateInfo.PlayerMovement.bCanAttack)
 	{
 		// 공중 상태일 때는 공중 공격
 		if (GetCharacterMovement() && GetCharacterMovement()->IsFalling())
@@ -988,7 +978,7 @@ void ASmashCharacter::DodgePressed(const FInputActionValue& InputActionValue)
 void ASmashCharacter::GrabPressed(const FInputActionValue& InputActionValue)
 {
 	if (SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Idle) return;
-	
+
 	SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 	AbilityType = ESmashAbilityTypes::Grab;
 }

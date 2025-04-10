@@ -75,7 +75,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config")
 	float HitInvulnerabilityDuration = 0.5f;
 
-
 	// 최소 기본 넉백 강도 (아주 낮은 피격 게이지에서도 의미 있는 넉백 보장)
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config|KnockBack")
 	float MinBaseKnockback = 300.0f;

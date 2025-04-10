@@ -359,7 +359,19 @@ public:
 	/** 전투 관련 */
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	ESmashDirection Direction;
+	
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	ESmashAbilityTypes AbilityType ;
+	
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	ESmashAttacks Attacks;
+	
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	ESmashCharacter Character;
 
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	ESmashHitState HitStates;
+	
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	int32 Team;
 
@@ -367,26 +379,6 @@ public:
 	// 비복제 상태 속성
 	//---------------------------------------------------------------------
 public:
-	/** 히트 및 효과 관련 */
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bEnergyHit;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bHitByProjectile;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bReflectMode;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bAbsorbMode;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bJustHit;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bHitButNoEffect;
-
-	
 	/** 입력 상태 */
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
 	bool bAttackButton;
@@ -415,11 +407,19 @@ public:
 
 
 	/** 기타 */
+public:
+	UPROPERTY( BlueprintReadWrite, Category = "Smash Character")
+	bool bDodgeDelay =false;
+
+	UPROPERTY( BlueprintReadWrite, Category = "Smash Character")
+	float DodgeDelayTimer = 0.2f;
+	
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Cosmetics")
 	UMaterialInstanceDynamic* Material;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Widget")
 	TObjectPtr<UUW_HUD_CharacterInfo> UW_HUDCharacterInfo;
+	
 
 private:
 	/** 초기화 완료 여부 추적 */

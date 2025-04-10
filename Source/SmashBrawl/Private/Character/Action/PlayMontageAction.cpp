@@ -128,7 +128,7 @@ bool UPlayMontageAction::PlayMontage()
     }
     
     // 몽타주 종료 이벤트 바인딩
-    MontageEndedDelegateHandle = AnimInstance->OnMontageEnded.AddUObject(this, &UPlayMontageAction::OnMontageEnded);
+    // MontageEndedDelegateHandle = AnimInstance->OnMontageEnded.AddUObject(this, &UPlayMontageAction::OnMontageEnded);
     
     bIsPlaying = true;
     
@@ -232,19 +232,19 @@ float UPlayMontageAction::GetMontagePlayProgress() const
 
 void UPlayMontageAction::CleanupDelegates()
 {
-    // 델리게이트가 유효한 경우 제거
-    if (MontageEndedDelegateHandle.IsValid())
-    {
-        ASmashCharacter* OwnerCharacter = GetOwnerCharacter();
-        if (OwnerCharacter && OwnerCharacter->GetMesh())
-        {
-            UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
-            if (AnimInstance)
-            {
-                AnimInstance->OnMontageEnded.Remove(MontageEndedDelegateHandle);
-            }
-        }
-        
-        MontageEndedDelegateHandle.Reset();
-    }
+    // // 델리게이트가 유효한 경우 제거
+    // if (MontageEndedDelegateHandle.IsValid())
+    // {
+    //     ASmashCharacter* OwnerCharacter = GetOwnerCharacter();
+    //     if (OwnerCharacter && OwnerCharacter->GetMesh())
+    //     {
+    //         UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
+    //         if (AnimInstance)
+    //         {
+    //             AnimInstance->OnMontageEnded.Remove(MontageEndedDelegateHandle);
+    //         }
+    //     }
+    //     
+    //     MontageEndedDelegateHandle.Reset();
+    // }
 }
