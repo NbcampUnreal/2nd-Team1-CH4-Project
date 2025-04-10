@@ -10,10 +10,9 @@ UENUM(BlueprintType)
 enum class ECameraTriggerUpdateFloatParameter : uint8
 {
 	ZoomDistance UMETA(DisplayName = "ZoomDistance"),
-	MaxLeadDistance   UMETA(DisplayName = "MaxLeadDistance"),
-	LeadSpeed      UMETA(DisplayName = "LeadSpeed"),
-	ZLockHeight   UMETA(DisplayName = "ZLockHeight")
-
+	MaxLeadDistance UMETA(DisplayName = "MaxLeadDistance"),
+	LeadSpeed UMETA(DisplayName = "LeadSpeed"),
+	ZLockHeight UMETA(DisplayName = "ZLockHeight")
 };
 
 USTRUCT(BlueprintType)

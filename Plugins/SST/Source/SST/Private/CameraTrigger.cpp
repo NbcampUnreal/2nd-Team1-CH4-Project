@@ -54,9 +54,7 @@ void ACameraTrigger::InitiateCameraUpdate_Implementation(AActor* Actor, bool Und
 		for (const FCameraTriggerUpdateFloat p : FloatParameters)
 		{
 			FCameraTriggerUpdateFloat update = {
-				p.Parameter,
-				followCameraComponent->UpdateOrGetFloatParameter(p.Parameter),
-				p.BlendTime
+				p.Parameter, followCameraComponent->UpdateOrGetFloatParameter(p.Parameter), p.BlendTime
 			};
 			PreviousFloatParameters.Push(update);
 		}
@@ -82,7 +80,7 @@ void ACameraTrigger::InitiateCameraUpdate_Implementation(AActor* Actor, bool Und
 
 	// Smoothly blend to new camera, if specified
 	AActor* viewTarget = Undo ? PreviousCamera : TargetCamera;
-	if (viewTarget) 
+	if (viewTarget)
 	{
 		playerController->SetViewTargetWithBlend(
 			viewTarget,
@@ -132,4 +130,3 @@ void ACameraTrigger::InitiateCameraUpdate_Implementation(AActor* Actor, bool Und
 		followCameraComponent->UpdateOrGetVectorParameter(VectorParameters[i].Parameter, &update);
 	}
 }
-

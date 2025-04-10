@@ -119,7 +119,7 @@ bool UPlayMontageAction::PlayMontage()
 	{
 		AnimInstance->Montage_JumpToSection(StartSectionName, Montage);
 	}
-	
+
 	AnimInstance->OnMontageEnded.AddDynamic(this, &UPlayMontageAction::OnMontageEnded);
 
 	bIsPlaying = true;

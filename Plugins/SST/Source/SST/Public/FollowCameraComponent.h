@@ -36,7 +36,7 @@ class SST_API UFollowCameraComponent : public UCameraComponent
 	/** If true, locks the camera to a specific z-height, rather than following character as they jump */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	bool CameraZLock;
-	
+
 	/** Z-height of the camera, when CameraZLock == true */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	float CameraZLockHeight;
@@ -138,10 +138,9 @@ public:
 
 	// Setters/getters enabling CameraTrigger objects to update camera parameters without knowing anything about them
 	FORCEINLINE float GetDefaultCameraBlendSpeed() const { return CameraBlendSpeed; }
-	float UpdateOrGetFloatParameter(ECameraTriggerUpdateFloatParameter Parameter, FCameraTriggerUpdateFloat* Update=nullptr);
+	float UpdateOrGetFloatParameter(ECameraTriggerUpdateFloatParameter Parameter, FCameraTriggerUpdateFloat* Update = nullptr);
 
 	bool UpdateOrGetBoolParameter(ECameraTriggerUpdateBoolParameter Parameter, FCameraTriggerUpdateBool* Update = nullptr);
 
 	FVector UpdateOrGetVectorParameter(ECameraTriggerUpdateVectorParameter Parameter, FCameraTriggerUpdateVector* Update = nullptr);
-
 };
