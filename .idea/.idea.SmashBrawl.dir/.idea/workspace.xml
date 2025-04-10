@@ -9,11 +9,13 @@
   <component name="ChangeListManager">
     <list default="true" id="0129cbba-eed8-44b4-82a9-3d1e917e61a8" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Dead.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Dead.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Dizzy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Dizzy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Hit.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Hit.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Pron.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Thumble.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Tumble.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Tumble.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Content/SST/Input/Actions/IA_CrouchDrop.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Content/SST/Input/Actions/IA_CrouchDrop.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +53,7 @@
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "Uproject.SmashBrawl.executor": "Run",
+    "Uproject.SmashBrawl.executor": "Debug",
     "git-widget-placeholder": "Charactor__KSY",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
@@ -194,6 +196,7 @@
       <workItem from="1744250859553" duration="1059000" />
       <workItem from="1744253577448" duration="1769000" />
       <workItem from="1744255444331" duration="674000" />
+      <workItem from="1744261326742" duration="2595000" />
     </task>
     <servers />
   </component>
