@@ -55,7 +55,7 @@ void ABaseFracturePlatform_Init::MultiCast_Destruction_Implementation()
 			PlatformDestroyTimerHandle,
 			this,
 			&ABaseFracturePlatform_Init::DestroyPlatform,
-			15.0f,
+			5.0f,
 			false
 		);
 	}
