@@ -375,6 +375,9 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	int32 Team;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
+	float ProneTime;
+
 	//---------------------------------------------------------------------
 	// 비복제 상태 속성
 	//---------------------------------------------------------------------
