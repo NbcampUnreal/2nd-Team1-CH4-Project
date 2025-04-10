@@ -26,39 +26,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Pron.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Thumble.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/Widgets/WBP_PercentGauge.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Action/PlayMontageAction.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Widgets/UW_PercentGauge.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Action/PlayMontageAction.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Widgets/UW_PercentGauge.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/.name" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/indexLayout.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Characters/BP_Fighter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Characters/BP_Fighter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Fall.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Fall.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/ABP_SmashCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/ABP_SmashCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Inputs/IA_Jump.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Input/Actions/IA_Jump.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Input/Actions/IA_Look.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Input/Actions/IA_Move_Base.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Input/IMC_Default.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmashBrawl.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Components/SmashCharacterStats.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Components/SmashCharacterStats.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Components/SmashCombatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Components/SmashCombatComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Components/SmashStateSystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Components/SmashStateSystem.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Components/SmashCharacterStats.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Components/SmashCharacterStats.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Components/SmashCombatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Components/SmashCombatComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/SmashCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/SmashCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Action/PlayMontageAction.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Action/PlayMontageAction.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Action/PlayMontageAction.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Action/PlayMontageAction.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Core/SmashTypes.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Core/SmashTypes.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -200,6 +170,7 @@
       <workItem from="1744168845920" duration="21883000" />
       <workItem from="1744195410017" duration="4080000" />
       <workItem from="1744199526760" duration="58000" />
+      <workItem from="1744199684976" duration="573000" />
     </task>
     <servers />
   </component>

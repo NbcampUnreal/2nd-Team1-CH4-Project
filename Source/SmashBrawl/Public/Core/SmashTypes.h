@@ -18,13 +18,7 @@ UENUM(BlueprintType)
 enum class ESmashActionType : uint8
 {
 	None UMETA(DisplayName = "None"),
-	BasicAttack UMETA(DisplayName = "BasicAttack"),
-	SpecialAttack UMETA(DisplayName = "SpecialAttack"),
-	Jump UMETA(DisplayName = "Jump"),
-	Dodge UMETA(DisplayName = "Dodge"),
-	Shield UMETA(DisplayName = "Shield"),
-	Grab UMETA(DisplayName = "Grab"),
-	Taunt UMETA(DisplayName = "Taunt")
+	PlayMontage UMETA(DisplayName = "PlayMontage"),
 	// 필요한 액션들 추가...
 };
 
