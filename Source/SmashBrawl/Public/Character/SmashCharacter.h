@@ -131,18 +131,6 @@ public:
 	void Launch(FVector LaunchVector, bool bXYOver, bool bZOver);
 public:
 	/** 상태 관리 함수 */
-	void Dizzy();
-
-	float NockBackCalculate();
-
-	void ShieldHit(ESmashDirection NewDirection);
-
-	void LandedAction();
-
-	UFUNCTION()
-	void OnLandedSmash(const FHitResult& Hit);
-
-public:
 	UFUNCTION(BlueprintCallable, Category="Smash Character|Movement")
 	void SetMovementState(FSmashPlayerMovement SetMovement);
 
@@ -193,9 +181,12 @@ public:
 	/** 방향 및 위치 업데이트 */
 	void FacingCheck();
 	void UpdateLocations();
+	
+	void Dizzy();
+	void LandedAction();
 
-	/** 이펙트 및 피격 처리 */
-	void UpdateFlashing();
+	UFUNCTION()
+	void OnLandedSmash(const FHitResult& Hit);
 
 	UFUNCTION(BlueprintCallable, Category = "Smash Character|Movement")
 	void SpawnFeetFX();
@@ -302,87 +293,11 @@ public:
 	UPROPERTY(ReplicatedUsing=OnRep_StateInfo, BlueprintReadWrite, Category = "Smash Character|State")
 	FSmashPlayerStateInfo StateInfo;
 
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	bool bFlashing;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	bool bIsSmashFlash;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Input")
-	bool bAttackButton;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Input")
-	bool bAttackButtonReleased;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Input")
-	bool bSpecialAttackButton;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Input")
-	bool bSpecialAttackButtonReleased;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character")
-	float InvonFlash;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character")
-	float SmashFlash;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character")
-	float HitFlash;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Smash Character")
-	float FreeFallFlash;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	bool bDodgeDelay = false;
-	
-	UPROPERTY(ReplicatedUsing=OnRep_PlayerNo, BlueprintReadWrite, Category="Smash Character")
-	int32 PlayerNo;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	ESmashCharacter Character;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	ESmashHitState HitStates;
-
-	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
-	ESmashAbilityTypes AbilityType;
-
-	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
-	ESmashAttacks Attacks;
-
-	UPROPERTY(Replicated, BlueprintReadWrite, Category="Smash Character")
-	int32 Team;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	int32 Damage;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	int32 BaseKnock = 5;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	float DefaultCapsuleHeight;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	float Knockback = 1.0f;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	float DamRatios = 1.0f;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	float HitScale;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	float DodgeDelayTimer = 0.2f;
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character")
-	float ProneTime = 0.0f;
-	
-
-	UPROPERTY(BlueprintReadWrite, Category="Smash Character|Cosmetics")
-	UMaterialInstanceDynamic* Material;
-
-	UPROPERTY(ReplicatedUsing=OnRep_LastHit, BlueprintReadWrite, Category="Smash Character")
+	UPROPERTY(ReplicatedUsing=OnRep_LastHit, BlueprintReadWrite, Category = "Smash Character")
 	TObjectPtr<ASmashCharacter> LastHit;
+
+	UPROPERTY(ReplicatedUsing=OnRep_PlayerNo, BlueprintReadWrite, Category = "Smash Character")
+	int32 PlayerNo;
 
 	/** 입력 관련 */
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Smash Character|Input")
@@ -445,6 +360,9 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	ESmashDirection Direction;
 
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	int32 Team;
+
 	//---------------------------------------------------------------------
 	// 비복제 상태 속성
 	//---------------------------------------------------------------------
@@ -468,6 +386,20 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	bool bHitButNoEffect;
 
+	
+	/** 입력 상태 */
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
+	bool bAttackButton;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
+	bool bAttackButtonReleased;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
+	bool bSpecialAttackButton;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
+	bool bSpecialAttackButtonReleased;
+	
 	/** 전투 관련 */
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	int32 ProjectileDamage;
@@ -478,7 +410,14 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	ESmashDirection BufferDirection = ESmashDirection::Up;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
+	float DefaultCapsuleHeight;
+
+
 	/** 기타 */
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Cosmetics")
+	UMaterialInstanceDynamic* Material;
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Widget")
 	TObjectPtr<UUW_HUD_CharacterInfo> UW_HUDCharacterInfo;
 

@@ -5,12 +5,9 @@
 #include "Core/SmashTypes.h"
 #include "SmashCombatComponent.generated.h"
 
-// 전방 선언
 class ASmashCharacter;
+class USmashCharacterStats;
 
-
-// 피격게이지 변경 이벤트 델리게이트
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnPercentChangedSignature, int32, OldPercent, int32, NewPercent);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class SMASHBRAWL_API USmashCombatComponent : public UActorComponent
@@ -22,154 +19,76 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
-
-	virtual void EndPlay(EEndPlayReason::Type EndPlayReason) override;
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	// 데미지 처리 함수 - 넉백 방향을 bool로 변경
+	/** 
+	 * TakeDamage
+	 * @param DamageAmount		 : 추가될 데미지 양 (피격게이지 증가치)
+	 * @param AttackType         : 공격 유형 (넉백/일반)
+	 * @param bIsRightDirection  : 맞은 방향이 오른쪽에서 왔는지 (true=오른쪽 / false=왼쪽)
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection = true, float KnockbackMultiplier = 1.0f);
+	void TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection = true);
 
-	// 서버 RPC로 데미지 처리 요청 - 넉백 방향을 bool로 변경
+	/** 서버용 RPC: TakeDamage를 호출하여 서버에서 처리 */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Combat")
-	void Server_TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection = true, float KnockbackMultiplier = 1.0f);
+	void Server_TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection = true);
 
-	// 넉백 계산 함수
+	/**
+	 * ApplyKnockback
+	 * @param bIsRightDirection  : 넉백 방향 (true = +X, false = -X)
+	 * @param KnockbackMultiplier: 넉백 강도 배율 (특수 상황이 아니라면 1.0f)
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-	float CalculateKnockback(float InDamageScale, float InWeight, float InBaseKnock, float InHitScale, float InDamRatios = 1.0f);
+	void ApplyKnockback(bool bIsRightDirection);
 
-	// 피격게이지 설정/획득 함수
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void SetPercent(int32 NewPercent);
-
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void AddPercent(int32 PercentToAdd);
-
-	UFUNCTION(BlueprintPure, Category = "Combat")
-	int32 GetPercent() const { return Percent; }
-
-	// 장외 체크 및 처리 함수
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void CheckOutOfBounds();
-
-	// 피격 이펙트 재생 함수
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void PlayHitEffect(bool bIsKnockback);
-
-	// 캐릭터 런치 함수 (새로 추가)
+	/**
+	 * 실제 캐릭터를 런치(발사)합니다.
+	 * @param LaunchVelocity: 적용할 런치 벡터(XZ)
+	 * @param bXYOverride   : X/Y 기존속도 무시 여부
+	 * @param bZOverride    : Z 기존속도 무시 여부
+	 */
 	UFUNCTION(BlueprintCallable, Category = "Combat")
 	void LaunchCharacter(FVector LaunchVelocity, bool bXYOverride, bool bZOverride);
 
-	// 서버 런치 함수 (새로 추가)
+	/** 서버 RPC: LaunchCharacter를 서버에서 호출 */
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Combat")
 	void Server_LaunchCharacter(FVector LaunchVelocity, bool bXYOverride, bool bZOverride);
 
-	// 넉백 적용 함수 - 넉백 방향을 bool로 변경
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void ApplyKnockback(bool bIsRightDirection, float KnockbackForce);
-
-	// 피격 상태 효과 업데이트 (SmashCharacter에서 이동)
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void UpdateHitEffect();
-
-	// 피격게이지 변경 이벤트
-	UPROPERTY(BlueprintAssignable, Category = "Combat|Events")
-	FOnPercentChangedSignature OnPercentChanged;
-
-	// 사망 이벤트 델리게이트
-	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeathSignature);
-
-	UPROPERTY(BlueprintAssignable, Category = "Combat|Events")
-	FOnDeathSignature OnDeath;
-
 protected:
-	// 피격게이지 (복제됨)
-	UPROPERTY(ReplicatedUsing = OnRep_Percent, BlueprintReadOnly, Category = "Combat")
-	int32 Percent;
-
-	// 피격게이지 최대값
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	int32 MaxPercent;
-
-	// 맵 경계 값 - 구성 가능하게 변경
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	FVector MapBounds;
-
-	// 피격 후 무적 시간 - 구성 가능하게 변경
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	float HitInvulnerabilityDuration;
-
-	// 넉백 보정 값 - 구성 가능하게 변경
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	float MinVerticalMultiplier;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	float MaxVerticalMultiplier;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	float MinAirControl;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	float MaxAirControl;
-
-	// 넉백 계산 상수 - 구성 가능하게 변경
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	float KnockbackBaseValue;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	float KnockbackWeightFactor;
-
-	// 피격게이지 복제 처리 함수
-	UFUNCTION()
-	void OnRep_Percent();
-
-	// 피격 이펙트 타이머 관리
-	FTimerHandle HitEffectTimerHandle;
-
-	// 소유 캐릭터 참조
-	UPROPERTY()
+	/** 소유 캐릭터 참조 */
+	UPROPERTY(BlueprintReadWrite, Category="Combat|Reference")
 	TObjectPtr<ASmashCharacter> OwnerCharacter;
 
-	// 무적 상태 여부
-	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Combat")
-	bool bIsInvulnerable;
+	/** 캐릭터 스탯 컴포넌트 (피격게이지, 무적 등) */
+	UPROPERTY(BlueprintReadWrite, Category="Combat|Reference")
+	TObjectPtr<USmashCharacterStats> CharacterStats;
 
-	// 무적 상태 설정 함수
-	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void SetInvulnerable(bool bNewInvulnerable, float Duration = 0.0f);
+	/**  
+	 * 피격 후 잠시 무적이 되는 시간(초).
+	 * 예: 0.5f -> 0.5초 동안 무적.
+	 */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config")
+	float HitInvulnerabilityDuration = 0.5f;
 
-	// 장외 체크 최적화를 위한 변수
-	float LastOutOfBoundsCheckTime;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	float OutOfBoundsCheckInterval;
+	// 최소 기본 넉백 강도 (아주 낮은 피격 게이지에서도 의미 있는 넉백 보장)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config|KnockBack")
+	float MinBaseKnockback = 300.0f;
+	
+	// 기본 넉백 값
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config|KnockBack")
+	float BaseKnockback = 500.0f;
 
-public:
-	// 사용자 정의 값 배열 (예: 데미지 스케일)
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat|Config")
-	TArray<float> DamageScale;
+	// 피격 게이지에 따른 넉백 증가율
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config|KnockBack")
+	float KnockbackGrowthFactor = 3.0f;
 
-	// 현재 사용된 이동 카운트
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Combat")
-	int32 UsedMovesCount;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	int32 BaseKnock = 5;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	float HitScale;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	float DamRatios = 1.0f;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	int32 Damage;
-
-	// SmashCharacter에서 이동된 변수들
-	UPROPERTY(BlueprintReadWrite, Category = "Combat|Effects")
-	float HitFlash;
+	// 최대 넉백 제한
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config|KnockBack")
+	float MaxKnockbackMagnitude = 2500.0f;
 };

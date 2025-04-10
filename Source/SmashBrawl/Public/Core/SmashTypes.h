@@ -73,7 +73,6 @@ enum class ESmashPlayerStates : uint8
 	Launch UMETA(DisplayName = "Launch"),
 	Ledge UMETA(DisplayName = "Ledge"),
 	Dead UMETA(DisplayName = "Dead"),
-	Shield UMETA(DisplayName = "Shield"),
 	Tumble UMETA(DisplayName = "Tumble"),
 	ShieldTumble UMETA(DisplayName = "Shield Tumble"),
 	Prone UMETA(DisplayName = "Prone"),

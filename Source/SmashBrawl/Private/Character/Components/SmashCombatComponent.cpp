@@ -1,267 +1,173 @@
 #include "Character/Components/SmashCombatComponent.h"
 #include "Character/SmashCharacter.h"
-#include "Character/Components/SmashStateSystem.h"
 #include "Character/Components/SmashCharacterStats.h"
+#include "Character/Components/SmashStateSystem.h"
 #include "Net/UnrealNetwork.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Kismet/GameplayStatics.h"
 #include "Components/CapsuleComponent.h"
-#include "Core/SmashGameInstance.h"
-#include "Widgets/HUD/InGame/UW_HUD_CharacterInfo.h"
+#include "DrawDebugHelpers.h"
+#include "Character/Components/FXComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 USmashCombatComponent::USmashCombatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	SetIsReplicated(true);
-
-	// 기본값 설정
-	Percent = 0;
-	MaxPercent = 999;
-	bIsInvulnerable = false;
-	UsedMovesCount = 0;
-	HitFlash = 0.0f;
-
-	// 맵 경계 기본값 설정
-	MapBounds = FVector(5000.0f, 5000.0f, 3000.0f);
-
-	// 무적 시간 기본값 설정
-	HitInvulnerabilityDuration = 0.5f;
-
-	// 넉백 보정 값 기본값 설정
-	MinVerticalMultiplier = 0.5f;
-	MaxVerticalMultiplier = 1.5f;
-	MinAirControl = 0.2f;
-	MaxAirControl = 1.0f;
-
-	// 넉백 계산 상수 기본값 설정
-	KnockbackBaseValue = 18.0f;
-	KnockbackWeightFactor = 1.4f;
-
-	// 기본 데미지 스케일 설정
-	DamageScale.Add(1.0f); // 기본 스케일
-
-	// Tick 최적화를 위한 변수 추가
-	LastOutOfBoundsCheckTime = 0.0f;
-	OutOfBoundsCheckInterval = 0.1f; // 100ms마다 장외 체크
 }
 
 void USmashCombatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-
-	// 복제할 속성 등록 - 조건부 복제로 최적화
-	DOREPLIFETIME(USmashCombatComponent, Percent);
-	DOREPLIFETIME_CONDITION(USmashCombatComponent, bIsInvulnerable, COND_OwnerOnly);
-	DOREPLIFETIME_CONDITION(USmashCombatComponent, UsedMovesCount, COND_OwnerOnly);
+	// 필요한 변수를 DOREPLIFETIME으로 추가 가능
 }
 
 void USmashCombatComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// 소유 캐릭터 참조 설정
 	OwnerCharacter = Cast<ASmashCharacter>(GetOwner());
-
-	// SmashCharacterStats와 연결
-	if (OwnerCharacter && OwnerCharacter->SmashCharacterStatsComponent)
+	if (!OwnerCharacter)
 	{
-		// 초기 Percent 동기화
-		OwnerCharacter->SmashCharacterStatsComponent->Percent = Percent;
+		UE_LOG(LogTemp, Error, TEXT("SmashCombatComponent: 소유자는 ASmashCharacter가 아닙니다!"));
+		return;
+	}
+
+	CharacterStats = OwnerCharacter->SmashCharacterStatsComponent;
+	if (!CharacterStats)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SmashCombatComponent: 캐릭터 스탯 컴포넌트를 찾을 수 없습니다!"));
 	}
 }
 
 void USmashCombatComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
-
-	// 모든 타이머 정리
-	if (GetWorld())
-	{
-		GetWorld()->GetTimerManager().ClearTimer(HitEffectTimerHandle);
-	}
 }
 
 void USmashCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// 장외 체크 (서버에서만 실행) - 매 틱이 아닌 일정 간격으로 수행
-	if (GetOwner()->HasAuthority())
-	{
-		float CurrentTime = GetWorld()->GetTimeSeconds();
-		if (CurrentTime - LastOutOfBoundsCheckTime >= OutOfBoundsCheckInterval)
-		{
-			CheckOutOfBounds();
-			LastOutOfBoundsCheckTime = CurrentTime;
-		}
-	}
+	// 넉백 물리나 추가 로직이 있다면 여기서 처리
 }
 
-// 데미지 처리 함수 - 넉백 방향을 bool로 변경
-void USmashCombatComponent::TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection, float KnockbackMultiplier)
+void USmashCombatComponent::TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection)
 {
-	// 클라이언트에서는 서버에 요청
+	// 클라이언트이면 서버 RPC 호출
 	if (!GetOwner()->HasAuthority())
 	{
-		Server_TakeDamage(DamageAmount, AttackType, bIsRightDirection, KnockbackMultiplier);
+		Server_TakeDamage(DamageAmount, AttackType, bIsRightDirection);
 		return;
 	}
 
-	// 무적 상태 체크
-	if (bIsInvulnerable)
+	if (!CharacterStats || !OwnerCharacter)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SmashCombatComponent: TakeDamage - Stats 또는 OwnerCharacter가 없습니다."));
+		return;
+	}
+
+	// 무적이면 무시
+	if (CharacterStats->IsInvulnerable())
 	{
 		return;
 	}
 
-	// 데미지 처리
-	int32 OldPercent = Percent;
-	Percent = FMath::Clamp(Percent + DamageAmount, 0, MaxPercent);
+	// 1) 데미지 누적 (피격게이지 증가)
+	CharacterStats->AddPercent(DamageAmount);
 
-	// 피격게이지 변경 이벤트 호출
-	OnPercentChanged.Broadcast(OldPercent, Percent);
-
-	// SmashCharacterStats에도 업데이트 (null 체크 추가)
-	if (OwnerCharacter && OwnerCharacter->SmashCharacterStatsComponent)
+	// 2) 공격 유형에 따른 처리
+	if (AttackType == ESmashAttackType::Knockback)
 	{
-		OwnerCharacter->SmashCharacterStatsComponent->Percent = Percent;
-		OwnerCharacter->SmashCharacterStatsComponent->DamageTaken += DamageAmount;
+		// 넉백
+		ApplyKnockback(bIsRightDirection);
 
-		// SuperIndex 업데이트 (필요한 경우 여기서 조정)
-		OwnerCharacter->SmashCharacterStatsComponent->SuperIndex += DamageAmount * 0.5f;
-	}
-
-	// 이펙트 재생
-	PlayHitEffect(AttackType == ESmashAttackType::Knockback);
-
-	// 넉백 유형 공격인 경우
-	if (AttackType == ESmashAttackType::Knockback && OwnerCharacter)
-	{
-		// BaseKnock와 HitScale, DamRatios 체크 및 기본값 설정
-		float CalBaseKnock = BaseKnock > 0.0f ? BaseKnock : 1.0f;
-		float CalHitScale = HitScale > 0.0f ? HitScale : 1.0f;
-		float CalDamRatios = DamRatios > 0.0f ? DamRatios : 1.0f;
-
-		// 무게 값 가져오기 (null 체크 추가)
-		float Weight = 100.0f;
-		if (OwnerCharacter->SmashCharacterStatsComponent)
-		{
-			Weight = OwnerCharacter->SmashCharacterStatsComponent->Weight;
-		}
-
-		// 넉백 계산 및 적용
-		float KnockbackForce = CalculateKnockback(
-			DamageScale.IsValidIndex(UsedMovesCount) ? DamageScale[UsedMovesCount] : 1.0f,
-			Weight,
-			CalBaseKnock,
-			CalHitScale,
-			CalDamRatios
-		);
-
-		// 최종 넉백 값 계산
-		KnockbackForce *= KnockbackMultiplier;
-
-		// 넉백 적용 (방향을 bool로 변경)
-		ApplyKnockback(bIsRightDirection, KnockbackForce);
-
-		// 캐릭터 상태 변경 (히트 상태로)
+		// Tumble 등 상태 변경
 		if (OwnerCharacter->SmashStateSystem)
 		{
-			OwnerCharacter->SmashStateSystem->TryChangeState(ESmashPlayerStates::Hit);
+			OwnerCharacter->SmashStateSystem->TryChangeState(ESmashPlayerStates::Tumble);
 		}
-	}
-
-	// 피격 후 짧은 무적 시간 부여
-	SetInvulnerable(true, HitInvulnerabilityDuration);
-}
-
-// 서버 RPC로 데미지 처리 요청 - 넉백 방향을 bool로 변경
-void USmashCombatComponent::Server_TakeDamage_Implementation(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection, float KnockbackMultiplier)
-{
-	TakeDamage(DamageAmount, AttackType, bIsRightDirection, KnockbackMultiplier);
-}
-
-float USmashCombatComponent::CalculateKnockback(float InDamageScale, float InWeight, float InBaseKnock, float InHitScale, float InDamRatios)
-{
-	if (!OwnerCharacter || !IsValid(OwnerCharacter))
-	{
-		return InBaseKnock;
-	}
-
-	// Damage 변수 명확화 - 기본값 사용
-	float CharacterDamage = 1.0f;
-
-	// 넉백 계산 공식 - 주석 추가
-	float DamageScaleFactor = InDamageScale; // 데미지 스케일
-	float PercentFactor = Percent / 10.0f; // 기본 피격게이지 계수
-	float WeightedDamageFactor = (Percent * CharacterDamage) / 20.f; // 데미지 가중치 계수
-
-	// 1단계: 기본 데미지 계산
-	float BaseDamage = DamageScaleFactor * (PercentFactor + WeightedDamageFactor);
-
-	// 2단계: 무게 기반 보정 계산
-	float WeightFactor = (200.0f / (InWeight + 100.0f)) * KnockbackWeightFactor; // 무게에 따른 보정
-
-	// 3단계: 기본 데미지와 무게 보정 조합
-	float CombinedDamage = (BaseDamage * WeightFactor) + KnockbackBaseValue;
-
-	// 4단계: 피격게이지와 히트 스케일 기반 최종 보정
-	float PercentScaleFactor = (Percent / 7.0f) * InHitScale;
-
-	// 최종 넉백 계산
-	float FinalKnockback = (CombinedDamage * PercentScaleFactor) + InBaseKnock;
-
-	// 타격비율 적용
-	return FinalKnockback * InDamRatios;
-}
-
-// 넉백 적용 함수 - 넉백 방향을 bool로 변경
-void USmashCombatComponent::ApplyKnockback(bool bIsRightDirection, float KnockbackForce)
-{
-	if (!OwnerCharacter || !IsValid(OwnerCharacter))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("USmashCombatComponent::ApplyKnockback - OwnerCharacter is invalid"));
-		return;
-	}
-
-	// 캐릭터 무브먼트 컴포넌트 체크
-	UCharacterMovementComponent* MovementComponent = OwnerCharacter->GetCharacterMovement();
-	if (!MovementComponent)
-	{
-		return;
-	}
-
-	// 넉백 방향 설정 (bool 값에 따라 방향 결정)
-	FVector KnockbackDirection = FVector::RightVector; // 기본 오른쪽 방향
-	if (!bIsRightDirection)
-	{
-		KnockbackDirection = FVector::LeftVector; // 왼쪽 방향
-	}
-
-	// 넉백 벡터 계산
-	FVector KnockbackVector = KnockbackDirection * KnockbackForce;
-
-	// 피격게이지가 높을수록 더 높게 날아가도록 수직 방향 보정
-	float VerticalMultiplier = FMath::Lerp(MinVerticalMultiplier, MaxVerticalMultiplier, Percent / static_cast<float>(MaxPercent));
-	KnockbackVector.Z = KnockbackForce * VerticalMultiplier; // 항상 위로 날아가도록 양수 값 설정
-
-	// 피격게이지가 높을수록 공중에서 컨트롤이 제한되도록 설정
-	float AirControl = FMath::Lerp(MaxAirControl, MinAirControl, Percent / static_cast<float>(MaxPercent));
-	MovementComponent->AirControl = AirControl;
-
-	// 넉백 적용 (서버에서만 직접 호출, 클라이언트에서는 RPC 호출)
-	if (GetOwner()->HasAuthority())
-	{
-		// 직접 LaunchCharacter 함수 호출
-		LaunchCharacter(KnockbackVector, true, true);
 	}
 	else
 	{
-		// 클라이언트에서는 RPC 호출
-		Server_LaunchCharacter(KnockbackVector, true, true);
+		// Normal Attack (피격게이지만 증가)
+		if (OwnerCharacter->SmashStateSystem)
+		{
+			ESmashPlayerStates CurrentState = OwnerCharacter->SmashStateSystem->GetCurrentState();
+			// if (  CurrentState != ESmashPlayerStates::Dizzy && CurrentState != ESmashPlayerStates::Tumble)
+			// {
+				OwnerCharacter->SmashStateSystem->TryChangeState(ESmashPlayerStates::Hit);
+			// }
+		}
+	}
+
+	// 3) 피격 후 잠시 무적
+	CharacterStats->SetInvulnerable(true, HitInvulnerabilityDuration);
+
+	// 4) 이펙트/사운드
+	if (OwnerCharacter->FXComponent)
+	{
+		OwnerCharacter->FXComponent->PlayHitEffect(OwnerCharacter->GetActorLocation());
 	}
 }
 
-// 캐릭터 런치 함수 (새로 추가)
+void USmashCombatComponent::Server_TakeDamage_Implementation(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection)
+{
+	TakeDamage(DamageAmount, AttackType, bIsRightDirection);
+}
+
+void USmashCombatComponent::ApplyKnockback(bool bIsRightDirection)
+{
+	// 필수 컴포넌트 유효성 검사
+	if (!OwnerCharacter || !CharacterStats)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ApplyKnockback: 유효하지 않은 OwnerCharacter 또는 CharacterStats"));
+		return;
+	}
+
+	// 현재 피격 게이지 취득
+	float CurrentPercent = CharacterStats->GetPercent();
+
+	// 최소 기본 넉백 보장 (최소 넉백과 현재 피격 게이지에 따른 넉백 중 큰 값 선택)
+	float KnockbackMagnitude = FMath::Max(MinBaseKnockback, BaseKnockback + (CurrentPercent * KnockbackGrowthFactor));
+
+	// 캐릭터 무게에 따른 넉백 조정
+	float WeightFactor = 100.0f / FMath::Max(CharacterStats->Weight, 1.0f); // 0으로 나누기 방지
+	KnockbackMagnitude *= WeightFactor;
+
+	// 최대 넉백 강도로 제한
+	KnockbackMagnitude = FMath::Min(KnockbackMagnitude, MaxKnockbackMagnitude);
+
+	// 방향에 따라 X 방향 결정 (오른쪽 = 양수, 왼쪽 = 음수)
+	float DirectionMultiplier = bIsRightDirection ? 1.0f : -1.0f;
+
+    // Z축 상승 계산 수정 - 균형잡힌 범위 사용 및 비선형 커브 적용
+    // 피격 게이지가 낮을 때는 충분한 Z축 상승을 보장하고, 높아질수록 증가율을 감소시킴
+    float PercentRatio = FMath::Clamp(CurrentPercent / 150.0f, 0.0f, 1.0f); // 150%를 최대값으로 고려
+    
+    // 초기값은 더 높게 시작하되 증가율은 낮추기 위해 제곱근 대신 다른 함수 사용
+    // (1 - (1 - x)²) 함수는 낮은 값에서는 빠르게 증가하다가 높은 값에서는 완만하게 증가
+    float NonLinearFactor = 1.0f - FMath::Square(1.0f - PercentRatio);
+    
+    // 시작값을 0.35로 높이고 최대값을 0.6으로 제한
+    float ZAxisFactor = FMath::Lerp(0.35f, 0.6f, NonLinearFactor);
+
+    // 피격 게이지가 높을수록 X축(수평) 방향 넉백 강화
+    float XAxisMultiplier = 1.0f + (0.5f * PercentRatio); // 1.0~1.5 범위로 X축 넉백 강화
+
+	// 약간의 무작위성 추가 (자연스러운 넉백 구현)
+	// 0.9~1.1 사이의 랜덤 변동 적용
+	float RandomVariation = FMath::RandRange(0.9f, 1.1f);
+
+	// 최종 넉백 벡터 계산
+	FVector LaunchVelocity(
+        KnockbackMagnitude * DirectionMultiplier * RandomVariation * XAxisMultiplier, // X 방향 (좌/우) - 강화됨
+		0.0f, // Y 방향 (사용하지 않음)
+        KnockbackMagnitude * ZAxisFactor * RandomVariation // Z 방향 (수직) - 조정됨
+	);
+
+	// 캐릭터 발사 (X,Y 속도는 덮어쓰기, Z 속도도 덮어쓰기)
+	LaunchCharacter(LaunchVelocity, true, true);
+}
+
+
 void USmashCombatComponent::LaunchCharacter(FVector LaunchVelocity, bool bXYOverride, bool bZOverride)
 {
 	if (OwnerCharacter && IsValid(OwnerCharacter))
@@ -270,200 +176,7 @@ void USmashCombatComponent::LaunchCharacter(FVector LaunchVelocity, bool bXYOver
 	}
 }
 
-// 서버 런치 함수 (새로 추가)
 void USmashCombatComponent::Server_LaunchCharacter_Implementation(FVector LaunchVelocity, bool bXYOverride, bool bZOverride)
 {
 	LaunchCharacter(LaunchVelocity, bXYOverride, bZOverride);
-}
-
-void USmashCombatComponent::SetPercent(int32 NewPercent)
-{
-	if (GetOwner()->HasAuthority())
-	{
-		int32 OldPercent = Percent;
-		Percent = FMath::Clamp(NewPercent, 0, MaxPercent);
-
-		// 값이 변경되었을 때만 이벤트 발생
-		if (OldPercent != Percent)
-		{
-			OnPercentChanged.Broadcast(OldPercent, Percent);
-
-			// SmashCharacterStats 동기화 (null 체크 추가)
-			if (OwnerCharacter && OwnerCharacter->SmashCharacterStatsComponent)
-			{
-				OwnerCharacter->SmashCharacterStatsComponent->Percent = Percent;
-			}
-		}
-	}
-}
-
-void USmashCombatComponent::AddPercent(int32 PercentToAdd)
-{
-	if (GetOwner()->HasAuthority())
-	{
-		int32 OldPercent = Percent;
-		Percent = FMath::Clamp(Percent + PercentToAdd, 0, MaxPercent);
-
-		// 값이 변경되었을 때만 이벤트 발생
-		if (OldPercent != Percent)
-		{
-			OnPercentChanged.Broadcast(OldPercent, Percent);
-
-			// SmashCharacterStats 동기화 (null 체크 추가)
-			if (OwnerCharacter && OwnerCharacter->SmashCharacterStatsComponent)
-			{
-				OwnerCharacter->SmashCharacterStatsComponent->Percent = Percent;
-			}
-		}
-	}
-}
-
-void USmashCombatComponent::OnRep_Percent()
-{
-	// 클라이언트에서 Percent가 복제되었을 때 UI 업데이트 등 처리
-	if (OwnerCharacter && OwnerCharacter->SmashCharacterStatsComponent)
-	{
-		OwnerCharacter->SmashCharacterStatsComponent->Percent = Percent;
-
-		// UI 업데이트가 필요하면 HUD에도 알림 (null 체크 추가)
-		if (OwnerCharacter->UW_HUDCharacterInfo)
-		{
-			OwnerCharacter->UW_HUDCharacterInfo->PlayShake();
-		}
-	}
-}
-
-void USmashCombatComponent::CheckOutOfBounds()
-{
-	if (!OwnerCharacter || !IsValid(OwnerCharacter))
-	{
-		return;
-	}
-
-	// 맵 경계 정보 사용
-	FVector ActorLocation = OwnerCharacter->GetActorLocation();
-
-	// 맵 밖으로 나갔는지 체크
-	bool bOutOfBounds = FMath::Abs(ActorLocation.X) > MapBounds.X ||
-		FMath::Abs(ActorLocation.Y) > MapBounds.Y ||
-		ActorLocation.Z < -MapBounds.Z || ActorLocation.Z > MapBounds.Z;
-
-	if (bOutOfBounds)
-	{
-		// 장외 사망 처리
-		OnDeath.Broadcast();
-
-		// 캐릭터 관련 처리 (스톡 감소 등)
-		if (OwnerCharacter->SmashCharacterStatsComponent)
-		{
-			OwnerCharacter->SmashCharacterStatsComponent->Stock--;
-			OwnerCharacter->SmashCharacterStatsComponent->Falls++;
-
-			// 게임 인스턴스에 알림 (null 체크 추가)
-			if (OwnerCharacter->SmashGameInstance && OwnerCharacter->PlayerNo >= 0)
-			{
-				// OwnerCharacter->SmashGameInstance->PlayerDeath(OwnerCharacter->PlayerNo);
-			}
-
-			// 시체 생성 및 부활 로직 구현 (기획에 따른 추가)
-			if (OwnerCharacter->SmashCharacterStatsComponent->Stock > 0)
-			{
-				// 5초 후 시체 생성 및 부활 로직 호출
-				FTimerHandle RespawnTimerHandle;
-				GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, [this]()
-				{
-					if (OwnerCharacter && IsValid(OwnerCharacter))
-					{
-						// OwnerCharacter->SpawnDeadBody();
-					}
-				}, 5.0f, false);
-			}
-		}
-	}
-}
-
-void USmashCombatComponent::PlayHitEffect(bool bIsKnockback)
-{
-	if (!OwnerCharacter || !IsValid(OwnerCharacter))
-	{
-		return;
-	}
-
-	// 넉백일 경우 추가 이펙트
-	if (bIsKnockback)
-	{
-		// 강한 타격 이펙트
-		HitFlash = 1.0f;
-
-		// SmashCharacter의 HitFlash 값도 업데이트 (호환성 유지)
-		OwnerCharacter->HitFlash = 1.0f;
-	}
-	else
-	{
-		// 일반 타격 이펙트
-		HitFlash = 0.5f;
-
-		// SmashCharacter의 HitFlash 값도 업데이트 (호환성 유지)
-		OwnerCharacter->HitFlash = 0.5f;
-	}
-
-	// 이펙트 지속 시간 후 리셋
-	GetWorld()->GetTimerManager().ClearTimer(HitEffectTimerHandle);
-	GetWorld()->GetTimerManager().SetTimer(HitEffectTimerHandle, [this]()
-	{
-		HitFlash = 0.0f;
-
-		// SmashCharacter의 HitFlash 값도 업데이트 (호환성 유지)
-		if (OwnerCharacter && IsValid(OwnerCharacter))
-		{
-			OwnerCharacter->HitFlash = 0.0f;
-		}
-	}, 0.25f, false);
-}
-
-void USmashCombatComponent::UpdateHitEffect()
-{
-	if (!OwnerCharacter || !IsValid(OwnerCharacter) || !OwnerCharacter->Material)
-	{
-		return;
-	}
-
-	// 피격 효과 파라미터 설정
-	OwnerCharacter->Material->SetScalarParameterValue(FName("Hit"), HitFlash);
-
-	// 캐릭터가 히트 상태일 때 색상 설정
-	if (OwnerCharacter->SmashStateSystem &&OwnerCharacter->SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Hit)
-	{
-		OwnerCharacter->Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.6f, 0.0f, 0.03f, 1.0f));
-	}
-}
-
-void USmashCombatComponent::SetInvulnerable(bool bNewInvulnerable, float Duration)
-{
-	if (GetOwner()->HasAuthority())
-	{
-		bIsInvulnerable = bNewInvulnerable;
-
-		// 무적 시간이 지정된 경우 타이머 설정
-		if (bNewInvulnerable && Duration > 0.0f)
-		{
-			FTimerHandle InvulnerabilityTimerHandle;
-			GetWorld()->GetTimerManager().SetTimer(InvulnerabilityTimerHandle, [this]()
-			{
-				bIsInvulnerable = false;
-
-				// 캐릭터의 HitState 업데이트
-				if (OwnerCharacter && IsValid(OwnerCharacter))
-				{
-					OwnerCharacter->HitStates = ESmashHitState::Normal;
-				}
-			}, Duration, false);
-		}
-
-		// 캐릭터의 HitState 변경
-		if (OwnerCharacter && IsValid(OwnerCharacter))
-		{
-			OwnerCharacter->HitStates = bNewInvulnerable ? ESmashHitState::Invincible : ESmashHitState::Normal;
-		}
-	}
 }

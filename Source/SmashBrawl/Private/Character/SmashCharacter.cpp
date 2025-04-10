@@ -31,7 +31,7 @@ ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer)
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	PrimaryActorTick.SetTickFunctionEnable(false);
 
-	// 컴포넌트 생성 및 초기화
+
 	SmashCharacterMovementComponent = Cast<USmashCharacterMovementComponent>(GetCharacterMovement());
 	SmashStateSystem = CreateDefaultSubobject<USmashStateSystem>(TEXT("SmashCharacterState"));
 	SmashCharacterStatsComponent = CreateDefaultSubobject<USmashCharacterStats>(TEXT("SmashCharacterStatsComponent"));
@@ -108,9 +108,10 @@ void ASmashCharacter::Tick(float DeltaSeconds)
 
 	// 주요 틱 로직
 	FacingCheck();
+
 	Multicast_SmashDetection();
+
 	UpdateLocations();
-	UpdateFlashing();
 
 	// 컴포넌트 틱 호출
 	if (AbilitySystemComponent)
@@ -467,69 +468,6 @@ void ASmashCharacter::UpdateLocations()
 	}
 
 	LocationFeet = FVector(Location.X, Location.Y, FootZPos);
-}
-
-void ASmashCharacter::UpdateFlashing()
-{
-	// 재질이 유효한지 확인
-	if (!IsValid(Material))
-	{
-		return;
-	}
-
-	// 깜박임 상태에 따라 플래시 파라미터 설정
-	if (bFlashing)
-	{
-		Material->SetScalarParameterValue(FName("Flash"), 0.0f);
-	}
-	else
-	{
-		Material->SetScalarParameterValue(FName("Flash"), 1.0f);
-	}
-
-	// 이펙트 파라미터 설정
-	Material->SetScalarParameterValue(FName("Invon"), InvonFlash);
-	Material->SetScalarParameterValue(FName("Smash"), SmashFlash);
-	Material->SetScalarParameterValue(FName("Hit"), HitFlash);
-	Material->SetScalarParameterValue(FName("FreeFall"), FreeFallFlash);
-
-	// 상태에 따른 깜박임 로직
-	if (SmashStateSystem && (
-		SmashStateSystem->GetCurrentState() == ESmashPlayerStates::FreeFall ||
-		SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Hit ||
-		bIsSmashFlash ||
-		(HitStates == ESmashHitState::Intangible || HitStates == ESmashHitState::Invincible)
-	))
-	{
-		bFlashing = true;
-	}
-	else
-	{
-		bFlashing = false;
-	}
-
-	// 상태별 색상 설정
-	if (SmashStateSystem)
-	{
-		if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::FreeFall)
-		{
-			Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.008f, 0.02f, 0.02f, 1.0f));
-		}
-		if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Hit)
-		{
-			Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.6f, 0.0f, 0.03f, 1.0f));
-		}
-	}
-
-	if (HitStates == ESmashHitState::Intangible || HitStates == ESmashHitState::Invincible)
-	{
-		Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.7f, 0.93f, 0.77f, 1.0f));
-	}
-
-	if (bIsSmashFlash)
-	{
-		Material->SetVectorParameterValue(FName("FlashColor"), FLinearColor(0.81f, 0.48f, 0.01f, 1.0f));
-	}
 }
 
 void ASmashCharacter::SetMovementState(FSmashPlayerMovement SetMovement)
@@ -1101,7 +1039,7 @@ ESmashDirection ASmashCharacter::GetDirection_Implementation()
 
 int32 ASmashCharacter::GetSuper_Implementation()
 {
-	return SmashCharacterStatsComponent ? SmashCharacterStatsComponent->SuperIndex : 0;
+	return SmashCharacterStatsComponent ? SmashCharacterStatsComponent->GetSuper() : 0;
 }
 
 FTransform ASmashCharacter::GetAbilitySpawnTransform_Implementation()
@@ -1113,7 +1051,7 @@ void ASmashCharacter::SetSuper_Implementation(int32 NewSuper)
 {
 	if (SmashCharacterStatsComponent)
 	{
-		SmashCharacterStatsComponent->SuperIndex = NewSuper;
+		SmashCharacterStatsComponent->SetSuper(NewSuper);
 	}
 }
 
