@@ -102,6 +102,16 @@ void ABaseBossMonster::PerformAttack_Implementation(int32 MontageIndex)
 	}
 }
 
+void ABaseBossMonster::Server_PlatformDestroy_Phase2_Implementation()
+{
+	OnTriggerDestructionPhase2.Broadcast();
+}
+
+void ABaseBossMonster::Server_PlatformDestroy_Init_Implementation()
+{
+	OnTriggerDestructionInit.Broadcast();
+}
+
 void ABaseBossMonster::StartAttack_Implementation()
 {
 	HeadCollision->SetCollisionProfileName("NoCollision");

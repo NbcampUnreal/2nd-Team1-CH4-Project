@@ -1,9 +1,14 @@
-﻿#include "Monster/BaseFracturePlatform.h"
+﻿// 
+
+
+#include "Monster/BaseFracturePlatform_Init.h"
+
 #include "GeometryCollection/GeometryCollectionComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Monster/BaseBossMonster.h"
 
-ABaseFracturePlatform::ABaseFracturePlatform()
+
+ABaseFracturePlatform_Init::ABaseFracturePlatform_Init()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	
@@ -18,7 +23,7 @@ ABaseFracturePlatform::ABaseFracturePlatform()
 	bReplicates = true;
 }
 
-void ABaseFracturePlatform::BeginPlay()
+void ABaseFracturePlatform_Init::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -26,11 +31,11 @@ void ABaseFracturePlatform::BeginPlay()
 	
 	if (BossMonster)
 	{
-		BossMonster->OnTriggerDestruction.AddDynamic(this, &ABaseFracturePlatform::MultiCast_Destruction);
+		BossMonster->OnTriggerDestructionInit.AddDynamic(this, &ABaseFracturePlatform_Init::MultiCast_Destruction);
 	}
 }
 
-void ABaseFracturePlatform::MultiCast_Destruction_Implementation()
+void ABaseFracturePlatform_Init::MultiCast_Destruction_Implementation()
 {
 	if (UGeometryCollectionComponent* GCComponent = GetGeometryCollectionComponent())
 	{
@@ -41,24 +46,22 @@ void ABaseFracturePlatform::MultiCast_Destruction_Implementation()
 		GCComponent->SetCollisionProfileName("OverlapOnlyPawn");
 		GCComponent->SetCollisionObjectType(ECC_WorldDynamic);
 
-		FVector const LaunchDirection = FVector(0.0f, 0.0f, -1.0f).GetSafeNormal();
-		float const ImpulseStrength = 1000.0f;
+		FVector const LaunchDirection = FVector(1.0f, 0.0f, 0.0f).GetSafeNormal();
+		float const ImpulseStrength = 500.0f;
 
 		GCComponent->AddImpulse(LaunchDirection * ImpulseStrength, NAME_None, true);
 		// 일정 시간 후 제거
 		GetWorldTimerManager().SetTimer(
 			PlatformDestroyTimerHandle,
 			this,
-			&ABaseFracturePlatform::DestroyPlatform,
+			&ABaseFracturePlatform_Init::DestroyPlatform,
 			15.0f,
 			false
 		);
 	}
 }
 
-void ABaseFracturePlatform::DestroyPlatform()
+void ABaseFracturePlatform_Init::DestroyPlatform()
 {
 	Destroy();
 }
-
-
