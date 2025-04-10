@@ -12,7 +12,7 @@ class ASmashCharacter;
  * 상태 내에서 실행할 수 있는 액션 클래스
  * 각 액션은 특정 상태와 연결되며, 실행 조건과 로직을 포함
  */
-UCLASS(Abstract, Blueprintable)
+UCLASS(Abstract, Blueprintable,EditInlineNew)
 class SMASHBRAWL_API USmashAction : public UObject
 {
 	GENERATED_BODY()
