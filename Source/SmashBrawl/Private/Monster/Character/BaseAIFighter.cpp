@@ -116,6 +116,13 @@ void ABaseAIFighter::FinishRecovery()
     bActive = true;
 }
 
+void ABaseAIFighter::FlipDirection()
+{
+    FVector Scale = GetActorScale3D();
+    Scale.X *= -1;
+    SetActorScale3D(Scale);
+}
+
 bool ABaseAIFighter::IsActive() const
 {
     return bActive;
@@ -134,4 +141,9 @@ bool ABaseAIFighter::IsCPU() const
 bool ABaseAIFighter::IsOffStage() const
 {
     return !bOverGround;
+}
+
+bool ABaseAIFighter::IsFacingRight() const
+{
+    return GetActorForwardVector().X > 0;
 }

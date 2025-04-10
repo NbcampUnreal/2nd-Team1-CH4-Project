@@ -1,6 +1,9 @@
 #include "Monster/Controller/BaseAIController.h"
-#include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardData.h"
+#include "Kismet/GameplayStatics.h"
+#include "SmashBrawl/Public/Charactor/BaseCharacter.h"
 
 ABaseAIController::ABaseAIController()
 {
@@ -10,6 +13,32 @@ ABaseAIController::ABaseAIController()
 void ABaseAIController::BeginPlay()
 {
     Super::BeginPlay();
+
+    if (UseBlackboard(BlackboardAsset, BlackboardComponent))
+    {
+        RunBehaviorTree(BehaviorTreeAsset);
+    }
+    TArray<AActor*> FoundActors;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), FoundActors);
+
+    for (AActor* Actor : FoundActors)
+    {
+        if (ABaseCharacter* Char = Cast<ABaseCharacter>(Actor))
+        {
+            PlayerArray.Add(Char);
+        }
+    }
+    if (PlayerArray.Num() > 0)
+    {
+        int32 RandomIndex = FMath::RandRange(0, PlayerArray.Num() - 1);
+        ABaseCharacter* RandomCharacter = PlayerArray[RandomIndex];
+
+        BlackboardComponent->SetValueAsObject(FName("Target"), RandomCharacter);
+    }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("PlayerArray에 Player 없음"));
+    }
 }
 
 void ABaseAIController::OnPossess(APawn* InPawn)

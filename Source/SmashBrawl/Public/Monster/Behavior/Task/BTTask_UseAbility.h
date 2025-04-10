@@ -16,6 +16,21 @@ class SMASHBRAWL_API UBTTask_UseAbility : public UBTTask_BlackboardBase
 public:
     UBTTask_UseAbility();
 
+    UPROPERTY(EditAnywhere, Category = "Blackboard")
+    FBlackboardKeySelector Key_LeftRight;
+
+    UPROPERTY(EditAnywhere, Category = "Blackboard")
+    FBlackboardKeySelector Key_UpDown;
+
+    UPROPERTY(EditAnywhere, Category = "Blackboard")
+    FBlackboardKeySelector Key_Param;
+
+    UPROPERTY(EditAnywhere, Category = "Blackboard")
+    FBlackboardKeySelector Key_Type;
+
+    UPROPERTY(EditAnywhere, Category = "Blackboard")
+    FBlackboardKeySelector Key_Direction;
+
 protected:
     virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 };

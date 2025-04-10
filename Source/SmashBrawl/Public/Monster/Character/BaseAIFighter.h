@@ -17,11 +17,26 @@ public:
     /** 어빌리티 입력 파라미터 설정 */
     void SetAbility(float InLeftRight, float InUpDown, int32 InParam, int32 InAbilityType, int32 InDirection);
 
-    // --- 상태 판단 함수들 ---
     /** 지정 거리 이내에 있는 유효한 타겟 반환 */
     UFUNCTION(BlueprintCallable)
     AActor* GetValidTargetByDistance(AActor* TargetActor, AActor* ParentActor, float DistanceThreshold = 400.0f);
 
+    /** 리커버리 종료 → 정상 상태 복귀 */
+    UFUNCTION()
+    void FinishRecovery();
+
+    /** 리커버리 시작 (리스폰 위치로 이동) */
+    UFUNCTION(BlueprintCallable)
+    void StartRecovery();
+
+    /** 리커버리 상태 리셋 (딜레이 기반) */
+    UFUNCTION()
+    void ResetRecovery();
+
+    // 캐릭터의 좌우 방향을 반전
+    void FlipDirection();
+
+    // --- 상태 판단 함수들 ---
     /** 타겟이 지정한 Y/Z 범위 안에 있는지 확인 */
     UFUNCTION(BlueprintCallable)
     bool IsTargetInRange(AActor* TargetActor, AActor* ParentActor,
@@ -36,17 +51,8 @@ public:
     UFUNCTION(BlueprintCallable, Category = "AI|State")
     bool IsInMoveAwayMode() const;
 
-    /** 리커버리 시작 (리스폰 위치로 이동) */
-    UFUNCTION(BlueprintCallable)
-    void StartRecovery();
-
-    /** 리커버리 상태 리셋 (딜레이 기반) */
-    UFUNCTION()
-    void ResetRecovery();
-
-    /** 리커버리 종료 → 정상 상태 복귀 */
-    UFUNCTION()
-    void FinishRecovery();
+    /** 타겟과 마주보고 있는지 여부 */
+    bool IsFacingRight() const;
 
     /** CPU AI 여부 */
     UFUNCTION(BlueprintCallable, Category = "AI|State")
