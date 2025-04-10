@@ -3,7 +3,8 @@ Build/
 DerivedDataCache/
 Intermediate/
 Saved/
-.idea/
+
+idea/
 
 *.sln
 *.suo

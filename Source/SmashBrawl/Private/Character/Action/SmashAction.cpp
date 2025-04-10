@@ -1,7 +1,7 @@
 #include "Character/Action/SmashAction.h"
 #include "Character/CharacterState/BaseCharacterState.h"
 #include "Character/SmashCharacter.h"
-#include "Character/SmashStateSystem.h"
+#include "Character/Components/SmashStateSystem.h"
 
 USmashAction::USmashAction(): ActionType()
 {
