@@ -3,10 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Core/SmashDamageBoxType.h"
-#include "Core/SmashTypes.h"
+#include "Core/DamageTable.h"
 #include "GameFramework/Actor.h"
-#include "Interfaces/Interface_SmashHitBox.h"
 #include "SmashBaseDamager.generated.h"
 
 class ASmashCharacter;
@@ -22,8 +20,6 @@ public:
 	// Sets default values for this actor's properties
 	ASmashBaseDamager();
 
-	UFUNCTION(BlueprintCallable, Category="SmashAbility Hitbox")
-	void Init(AActor* InParent, const FHitProperty InHitProperty);
 
 protected:
 	// Called when the game starts or when spawned
@@ -42,32 +38,51 @@ public:
 	);
 
 	UFUNCTION()
+	virtual bool bIsAttackAble(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+		);
+
+	UFUNCTION()
+	virtual void AttackActor(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+		);
+
+	UFUNCTION()
 	void LifeTimeOut();
+
+	void Init(const TObjectPtr<AActor> InParent,
+		const TArray<TSubclassOf<AActor>>& InAttackAbleClasses,
+		const FDamagePlayRow& InDamagePlayRow,
+		const FDamageVisualRow& InDamageVisualRow);
 public:
-	UPROPERTY(EditAnywhere)
-	TArray<TScriptInterface<IInterface_SmashHitBox>> SmashHitModels;
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility Hitbox")
 	TObjectPtr<UStaticMeshComponent> SmashDamageBox;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	TObjectPtr<UStaticMesh> HitBoxMesh;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	TArray<TScriptInterface<IInterface_SmashHitBox>> HitModels;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
 	TObjectPtr<AActor> Parent;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	float LifeTime;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	FHitProperty HitProperty;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	bool bIsRightDirection;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	TSet<AActor*> IgnoreActors;
-
+	TSet<TObjectPtr<AActor>> IgnoreActors;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
+	TArray<TSubclassOf<AActor>> AttackAbleClasses;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
+	FDamagePlayRow DamagePlayRow;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
+	FDamageVisualRow DamageVisualRow;
+	
 	FTimerHandle LifeTimer;
 };
 

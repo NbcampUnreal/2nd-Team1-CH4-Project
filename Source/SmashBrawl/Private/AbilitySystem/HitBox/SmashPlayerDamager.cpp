@@ -4,8 +4,6 @@
 #include "AbilitySystem/HitBox/SmashPlayerDamager.h"
 
 #include "Character/SmashCharacter.h"
-#include "Character/SmashStateSystem.h"
-
 
 // Sets default values
 ASmashPlayerDamager::ASmashPlayerDamager()
@@ -46,4 +44,19 @@ void ASmashPlayerDamager::ActionPriority(int32 OtherPriority)
 void ASmashPlayerDamager::Flinch()
 {
 	Destroy();
+}
+
+void ASmashPlayerDamager::AttackActor(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	int32 TmpDamageAmount = DamagePlayRow.DamageAmount;
+	if (ASmashCharacter* OtherSmashActor = Cast<ASmashCharacter>(OtherActor))
+	{
+		DamagePlayRow.DamageAmount = 0;
+	}
+	Super::AttackActor(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+	if (ASmashCharacter* OtherSmashActor = Cast<ASmashCharacter>(OtherActor))
+	{
+		DamagePlayRow.DamageAmount = TmpDamageAmount;
+	}
 }

@@ -3,12 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Core/SmashTypes.h"
 #include "UObject/Interface.h"
 #include "Interface_SmashHitBox.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE()
-class UInterface_SmashHitBox : public UInterface
+class UInterface_TakeDamage : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,16 +17,16 @@ class UInterface_SmashHitBox : public UInterface
 /**
  * 
  */
-class SMASHBRAWL_API IInterface_SmashHitBox
+class SMASHBRAWL_API IInterface_TakeDamage
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	
-	virtual bool bHitConditions(AActor* OtherActor, UActorComponent* OtherComp) = 0;
-	virtual void Server_OverlapMesh(AActor* Target, UPrimitiveComponent* OtherComp,  bool bIsRightDirection) = 0;
-	virtual void MultiCast_OverlapMesh() = 0;
+	virtual bool bHitConditions() = 0;
+	virtual void TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection = true) = 0;
+
 };
 
 UINTERFACE()

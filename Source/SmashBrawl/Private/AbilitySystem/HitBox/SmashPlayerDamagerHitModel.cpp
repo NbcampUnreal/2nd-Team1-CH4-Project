@@ -3,8 +3,10 @@
 
 #include "AbilitySystem/HitBox/SmashPlayerDamagerHitModel.h"
 
+#include "AbilitySystem/HitBox/SmashBaseDamager.h"
 #include "Character/SmashCharacter.h"
-#include "Character/SmashStateSystem.h"
+#include "Character/Components/SmashStateSystem.h"
+#include "Core/DamageTable.h"
 #include "Core/SmashTypes.h"
 
 
@@ -19,11 +21,18 @@ USmashPlayerDamagerHitModel::USmashPlayerDamagerHitModel()
 	// ...
 }
 
+void USmashPlayerDamagerHitModel::BeginPlay()
+{
+	Super::BeginPlay();
+	/*Owner = GetOwner();*/
+}
+
+/*
 bool USmashPlayerDamagerHitModel::bHitConditions(AActor* OtherActor, UActorComponent* OtherComp)
 {
 	if (ASmashCharacter* OtherCharacter = Cast<ASmashCharacter>(OtherActor))
 	{
-		if (OtherCharacter->StateSystem->GetCurrentState() != ESmashPlayerStates::Hit &&
+		if (OtherCharacter->SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Hit &&
 			OtherCharacter->HitStates != ESmashHitState::Intangible)
 		{
 			return true;
@@ -52,10 +61,30 @@ void USmashPlayerDamagerHitModel::Server_OverlapMesh_Implementation(AActor* Targ
 
 	MultiCast_OverlapMesh();
 	// 데미지 전달
-	
+	if (ASmashCharacter* SmashTarget = Cast<ASmashCharacter>(Target))
+	{
+		if (Owner)
+		{
+			if (DamageTable.HitDirection == EHitDirection::Left ||
+				(DamageTable.HitDirection == EHitDirection::Auto && Owner->GetActorLocation().X - Target->GetActorLocation().X < 0))
+			{
+				UE_LOG(LogTemp, Display, TEXT("CharacterGiveDamage, Left"));
+				//SmashTarget->TakeDamage(DamageRow.Attack, DamageRow.AttackType, false, DamageRow.KnockbackMultiplier);
+
+			}
+			else if (DamageTable.HitDirection == EHitDirection::Left ||
+				(DamageTable.HitDirection == EHitDirection::Auto && Owner->GetActorLocation().X - Target->GetActorLocation().X < 0))
+			{
+				UE_LOG(LogTemp, Display, TEXT("CharacterGiveDamage, Right"));
+
+				//SmashTarget->TakeDamage(DamageRow.Attack, DamageRow.AttackType, false, DamageRow.KnockbackMultiplier);
+			}
+		}
+	}
 }
 
 void USmashPlayerDamagerHitModel::MultiCast_OverlapMesh_Implementation()
 {
 }
+*/
 

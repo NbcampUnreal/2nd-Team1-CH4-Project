@@ -234,3 +234,11 @@ struct FSmashPlayerStateInfo
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
 	FSmashPlayCondition PlayCondition;
 };
+
+UENUM(BlueprintType)
+enum class EHitDirection : uint8
+{
+	Left UMETA(DisplayName = "Left"),
+	Auto UMETA(DisplayName = "Auto"),
+	Right UMETA(DisplayName = "Right")
+};

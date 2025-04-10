@@ -85,7 +85,6 @@ void USmashAbilityHitboxComponent::SpawnHitBox(FHitProperty HitProperty)
 				nullptr,
 				ESpawnActorCollisionHandlingMethod::AlwaysSpawn))
 		{
-			SmashBaseDamager->Init(Parent, HitProperty);
 			if (AActor* SpawnActor =
 				UGameplayStatics::FinishSpawningActor(SmashBaseDamager, HitProperty.BoxTransform))
 			{
@@ -131,7 +130,6 @@ void USmashAbilityHitboxComponent::SpawnGrabBox(FHitProperty HitProperty)
 				nullptr,
 				ESpawnActorCollisionHandlingMethod::AlwaysSpawn))
 		{
-			SmashBaseDamager->Init(Parent, HitProperty);
 
 			if (AActor* SpawnActor =
 				UGameplayStatics::FinishSpawningActor(SmashBaseDamager, HitProperty.BoxTransform))
