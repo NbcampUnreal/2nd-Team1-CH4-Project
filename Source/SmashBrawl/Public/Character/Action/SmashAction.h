@@ -40,9 +40,6 @@ public:
 	UFUNCTION(BlueprintPure, Category="Action")
 	ASmashCharacter* GetOwnerCharacter() const;
 
-	// 상태 조건 만족 여부 확인
-	UFUNCTION(BlueprintPure, Category="Action")
-	bool AreStateConditionsMet() const;
 
 protected:
 	// 액션 타입
@@ -52,7 +49,4 @@ protected:
 	// 소유 상태 참조
 	UPROPERTY(BlueprintReadOnly, Category="Action")
 	TObjectPtr<UBaseCharacterState> OwnerState;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Action")
-	TArray<ESmashPlayerStates> RequiredStates;
 };
