@@ -77,6 +77,7 @@ void ASmashCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>
 	DOREPLIFETIME(ASmashCharacter, bBufferdInput);
 	DOREPLIFETIME(ASmashCharacter, bBufferdDirection);
 	DOREPLIFETIME(ASmashCharacter, bHitRest);
+	DOREPLIFETIME(ASmashCharacter, bSpiked);
 
 	// 전투 관련
 	DOREPLIFETIME(ASmashCharacter, AbilityType);
@@ -146,6 +147,23 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
 		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
 		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::SpecialAttackPressed);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this,
+		                                   &ASmashCharacter::SpecialAttackReleased);
+
+		EnhancedInputComponent->BindAction(IA_Dodge, ETriggerEvent::Started, this, &ASmashCharacter::DodgePressed);
+
+		EnhancedInputComponent->BindAction(IA_Grab, ETriggerEvent::Started, this, &ASmashCharacter::GrabPressed);
+
+		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::TauntUpPressed);
+		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::TauntRightPressed);
+		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::TauntLeftPressed);
+		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::TauntDownPressed);
 	}
 }
 
@@ -582,6 +600,55 @@ void ASmashCharacter::TauntAction(ESmashDirection ActionDirection)
 	}
 }
 
+void ASmashCharacter::DodgeDelayEvent()
+{
+	bDodgeDelay = true;
+
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindLambda([this]()
+	{
+		bDodgeDelay = false;
+	});
+
+	FTimerHandle DelayHandle;
+	GetWorld()->GetTimerManager().SetTimer(DelayHandle, TimerDelegate, DodgeDelayTimer, false);
+}
+
+void ASmashCharacter::ScreenShake(float RumbleInten, float RumbleDuration)
+{
+	// SmashCharacterStatsComponent->S
+}
+
+void ASmashCharacter::LedgeGrab()
+{
+	HitStates = ESmashHitState::Invincible;
+
+	SmashCharacterMovementComponent->StopMovementImmediately();
+
+	FVector NewLocation = FVector(LedgeLocation.X, LedgeLocation.Y, LedgeLocation.Z - 60.0f);
+	GetCapsuleComponent()->SetWorldLocation(NewLocation);
+
+	SmashCharacterMovementComponent->GravityScale = 0.0f;
+
+	SmashStateSystem->TryChangeState(ESmashPlayerStates::Ledge);
+
+	AbilitySystemComponent->Ledge->bActive = true;
+
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindLambda([this]()
+	{
+		HitStates = ESmashHitState::Normal;
+	});
+
+	FTimerHandle DelayHandle;
+	GetWorld()->GetTimerManager().SetTimer(DelayHandle, TimerDelegate, 1.0f, false);
+}
+
+void ASmashCharacter::Launch_Implementation(FVector LaunchVector, bool bXYOver, bool bZOver)
+{
+	LaunchCharacter(LaunchVector, bXYOver, bZOver);
+}
+
 void ASmashCharacter::Dizzy()
 {
 	// 캐릭터를 어지러움 상태로 설정
@@ -881,6 +948,49 @@ void ASmashCharacter::SpecialAttackReleased(const FInputActionValue& InputAction
 	// 특수 공격 버튼 릴리즈 상태 설정
 	bSpecialAttackButton = false;
 	bSpecialAttackButtonReleased = true;
+}
+
+void ASmashCharacter::DodgePressed(const FInputActionValue& InputActionValue)
+{
+	// SetMovementState(FSmashPlayerMovement(false, true, true, true));
+
+	if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Jump || SmashStateSystem->GetCurrentState() ==
+		ESmashPlayerStates::Fall)
+	{
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Dodge;
+		Direction = ESmashDirection::Up;
+	}
+
+	if (bDodgeDelay) return;
+
+	if (GetMoveInputValue() >= 0.3f || GetMoveInputValue() <= -0.3f)
+	{
+		if (SmashCharacterMovementComponent->IsFacingRight())
+		{
+			Direction = ESmashDirection::Forward;
+		}
+		else
+		{
+			Direction = ESmashDirection::Back;
+		}
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Dodge;
+	}
+	else if (GetUpDownInputValue() <= -0.4f)
+	{
+		Direction = ESmashDirection::Down;
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
+		AbilityType = ESmashAbilityTypes::Dodge;
+	}
+}
+
+void ASmashCharacter::GrabPressed(const FInputActionValue& InputActionValue)
+{
+	if (SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Idle) return;
+	
+	SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
+	AbilityType = ESmashAbilityTypes::Grab;
 }
 
 void ASmashCharacter::TauntUpPressed(const FInputActionValue& InputActionValue)

@@ -76,6 +76,15 @@ public:
 	//---------------------------------------------------------------------
 	// 인풋 액션 및 입력 처리
 	//---------------------------------------------------------------------
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
+	void DodgeDelayEvent();
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
+	void ScreenShake(float RumbleInten, float RumbleDuration);
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
+	void LedgeGrab();
+
 public:
 	/** 기본 입력 처리 함수 */
 	virtual void Move(const struct FInputActionValue& Value) override;
@@ -95,6 +104,8 @@ public:
 	void TauntRightPressed(const FInputActionValue& InputActionValue);
 	void TauntLeftPressed(const FInputActionValue& InputActionValue);
 	void TauntDownPressed(const FInputActionValue& InputActionValue);
+	void DodgePressed(const FInputActionValue& InputActionValue);
+	void GrabPressed(const FInputActionValue& InputActionValue);
 
 	/** 방향 및 입력 상태 확인 함수 */
 	UFUNCTION(BlueprintCallable, Category = "Smash Character|Input")
@@ -102,6 +113,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	float GetMoveInputValue() const { return MoveInputValue; }
+
+	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
+	float GetUpDownInputValue() const { return UpDownInputValue; }
 
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	bool HasMoveInput() const { return !FMath::IsNearlyZero(MoveInputValue); }
@@ -112,6 +126,9 @@ public:
 	//---------------------------------------------------------------------
 	// 캐릭터 상태 및 움직임 관리
 	//---------------------------------------------------------------------
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement", Server, Reliable)
+	void Launch(FVector LaunchVector, bool bXYOver, bool bZOver);
 public:
 	/** 상태 관리 함수 */
 	UFUNCTION(BlueprintCallable, Category="Smash Character|Movement")
@@ -247,7 +264,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
 	UInputAction* IA_SpecialAttack;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_Dodge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_Grab;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
 	UInputAction* IA_TauntUp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
@@ -299,6 +322,9 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	FVector LocationFeet;
 
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	FVector LedgeLocation;
+
 	/** 상태 플래그 */
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	bool bAttachedAbil = false;
@@ -327,13 +353,10 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	bool bHitRest = true;
 
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	bool bSpiked = false;
+
 	/** 전투 관련 */
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
-	ESmashAbilityTypes AbilityType;
-
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
-	ESmashAttacks Attacks;
-
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	ESmashDirection Direction;
 
@@ -362,6 +385,7 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	bool bHitButNoEffect;
+
 	
 	/** 입력 상태 */
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
@@ -379,13 +403,7 @@ public:
 	/** 전투 관련 */
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	int32 ProjectileDamage;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	ESmashCharacter Character;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	ESmashHitState HitStates;
-
+	
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	ESmashBuffer BufferMove = ESmashBuffer::Attack;
 
