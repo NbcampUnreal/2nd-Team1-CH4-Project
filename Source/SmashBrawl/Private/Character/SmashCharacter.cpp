@@ -681,6 +681,31 @@ void ASmashCharacter::ScreenShake(float RumbleInten, float RumbleDuration)
 	// SmashCharacterStatsComponent->S
 }
 
+void ASmashCharacter::LedgeGrab()
+{
+	HitStates = ESmashHitState::Invincible;
+
+	SmashCharacterMovementComponent->StopMovementImmediately();
+
+	FVector NewLocation = FVector(LedgeLocation.X, LedgeLocation.Y, LedgeLocation.Z - 60.0f);
+	GetCapsuleComponent()->SetWorldLocation(NewLocation);
+
+	SmashCharacterMovementComponent->GravityScale = 0.0f;
+
+	SmashStateSystem->TryChangeState(ESmashPlayerStates::Ledge);
+
+	AbilitySystemComponent->Ledge->bActive = true;
+
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindLambda([this]()
+	{
+		HitStates = ESmashHitState::Normal;
+	});
+
+	FTimerHandle DelayHandle;
+	GetWorld()->GetTimerManager().SetTimer(DelayHandle, TimerDelegate, 1.0f, false);
+}
+
 void ASmashCharacter::Launch_Implementation(FVector LaunchVector, bool bXYOver, bool bZOver)
 {
 	LaunchCharacter(LaunchVector, bXYOver, bZOver);

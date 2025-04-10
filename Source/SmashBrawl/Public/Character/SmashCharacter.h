@@ -82,6 +82,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
 	void ScreenShake(float RumbleInten, float RumbleDuration);
 
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
+	void LedgeGrab();
+
 public:
 	/** 기본 입력 처리 함수 */
 	virtual void Move(const struct FInputActionValue& Value) override;
@@ -403,6 +406,9 @@ public:
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	FVector LocationFeet;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	FVector LedgeLocation;
 
 	/** 상태 플래그 */
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
