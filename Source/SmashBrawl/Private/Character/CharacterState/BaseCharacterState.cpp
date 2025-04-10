@@ -1,5 +1,5 @@
 #include "Character/CharacterState/BaseCharacterState.h"
-#include "Character/SmashStateSystem.h"
+#include "Character/Components/SmashStateSystem.h"
 #include "Character/SmashCharacter.h"
 #include "Character/Action/SmashAction.h"
 
