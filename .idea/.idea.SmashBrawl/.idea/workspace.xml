@@ -27,51 +27,14 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/SK_aeShinobi_1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/SK_aeShinobi_1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/SK_aeShinobi_2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/SK_aeShinobi_2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/SK_aeShinobi_3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/SK_aeShinobi_3.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/UE4_Mannequin_Skeleton.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/SK_aeShinobi_head.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/SK_aeShinobi_head.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_kimono.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_kimono.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_legsbandages.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_legsbandages.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_pants.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_pants.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_skirt.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_skirt.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_weistbelt.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_aeshinobi_weistbelt.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_lingerie_botm.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_lingerie_botm.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_lingerie_top.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/BaseMesh/parts/sk_lingerie_top.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonIdle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonIdle.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonJump_End.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonJump_End.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonJump_Loop.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonJump_Loop.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonJump_Start.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonJump_Start.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonRun.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonRun.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonWalk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPersonWalk.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPerson_Jump.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Characters/aeShinobi/Demo/Animations/ThirdPerson_Jump.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/Mannequin_UE4/Meshes/SK_Mannequin_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/Mannequin_UE4/Meshes/SK_Mannequin_Skeleton.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/Mannequin_UE4/Rigs/RTG_UE5Manny_UE4Manny.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/Mannequin_UE4/Rigs/RTG_UE5Manny_UE4Manny.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/Mannequins/Rigs/CR_Mannequin_BasicFootIK.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/Mannequins/Rigs/CR_Mannequin_BasicFootIK.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/ABP_SmashCharacter.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/ABP_SmashCharacter_UE4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Idle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Idle.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Walk_Bwd.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Walk_Bwd.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Walk_Fwd1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Walk_Fwd1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Walk_Lt.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Walk_Lt.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Walk_Rt.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Crouch_Walk_Rt.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Dash.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Dash.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Wallslide_Left.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_AS_Wallslide_Left.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_BS_CrouchWalk.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_BS_MM_WalkRun.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Fall_Loop.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Fall_Loop.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Idle.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Idle.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Jump.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Jump.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Land.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Land.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Run_Fwd.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Run_Fwd.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Walk_Fwd.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Walk_Fwd.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Walk_InPlace.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/UE4_MM_Walk_InPlace.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Content/SST/Rigs/CR_Mannequin_FootAdjustWithoutFullIK.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Content/SST/Rigs/CR_Mannequin_FootAdjustWithoutFullIK.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Splash/EdSplash.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/CameraTrigger.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/CameraTrigger.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/CameraTrigger.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/CameraTrigger.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/CameraTriggerUpdateContents.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/CameraTriggerUpdateContents.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/FollowCameraComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/FollowCameraComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Action/PlayMontageAction.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Action/PlayMontageAction.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,19 +48,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://5" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic/UE_5.5/Engine/Source/Runtime/Core/Public/Containers/Array.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic/UE_5.5/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic/UE_5.5/Engine/Source/Runtime/Engine/Private/Character.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -117,22 +68,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "C/C++ 프로젝트.SmashBrawl.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Character__NamChanWoo",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "ml.llm.AIAssistantPromptsLibrary",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C/C++ 프로젝트.SmashBrawl.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Character__NamChanWoo&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;ml.llm.AIAssistantPromptsLibrary&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C/C++ 프로젝트.SmashBrawl">
     <configuration name="SmashBrawl" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
@@ -229,7 +180,8 @@
       <workItem from="1744195410017" duration="4080000" />
       <workItem from="1744199526760" duration="58000" />
       <workItem from="1744199684976" duration="573000" />
-      <workItem from="1744249222116" duration="6495000" />
+      <workItem from="1744249222116" duration="7128000" />
+      <workItem from="1744267403128" duration="3857000" />
     </task>
     <servers />
   </component>
