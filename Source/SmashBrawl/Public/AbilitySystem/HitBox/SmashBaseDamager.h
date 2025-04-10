@@ -6,8 +6,10 @@
 #include "Core/SmashDamageBoxType.h"
 #include "Core/SmashTypes.h"
 #include "GameFramework/Actor.h"
+#include "Interfaces/Interface_SmashHitBox.h"
 #include "SmashBaseDamager.generated.h"
 
+class ASmashCharacter;
 /**
  * BP_Damager및 Grab Box 스폰을 위해
  */
@@ -21,30 +23,51 @@ public:
 	ASmashBaseDamager();
 
 	UFUNCTION(BlueprintCallable, Category="SmashAbility Hitbox")
-	void Init(ACharacter* Parent, const FHitProperty HitProperty);
+	void Init(AActor* InParent, const FHitProperty InHitProperty);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
-	// 블루프린트에서 생성과 클래스에서 생성을 나눠 true인경우 블루프린트에서 사용하는 변수에 여기변수를 적용한다
+	UFUNCTION()
+	void OnMeshBeginOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+	);
+
+	UFUNCTION()
+	void LifeTimeOut();
+public:
+	UPROPERTY(EditAnywhere)
+	TArray<TScriptInterface<IInterface_SmashHitBox>> SmashHitModels;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility Hitbox")
+	TObjectPtr<UStaticMeshComponent> SmashDamageBox;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	bool bSpawnByClass;
+	TObjectPtr<UStaticMesh> HitBoxMesh;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	TObjectPtr<AActor> SpawningOwner;
+	TArray<TScriptInterface<IInterface_SmashHitBox>> HitModels;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	TObjectPtr<ACharacter> SpawningParent;
+	TObjectPtr<AActor> Parent;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	float SpawningLifeTime;
+	float LifeTime;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	FHitProperty SpawningHitProperty;
+	FHitProperty HitProperty;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	int32 SpawningPriority;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	ESmashFaceing SpawningDirection;
+	bool bIsRightDirection;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
+	TSet<AActor*> IgnoreActors;
+
+	FTimerHandle LifeTimer;
 };
+

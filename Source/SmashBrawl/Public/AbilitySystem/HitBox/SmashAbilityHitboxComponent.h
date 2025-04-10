@@ -7,6 +7,7 @@
 #include "Core/SmashDamageBoxType.h"
 #include "SmashAbilityHitboxComponent.generated.h"
 
+class ASmashDamagerInfo;
 class ASmashBaseDamager;
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -28,9 +29,11 @@ public:
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 	
 	UFUNCTION(BlueprintCallable, Category="SmashAbility Hitbox")
-	void SpawnDamageBox(int32 CollisionSet);
+	void SpawnDamageBox(int32 InfoIndex);
 	UFUNCTION(BlueprintCallable, Category="SmashAbility Hitbox")
 	void SpawnHitBox(FHitProperty HitProperty);
+	
+	void SpawnHitBox(int32 InfoIndex);
 	UFUNCTION(BlueprintCallable, Category="SmashAbility Hitbox")
 	void SpawnGrabBox(FHitProperty HitProperty);
 
@@ -45,7 +48,7 @@ public:
 	FHitProperty GetHitProperty(int32 CollisionSet);
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility HitBoxSystem|References")
-	TObjectPtr<ACharacter> Parent;
+	TObjectPtr<AActor> Parent;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="SmashAbility HitBoxSystem|References")
 	TArray<FHitProperty> HitProperties;
 
@@ -53,4 +56,7 @@ public:
 	TSubclassOf<ASmashBaseDamager> SpawnHitClass;
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="SmashAbility HitBoxSystem|References")
 	TSubclassOf<ASmashBaseDamager> SpawnGrabClass;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="SmashAbility Hitbox")
+	TMap<int32, FDamagerInfoProperty> DamagerInfoPropertys;
 };

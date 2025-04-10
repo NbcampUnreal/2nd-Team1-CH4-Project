@@ -57,3 +57,24 @@ struct FHitProperty
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
 	FTransform BoxTransform;
 };
+
+USTRUCT(BlueprintType)
+struct FDamagerInfoProperty
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
+	FName Attacks;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
+	TSubclassOf<UStaticMesh> StaticMesh;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
+	TSubclassOf<USoundBase> Sound;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
+	TSubclassOf<UParticleSystem> HitParticle;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
+	FTransform BoxTransform;
+};

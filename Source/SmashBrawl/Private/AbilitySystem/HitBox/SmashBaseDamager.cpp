@@ -3,23 +3,27 @@
 
 #include "AbilitySystem/HitBox/SmashBaseDamager.h"
 
+#include "AssetTypeActions/AssetDefinition_SoundBase.h"
+#include "Character/SmashCharacter.h"
+#include "Character/SmashStateSystem.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 ASmashBaseDamager::ASmashBaseDamager()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+
+	SmashDamageBox = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Smash Damage Box"));
+	
+	LifeTime = 3.0f;
 }
 
-void ASmashBaseDamager::Init(ACharacter* Parent, const FHitProperty HitProperty)
+void ASmashBaseDamager::Init(AActor* InParent, const FHitProperty InHitProperty)
 {
-	
-	SpawningParent = Parent;
-	SpawningLifeTime = 3.0f;
-	SpawningHitProperty = HitProperty;
-	SpawningPriority = 0;
-	// 캐릭터의 Faceing 추가할것 지금은 임시로 Left
-	SpawningDirection = ESmashFaceing::Left;
+	Parent = InParent;
+	HitProperty = InHitProperty;
 }
 
 
@@ -27,12 +31,25 @@ void ASmashBaseDamager::Init(ACharacter* Parent, const FHitProperty HitProperty)
 void ASmashBaseDamager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	SmashDamageBox->SetStaticMesh(HitBoxMesh);
+	SmashDamageBox->OnComponentBeginOverlap.AddDynamic(this, &ASmashBaseDamager::OnMeshBeginOverlap);
+	GetWorld()->GetTimerManager().SetTimer(LifeTimer, this, &ASmashBaseDamager::LifeTimeOut, LifeTime, false);
 }
 
-// Called every frame
-void ASmashBaseDamager::Tick(float DeltaTime)
+void ASmashBaseDamager::OnMeshBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	Super::Tick(DeltaTime);
+	for (TScriptInterface HitModel : HitModels)
+	{
+		if (HitModel->bHitConditions(OtherActor, OtherComp))
+		{
+			HitModel->Server_OverlapMesh(OtherActor, OtherComp, bIsRightDirection);
+		}
+	}
 }
 
+void ASmashBaseDamager::LifeTimeOut()
+{
+	Destroy();
+}
