@@ -22,8 +22,6 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Plugins/SST/Source/SST/Private/SSTCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Plugins/SST/Source/SST/Public/SSTCharacter.h" root0="FORCE_HIGHLIGHTING" />
@@ -187,7 +185,8 @@
       <workItem from="1744162243954" duration="6278000" />
       <workItem from="1744182398410" duration="2581000" />
       <workItem from="1744247079639" duration="1239000" />
-      <workItem from="1744249724970" duration="364000" />
+      <workItem from="1744249724970" duration="704000" />
+      <workItem from="1744250859553" duration="1059000" />
     </task>
     <servers />
   </component>
