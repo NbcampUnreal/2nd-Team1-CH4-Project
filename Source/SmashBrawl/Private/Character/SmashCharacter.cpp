@@ -330,19 +330,19 @@ void ASmashCharacter::SyncClientPlayerData()
 
 void ASmashCharacter::SetCostume()
 {
-	// 재질 설정 (팀별 색상)
-	if (TeamOptionMaterials.IsValidIndex(PlayerNo) && TeamOptionMaterials[PlayerNo])
-	{
-		UMaterialInstance* TeamMaterial = TeamOptionMaterials[PlayerNo];
-		if (GetMesh())
-		{
-			Material = GetMesh()->CreateDynamicMaterialInstance(0, TeamMaterial);
-		}
-	}
-	else
-	{
-		UE_LOG(LogSmashCharacter, Warning, TEXT("Team Material 인덱스에 메테리얼을 제대로 설정하세요."));
-	}
+	// // 재질 설정 (팀별 색상)
+	// if (TeamOptionMaterials.IsValidIndex(PlayerNo) && TeamOptionMaterials[PlayerNo])
+	// {
+	// 	UMaterialInstance* TeamMaterial = TeamOptionMaterials[PlayerNo];
+	// 	if (GetMesh())
+	// 	{
+	// 		Material = GetMesh()->CreateDynamicMaterialInstance(0, TeamMaterial);
+	// 	}
+	// }
+	// else
+	// {
+	// 	UE_LOG(LogSmashCharacter, Warning, TEXT("Team Material 인덱스에 메테리얼을 제대로 설정하세요."));
+	// }
 }
 
 void ASmashCharacter::AttachAbilities()
