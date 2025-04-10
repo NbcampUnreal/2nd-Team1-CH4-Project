@@ -25,17 +25,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_SmashExampl/5/3Q/EHJ4PNHWONSOWUGOYJFZB6.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Content/SST/Input/IMC_Default.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Content/SST/Input/IMC_Default.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/FollowCameraComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/FollowCameraComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/FollowCameraComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/FollowCameraComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/SmashCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/SmashCharacter.h" afterDir="false" />
-    </list>
+    <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -63,7 +53,11 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://4" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://7" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic/UE_5.5/Engine/Source/Runtime/Core/Public/Containers/Array.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic/UE_5.5/Engine/Source/Runtime/Engine/Classes/Kismet/GameplayStatics.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Epic/UE_5.5/Engine/Source/Runtime/Engine/Private/Character.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -196,7 +190,7 @@
       <workItem from="1744199526760" duration="58000" />
       <workItem from="1744199684976" duration="573000" />
       <workItem from="1744249222116" duration="7128000" />
-      <workItem from="1744267403128" duration="9890000" />
+      <workItem from="1744267403128" duration="10382000" />
     </task>
     <servers />
   </component>
@@ -210,16 +204,5 @@
     <MESSAGE value="방패 시스템 삭제 및 FX/Stats 컴포넌트, SmashStateSystem 구조 개선&#10;&#10;- 방패 관련 `AShield` 클래스 제거 및 관련 코드 삭제&#10;- `FXComponent`에 피격 이펙트(HitEffect) 재생 기능 추가&#10;- `SmashCharacterStats` 초기화 로직 개선 및 필요 없는 Tick 비활성화&#10;- `SmashStateSystem` 폴더 구성 변경&#10;- 구성 파일(DefaultEngine.ini)에 새로운 `PropertyRedirects` 추가&#10;- 네트워크 복제 로직 정리 및 필요 없는 코드 제거" />
     <MESSAGE value="sdsdsdsdsd" />
     <option name="LAST_COMMIT_MESSAGE" value="" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp</url>
-          <line>746</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
