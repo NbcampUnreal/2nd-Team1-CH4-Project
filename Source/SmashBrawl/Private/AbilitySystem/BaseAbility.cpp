@@ -3,7 +3,8 @@
 
 #include "AbilitySystem/BaseAbility.h"
 
-#include <Character/SmashStateSystem.h>
+#include <Character/Components/SmashStateSystem.h>
+
 
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
 #include "Net/UnrealNetwork.h"
@@ -176,11 +177,11 @@ void ABaseAbility::BP_OnEndAbility_Implementation()
 	bIsUse = false;
 	if(Parent->GetMovementComponent()->IsFalling())
 	{
-		Parent->StateSystem->TryChangeState(ESmashPlayerStates::Fall,false);
+		Parent->SmashStateSystem->TryChangeState(ESmashPlayerStates::Fall,false);
 	}
 	else
 	{
-		Parent->StateSystem->TryChangeState(ESmashPlayerStates::Idle,false);
+		Parent->SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle,false);
 	}
 	Parent->AbilityType = ESmashAbilityTypes::None;
 	IInterface_SmashCombat::Execute_SetAttacks(Parent,ESmashAttacks::None);
@@ -261,10 +262,6 @@ void ABaseAbility::Multicast_AddDamagersClient_Implementation(ACharacter* InPare
 void ABaseAbility::Server_AddDamagersServer_Implementation(ACharacter* InParent)
 {
 	FuncDamageBoxes(InParent);
-}
-
-void ABaseAbility::FuncDamageBoxes(ACharacter* InParent)
-{
 }
 
 void ABaseAbility::Server_SpawnProjectile_Implementation(TSubclassOf<AActor> ProjectileClass, FTransform SpawnTransform,
@@ -441,6 +438,16 @@ void ABaseAbility::FuncCharging()
 
 void ABaseAbility::SpecialAttackButton()
 {
+	if (!Parent)
+		return;
+	if (Parent->bSpecialAttackButton)
+	{
+		SpecialButtonDown();
+	}
+	else
+	{
+		SpecialButtonUp();
+	}
 }
 
 void ABaseAbility::SetBuffer()
@@ -622,4 +629,11 @@ void ABaseAbility::Charge(bool InChargeing)
 void ABaseAbility::EndAllNonChargedAbilities(ABaseAbility* Caller)
 {
 	Parent->AbilitySystemComponent->EndAllNonChargedAbilities(Caller);
+}
+
+void ABaseAbility::StopAllMovement()
+{
+	if (!Parent)
+		return;
+	Parent->GetMovementComponent()->StopMovementImmediately();
 }

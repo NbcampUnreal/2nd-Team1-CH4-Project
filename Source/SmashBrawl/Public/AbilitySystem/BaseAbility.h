@@ -61,7 +61,7 @@ public:
 	void Multicast_LandLeg(UAnimMontage* LandAnimation, float PlayRate, float StartPosition, FName StartSection,
 	                       int32 InAnimNo);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	void ActivateDamagers();
 
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
@@ -70,7 +70,7 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Server_AddDamagersServer(ACharacter* InParent);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent)
 	void FuncDamageBoxes(ACharacter* InParent);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
@@ -139,6 +139,10 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShootProjectile();
+
+	
+	UFUNCTION(BlueprintCallable)
+	void StopAllMovement();
 	
 	UFUNCTION(BlueprintCallable)
 	void SetMovement(bool bCanMove);
