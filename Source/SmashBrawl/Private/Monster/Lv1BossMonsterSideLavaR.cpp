@@ -21,6 +21,8 @@ ALv1BossMonsterSideLavaR::ALv1BossMonsterSideLavaR()
 	NiagaraTrailEffect->bAutoActivate = false;
 
 	bReplicates = true;
+	
+	SmashDamageBox->SetupAttachment(RootComp);
 }
 
 void ALv1BossMonsterSideLavaR::BeginPlay()
