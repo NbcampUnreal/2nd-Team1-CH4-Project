@@ -9,10 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0129cbba-eed8-44b4-82a9-3d1e917e61a8" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Assets/Characters/Fighter/Animations/A_backRoll.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Assets/Characters/Fighter/Animations/A_backRoll.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_DodgeBack.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_DodgeBack.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_WalkRun.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_WalkRun.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Crouch.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Crouch.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,22 +45,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Uproject.SmashBrawl.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Charactor__KSY&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Uproject.SmashBrawl.executor": "Run",
+    "git-widget-placeholder": "Charactor",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="SmashBrawl" type="Uproject" factoryName="rider.uproject">
       <configuration_1 setup="1">
@@ -200,6 +197,7 @@
       <workItem from="1744285490978" duration="678000" />
       <workItem from="1744333609387" duration="5742000" />
       <workItem from="1744349824249" duration="778000" />
+      <workItem from="1744352934928" duration="383000" />
     </task>
     <servers />
   </component>
