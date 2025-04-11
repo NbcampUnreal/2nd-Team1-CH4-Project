@@ -23,6 +23,8 @@ ALv1BossMonsterMagic::ALv1BossMonsterMagic()
 	NiagaraTrailEffect->bAutoActivate = false;
 
 	bReplicates = true;
+	
+	SmashDamageBox->SetupAttachment(RootComp);
 }
 
 

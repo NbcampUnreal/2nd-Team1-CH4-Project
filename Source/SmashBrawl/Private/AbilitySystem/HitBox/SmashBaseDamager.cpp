@@ -14,7 +14,6 @@ ASmashBaseDamager::ASmashBaseDamager()
 	PrimaryActorTick.bCanEverTick = false;
 
 	SmashDamageBox = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Smash Damage Box"));
-	SetRootComponent(SmashDamageBox);
 	SmashDamageBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly); // Overlap만
 	SmashDamageBox->SetCollisionResponseToAllChannels(ECR_Ignore);
 	SmashDamageBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
@@ -97,19 +96,19 @@ void ASmashBaseDamager::AttackActor(UPrimitiveComponent* OverlappedComponent, AA
 	if (IInterface_TakeDamage* TakeDamageOtherActor = Cast<IInterface_TakeDamage>(OtherActor))
 	{
 		if (DamagePlayRow.HitDirection == EHitDirection::Left ||
-	(DamagePlayRow.HitDirection == EHitDirection::Auto && Owner->GetActorLocation().X - OtherActor->GetActorLocation().X < 0))
+	(DamagePlayRow.HitDirection == EHitDirection::Auto && Owner->GetActorLocation().X - OtherActor->GetActorLocation().X > 0))
 		{
 			UE_LOG(LogTemp, Display, TEXT("CharacterGiveDamage, %d"), DamagePlayRow.DamageAmount);
 			//SmashTarget->TakeDamage(DamageRow.Attack, DamageRow.AttackType, false, DamageRow.KnockbackMultiplier);
 			TakeDamageOtherActor->TakeDamage(DamagePlayRow.DamageAmount, DamagePlayRow.AttackType, false);
 		}
-		else if (DamagePlayRow.HitDirection == EHitDirection::Left ||
+		else if (DamagePlayRow.HitDirection == EHitDirection::Right ||
 			(DamagePlayRow.HitDirection == EHitDirection::Auto && Owner->GetActorLocation().X - OtherActor->GetActorLocation().X < 0))
 		{
 			UE_LOG(LogTemp, Display, TEXT("CharacterGiveDamage, Right"));
 
 			//SmashTarget->TakeDamage(DamageRow.Attack, DamageRow.AttackType, false, DamageRow.KnockbackMultiplier);
-			TakeDamageOtherActor->TakeDamage(DamagePlayRow.DamageAmount, DamagePlayRow.AttackType, false);
+			TakeDamageOtherActor->TakeDamage(DamagePlayRow.DamageAmount, DamagePlayRow.AttackType, true);
 		}
 	}
 }

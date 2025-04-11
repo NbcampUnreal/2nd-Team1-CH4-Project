@@ -29,6 +29,21 @@
       <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Camera/SmashCameraComponent.cpp" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Camera/SmashCameraComponent.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterLavaBurst.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterLavaBurst.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/AttackData/DT_MonsterAttackValueTable.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/AttackData/DT_MonsterAttackValueTable.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/HitBox/BaseSmashDamagerManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/HitBox/BaseSmashDamagerManager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/HitBox/SmashBaseDamager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/HitBox/SmashBaseDamager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterBreathProjectile.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterBreathProjectile.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterLavaBurst.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterLavaBurst.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterMagic.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterMagic.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterMeteor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterMeteor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaL.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaL.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaR.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaR.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterVacuum.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterVacuum.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/AbilitySystem/HitBox/SmashBaseDamager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/AbilitySystem/HitBox/SmashBaseDamager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterBreathProjectile.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterBreathProjectile.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_.uasset" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
@@ -72,6 +87,9 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://8" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Action/PlayMontageAction.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
@@ -238,6 +256,10 @@
       <workItem from="1744195410017" duration="4080000" />
       <workItem from="1744199526760" duration="58000" />
       <workItem from="1744199684976" duration="573000" />
+      <workItem from="1744338204392" duration="13000" />
+      <workItem from="1744338260435" duration="8140000" />
+      <workItem from="1744350331110" duration="3610000" />
+      <workItem from="1744354673037" duration="3123000" />
       <workItem from="1744249222116" duration="7128000" />
       <workItem from="1744267403128" duration="11140000" />
       <workItem from="1744328592544" duration="19659000" />

@@ -1,9 +1,8 @@
 #include "Monster/Controller/BaseAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
-#include "BehaviorTree/BlackboardData.h"
+#include "Character/SmashCharacter.h"
 #include "Kismet/GameplayStatics.h"
-#include "SmashBrawl/Public/Charactor/BaseCharacter.h"
 #include "Monster/Character/BaseAIFighter.h"
 
 ABaseAIController::ABaseAIController()
@@ -20,11 +19,11 @@ void ABaseAIController::BeginPlay()
         RunBehaviorTree(BehaviorTreeAsset);
     }
     TArray<AActor*> FoundActors;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), FoundActors);
-
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASmashCharacter::StaticClass(), FoundActors);
+    
     for (AActor* Actor : FoundActors)
     {
-        if (ABaseCharacter* Char = Cast<ABaseCharacter>(Actor))
+        if (ASmashCharacter* Char = Cast<ASmashCharacter>(Actor))
         {
             PlayerArray.Add(Char);
         }
@@ -32,7 +31,7 @@ void ABaseAIController::BeginPlay()
     if (PlayerArray.Num() > 0)
     {
         int32 RandomIndex = FMath::RandRange(0, PlayerArray.Num() - 1);
-        ABaseCharacter* RandomCharacter = PlayerArray[RandomIndex];
+        ASmashCharacter* RandomCharacter = PlayerArray[RandomIndex];
 
         BlackboardComponent->SetValueAsObject(FName("Target"), RandomCharacter);
     }

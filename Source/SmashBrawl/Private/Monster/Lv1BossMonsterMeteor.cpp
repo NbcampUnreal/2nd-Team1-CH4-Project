@@ -43,6 +43,8 @@ ALv1BossMonsterMeteor::ALv1BossMonsterMeteor()
 	NiagaraTrailEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailEffect"));
 	NiagaraTrailEffect->SetupAttachment(RootComponent);
 	NiagaraTrailEffect->bAutoActivate = false;
+	
+	SmashDamageBox->SetupAttachment(RootComp);
 }
 
 void ALv1BossMonsterMeteor::BeginPlay()
