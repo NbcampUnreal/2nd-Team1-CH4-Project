@@ -72,19 +72,19 @@ void ALv1BossMonster::Server_MagicAttack_Implementation()
 
 void ALv1BossMonster::Server_LavaBurstAttack_Implementation() const
 {	
-	FVector SpawnLocation = FVector( GetActorLocation().X, 0, GetActorLocation().Z - 900.0f);
-	FRotator SpawnRotation = FRotator(0, 90, 0);
+	FVector SpawnLocation = FVector( GetActorLocation().X , 0, GetActorLocation().Z - 900.0f);
+	FRotator SpawnRotation = FRotator(0, 0, 0);
 	FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
 
 	DamagerManager->CreateDamager(SpawnTransform, FName("Attack1"));
 	
-	if (ABaseBossPatternActor* PatternActor = GetWorld()->SpawnActor<ABaseBossPatternActor>(LavaBurst, SpawnLocation, SpawnRotation))
-	{		
-		if (AActor* Damager = DamagerManager->CreateDamager(PatternActor->GetTransform(), FName("Attack1")))
-		{
-			Damager->AttachToActor(PatternActor, FAttachmentTransformRules::KeepWorldTransform);
-		}
-	}
+	// if (ABaseBossPatternActor* PatternActor = GetWorld()->SpawnActor<ABaseBossPatternActor>(LavaBurst, SpawnLocation, SpawnRotation))
+	// {		
+	// 	if (AActor* Damager = DamagerManager->CreateDamager(PatternActor->GetTransform(), FName("Attack1")))
+	// 	{
+	// 		Damager->AttachToActor(PatternActor, FAttachmentTransformRules::KeepWorldTransform);
+	// 	}
+	// }
 }
 
 void ALv1BossMonster::Server_FlyBreathAttack_Implementation() const
