@@ -1,7 +1,7 @@
 #include "SmashBrawl/Public/AbilitySystem/SmashAbilitySystemComponent.h"
 
 #include "AbilitySystem/BaseAbility.h"
-#include "GameFramework/Character.h"
+#include "Character/SmashCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "SmashBrawl/Public/Interfaces/Interface_SmashCombat.h"
 
@@ -9,7 +9,7 @@ USmashAbilitySystemComponent::USmashAbilitySystemComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 
@@ -26,7 +26,7 @@ void USmashAbilitySystemComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// 부모 캐릭터 참조 설정
-	Parent = Cast<ACharacter>(GetOwner());
+	Parent = Cast<ASmashCharacter>(GetOwner());
 	if (!Parent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("부모는 캐릭터가 아닙니다"));
@@ -42,11 +42,10 @@ void USmashAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick Tic
 void USmashAbilitySystemComponent::MainTick()
 {
 	// 능력 상태이지만 특정 공격 타입이 없는 경우, 적절한 능력 활성화
-	if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == EPlayerStates::Ability &&
-		IInterface_SmashCombat::Execute_GetAttackTypes(Parent) == EAttacks::None)
-	{
-		Multicast_WitchAbility();
-	}
+	// if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Ability &&	IInterface_SmashCombat::Execute_GetAttackTypes(Parent) == ESmashAttacks::None)
+	// {
+	// 	Multicast_WitchAbility();
+	// }
 }
 
 void USmashAbilitySystemComponent::BufferCall(ESmashBuffer NewBuffer)
@@ -82,7 +81,7 @@ void USmashAbilitySystemComponent::EndAllNonChargedAbilities(ABaseAbility* Calle
 
 		if (Ability->Parent == Parent && Ability->ChargeLevel == 0.0f && Caller != Ability)
 		{
-			Ability->EndAbility();
+			Ability->Multicast_EndAbility();
 		}
 	}
 }
@@ -166,7 +165,7 @@ void USmashAbilitySystemComponent::AttachAllAbilities()
 	LedgeAttack = AttachAbility(LedgeAttackClass);
 	ProneAttack = AttachAbility(ProneAttackClass);
 	ProneStand = AttachAbility(ProneStandClass);
-	RespawnAbility = AttachAbility(RespawnAbilityClass);
+//	RespawnAbility = AttachAbility(RespawnAbilityClass);
 	Ledge = AttachAbility(LedgeClass);
 	Items = AttachAbility(ItemsClass);
 
@@ -242,7 +241,7 @@ ABaseAbility* USmashAbilitySystemComponent::AttachAbility(const TSubclassOf<ABas
 }
 
 // 새 헬퍼 메서드: 방향 기반 능력 활성화
-void USmashAbilitySystemComponent::ActivateDirectionalAbility(ESmashDirection Direction, EAttacks AttackType, ABaseAbility* Ability)
+void USmashAbilitySystemComponent::ActivateDirectionalAbility(ESmashDirection Direction, ESmashAttacks AttackType, ABaseAbility* Ability)
 {
 	if (IsValid(Ability))
 	{
@@ -254,11 +253,11 @@ void USmashAbilitySystemComponent::ActivateDirectionalAbility(ESmashDirection Di
 // 새 헬퍼 메서드: 방향에 따른 능력 선택 및 활성화
 void USmashAbilitySystemComponent::ProcessDirectionalAbility(ABaseAbility* UpAbility, ABaseAbility* DownAbility,
                                                              ABaseAbility* ForwardAbility, ABaseAbility* BackAbility, ABaseAbility* NeutralAbility,
-                                                             EAttacks UpAttackType,
-                                                             EAttacks DownAttackType,
-                                                             EAttacks ForwardAttackType,
-                                                             EAttacks BackAttackType,
-                                                             EAttacks NeutralAttackType)
+                                                             ESmashAttacks UpAttackType,
+                                                             ESmashAttacks DownAttackType,
+                                                             ESmashAttacks ForwardAttackType,
+                                                             ESmashAttacks BackAttackType,
+                                                             ESmashAttacks NeutralAttackType)
 {
 	// 현재 방향 가져오기
 	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
@@ -305,12 +304,12 @@ void USmashAbilitySystemComponent::Multicast_BasicAttack_Implementation()
 		TiltForward, // 앞쪽 능력
 		nullptr, // 뒤쪽 능력 (없음, 앞쪽 사용)
 		NeutralAttack, // 중립 능력
-		EAttacks::TiltUp, // 위쪽 공격 타입
-		EAttacks::TiltDown, // 아래쪽 공격 타입
-		EAttacks::TiltForward, // 앞쪽 공격 타입
-		EAttacks::TiltForward, // 뒤쪽 공격 타입
-		EAttacks::Neutral // 중립 공격 타입
-	);
+		ESmashAttacks::TiltUp, // 위쪽 공격 타입
+		ESmashAttacks::TiltDown, // 아래쪽 공격 타입
+		ESmashAttacks::TiltForward, // 앞쪽 공격 타입
+		ESmashAttacks::TiltForward, // 뒤쪽 공격 타입
+		ESmashAttacks::Neutral // 중립 공격 타입
+	);	
 }
 
 void USmashAbilitySystemComponent::Multicast_SpecialAttack_Implementation()
@@ -322,7 +321,7 @@ void USmashAbilitySystemComponent::Multicast_SpecialAttack_Implementation()
 	if (CurrentDirection == ESmashDirection::None && IInterface_SmashCombat::Execute_GetSuper(Parent) == 100)
 	{
 		IInterface_SmashCombat::Execute_SetSuper(Parent, 0);
-		IInterface_SmashCombat::Execute_SetAttacks(Parent, EAttacks::Super);
+		IInterface_SmashCombat::Execute_SetAttacks(Parent, ESmashAttacks::Super);
 		ActivateAbility(SuperAttack);
 		return;
 	}
@@ -334,11 +333,11 @@ void USmashAbilitySystemComponent::Multicast_SpecialAttack_Implementation()
 		SpecialForward, // 앞쪽 능력
 		nullptr, // 뒤쪽 능력 (없음, 앞쪽 사용)
 		SpecialNeutral, // 중립 능력
-		EAttacks::SpecialUp, // 위쪽 공격 타입
-		EAttacks::SpecialDown, // 아래쪽 공격 타입
-		EAttacks::SpecialForward, // 앞쪽 공격 타입
-		EAttacks::SpecialForward, // 뒤쪽 공격 타입
-		EAttacks::SpecialNeutral // 중립 공격 타입
+		ESmashAttacks::SpecialUp, // 위쪽 공격 타입
+		ESmashAttacks::SpecialDown, // 아래쪽 공격 타입
+		ESmashAttacks::SpecialForward, // 앞쪽 공격 타입
+		ESmashAttacks::SpecialForward, // 뒤쪽 공격 타입
+		ESmashAttacks::SpecialNeutral // 중립 공격 타입
 	);
 }
 
@@ -350,11 +349,11 @@ void USmashAbilitySystemComponent::Multicast_AirAttack_Implementation()
 		AirForward, // 앞쪽 능력
 		AirBack, // 뒤쪽 능력
 		AirNeutral, // 중립 능력
-		EAttacks::AirUp, // 위쪽 공격 타입
-		EAttacks::AirDown, // 아래쪽 공격 타입
-		EAttacks::AirForward, // 앞쪽 공격 타입
-		EAttacks::AirBack, // 뒤쪽 공격 타입
-		EAttacks::AirUp // 중립 공격 타입 (AirUp 사용)
+		ESmashAttacks::AirUp, // 위쪽 공격 타입
+		ESmashAttacks::AirDown, // 아래쪽 공격 타입
+		ESmashAttacks::AirForward, // 앞쪽 공격 타입
+		ESmashAttacks::AirBack, // 뒤쪽 공격 타입
+		ESmashAttacks::AirUp // 중립 공격 타입 (AirUp 사용)
 	);
 }
 
@@ -366,9 +365,9 @@ void USmashAbilitySystemComponent::Multicast_SmashAttack_Implementation()
 		SmashForward, // 앞쪽 능력
 		nullptr, // 뒤쪽 능력 (없음)
 		nullptr, // 중립 능력 (없음)
-		EAttacks::SmashUp, // 위쪽 공격 타입
-		EAttacks::SmashDown, // 아래쪽 공격 타입
-		EAttacks::SmashForward // 앞쪽 공격 타입
+		ESmashAttacks::SmashUp, // 위쪽 공격 타입
+		ESmashAttacks::SmashDown, // 아래쪽 공격 타입
+		ESmashAttacks::SmashForward // 앞쪽 공격 타입
 	);
 }
 
@@ -380,10 +379,10 @@ void USmashAbilitySystemComponent::Multicast_Dodge_Implementation()
 		DodgeForward, // 앞쪽 능력
 		DodgeBack, // 뒤쪽 능력
 		nullptr, // 중립 능력 (없음)
-		EAttacks::DodgeAir, // 위쪽 공격 타입
-		EAttacks::DodgeSpot, // 아래쪽 공격 타입
-		EAttacks::DodgeForward, // 앞쪽 공격 타입
-		EAttacks::DodgeBack // 뒤쪽 공격 타입
+		ESmashAttacks::DodgeAir, // 위쪽 공격 타입
+		ESmashAttacks::DodgeSpot, // 아래쪽 공격 타입
+		ESmashAttacks::DodgeForward, // 앞쪽 공격 타입
+		ESmashAttacks::DodgeBack // 뒤쪽 공격 타입
 	);
 }
 
@@ -391,7 +390,6 @@ void USmashAbilitySystemComponent::Multicast_Taunts_Implementation()
 {
 	// 도발은 공격 타입 설정이 필요 없으므로 간소화된 버전 사용
 	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
-
 	switch (CurrentDirection)
 	{
 	case ESmashDirection::Up:
@@ -413,7 +411,6 @@ void USmashAbilitySystemComponent::Multicast_Taunts_Implementation()
 void USmashAbilitySystemComponent::Multicast_Throw_Implementation()
 {
 	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
-
 	switch (CurrentDirection)
 	{
 	case ESmashDirection::Up:
@@ -435,7 +432,6 @@ void USmashAbilitySystemComponent::Multicast_Throw_Implementation()
 void USmashAbilitySystemComponent::Multicast_Prone_Implementation()
 {
 	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
-
 	switch (CurrentDirection)
 	{
 	case ESmashDirection::Up:
@@ -450,45 +446,44 @@ void USmashAbilitySystemComponent::Multicast_Prone_Implementation()
 
 void USmashAbilitySystemComponent::Multicast_Respawning_Implementation()
 {
-	if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == EPlayerStates::Dead)
-		RespawnAbility->bActive = true;
+	if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Dead)
+	{}
+		//RespawnAbility->bActive = true;
 }
 
 void USmashAbilitySystemComponent::Multicast_WitchAbility_Implementation()
 {
-	const EAbilityTypes CurrentAbilityTypes = IInterface_SmashCombat::Execute_GetAbilityTypes(Parent);
-
-	// 현재 능력 타입에 따라 적절한 함수 호출
+	const ESmashAbilityTypes CurrentAbilityTypes = IInterface_SmashCombat::Execute_GetAbilityTypes(Parent);
 	switch (CurrentAbilityTypes)
 	{
-	case EAbilityTypes::Basic:
+	case ESmashAbilityTypes::Basic:
 		Multicast_BasicAttack();
 		break;
-	case EAbilityTypes::Special:
+	case ESmashAbilityTypes::Special:
 		Multicast_SpecialAttack();
 		break;
-	case EAbilityTypes::Air:
+	case ESmashAbilityTypes::Air:
 		Multicast_AirAttack();
 		break;
-	case EAbilityTypes::Smash:
+	case ESmashAbilityTypes::Smash:
 		Multicast_SmashAttack();
 		break;
-	case EAbilityTypes::Dodge:
+	case ESmashAbilityTypes::Dodge:
 		Multicast_Dodge();
 		break;
-	case EAbilityTypes::Taunt:
+	case ESmashAbilityTypes::Taunt:
 		Multicast_Taunts();
 		break;
-	case EAbilityTypes::Throw:
+	case ESmashAbilityTypes::Throw:
 		Multicast_Throw();
 		break;
-	case EAbilityTypes::Prone:
+	case ESmashAbilityTypes::Prone:
 		Multicast_Prone();
 		break;
-	case EAbilityTypes::Grab:
+	case ESmashAbilityTypes::Grab:
 		ActivateAbility(Grab);
 		break;
-	case EAbilityTypes::Other:
+	case ESmashAbilityTypes::Other:
 		ActivateAbility(DashAttack);
 		break;
 
