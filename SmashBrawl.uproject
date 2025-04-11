@@ -7,26 +7,16 @@
 		{
 			"Name": "SmashBrawl",
 			"Type": "Runtime",
-			"LoadingPhase": "Default",
-			"AdditionalDependencies": [
-				"SST",
-				"Engine",
-				"UMG",
-				"AIModule"
-			]
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
 		{
 			"Name": "ModelingToolsEditorMode",
-			"Enabled": false,
+			"Enabled": true,
 			"TargetAllowList": [
 				"Editor"
 			]
-		},
-		{
-			"Name": "NiagaraFluids",
-			"Enabled": true
 		}
 	]
 }
