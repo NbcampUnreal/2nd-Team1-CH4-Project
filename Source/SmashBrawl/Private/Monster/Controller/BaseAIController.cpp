@@ -4,6 +4,7 @@
 #include "BehaviorTree/BlackboardData.h"
 #include "Kismet/GameplayStatics.h"
 #include "SmashBrawl/Public/Charactor/BaseCharacter.h"
+#include "Monster/Character/BaseAIFighter.h"
 
 ABaseAIController::ABaseAIController()
 {
@@ -45,10 +46,18 @@ void ABaseAIController::OnPossess(APawn* InPawn)
 {
     Super::OnPossess(InPawn);
 
+    ControlledFighter = Cast<ABaseAIFighter>(InPawn);
+
     if (BehaviorTreeAsset)
     {
         RunBehaviorTree(BehaviorTreeAsset);
         InitializeBlackboard();
+    }
+
+    // bActive 초기 블랙보드 세팅
+    if (ControlledFighter && BlackboardComponent)
+    {
+        BlackboardComponent->SetValueAsBool(FName("IsActive"), ControlledFighter->IsActive());
     }
 }
 

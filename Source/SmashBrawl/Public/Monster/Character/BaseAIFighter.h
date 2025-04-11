@@ -21,6 +21,9 @@ public:
     UFUNCTION(BlueprintCallable)
     AActor* GetValidTargetByDistance(AActor* TargetActor, AActor* ParentActor, float DistanceThreshold = 400.0f);
 
+    UFUNCTION(BlueprintCallable)
+    void PlayRandomAttackMontage();
+
     /** 리커버리 종료 → 정상 상태 복귀 */
     UFUNCTION()
     void FinishRecovery();
@@ -65,9 +68,39 @@ public:
 protected:
     void SetStateFromParam(int32 Param);
 
+    /** 사망 몽타주 */
+    UPROPERTY(EditDefaultsOnly, Category = "Animation")
+    UAnimMontage* DeathMontage;
+
+    // === 랜덤 공격용 애니메이션들 ===
+    UPROPERTY(EditDefaultsOnly, Category = "Animation|Attack")
+    UAnimMontage* AttackMontage_Left;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animation|Attack")
+    UAnimMontage* AttackMontage_Right;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animation|Attack")
+    UAnimMontage* AttackMontage_Uppercut;
+
+    /** 사망 애니메이션 재생 */
+    UFUNCTION(BlueprintCallable, Category = "Combat")
+    void PlayDeathMontage();
+
+    UFUNCTION(BlueprintCallable, Category = "Combat")
+    void TakeDamage(float DamageAmount);
+
+    UFUNCTION(BlueprintCallable, Category = "Combat")
+    void Die();
+
     /** 리커버리 딜레이 타이머 핸들 */
     FTimerHandle RecoveryHandle;
 
+    // Health
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+    float MaxHP = 100.f;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat")
+    float CurrentHP = 100.f;
     // --- 상태 변수들 ---
 
     /** 리커버리 중인지 여부 */
@@ -99,6 +132,7 @@ protected:
 
     /** 리스폰 위치 방향으로 이동 */
     void MoveTowardRespawn();
+
 
 public:
     // --- 어빌리티용 입력 값들 (네트워크 동기화 포함) ---

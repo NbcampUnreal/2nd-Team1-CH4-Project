@@ -14,6 +14,26 @@ ABaseAIFighter::ABaseAIFighter()
 void ABaseAIFighter::BeginPlay()
 {
     Super::BeginPlay();
+
+    CurrentHP = MaxHP;
+}
+
+void ABaseAIFighter::PlayRandomAttackMontage()
+{
+    const float Rand = FMath::FRand();
+
+    if (Rand < 0.2f && AttackMontage_Uppercut)
+    {
+        GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage_Uppercut);
+    }
+    else if (Rand < 0.6f && AttackMontage_Left)
+    {
+        GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage_Left);
+    }
+    else if (AttackMontage_Right)
+    {
+        GetMesh()->GetAnimInstance()->Montage_Play(AttackMontage_Right);
+    }
 }
 
 void ABaseAIFighter::SetAbility(float InLeftRight, float InUpDown, int32 InParam, int32 InAbilityType, int32 InDirection)
@@ -58,7 +78,48 @@ bool ABaseAIFighter::IsTargetInRange(AActor* TargetActor, AActor* ParentActor, f
 
 void ABaseAIFighter::SetStateFromParam(int32 Param)
 {
-    // 기존 Set States 블루프린트 함수 로직 여기에 이식
+}
+
+void ABaseAIFighter::TakeDamage(float DamageAmount)
+{
+    CurrentHP -= DamageAmount;
+    CurrentHP = FMath::Clamp(CurrentHP, 0.f, MaxHP);
+
+    UE_LOG(LogTemp, Warning, TEXT("AI 피격: 현재 HP = %.1f"), CurrentHP);
+
+    if (CurrentHP <= 0.f)
+    {
+        Die();
+    }
+}
+
+void ABaseAIFighter::Die()
+{
+    if (!bActive) return;
+
+    UE_LOG(LogTemp, Warning, TEXT("AI 사망"));
+
+    // 행동 막기
+    bActive = false;
+
+    // 몽타주 중지
+    if (GetMesh() && GetMesh()->GetAnimInstance())
+    {
+        GetMesh()->GetAnimInstance()->StopAllMontages(0.2f);
+    }
+
+     PlayDeathMontage();
+
+    // 제거
+    SetLifeSpan(3.0f);
+}
+
+void ABaseAIFighter::PlayDeathMontage()
+{
+    if (DeathMontage && GetMesh() && GetMesh()->GetAnimInstance())
+    {
+        GetMesh()->GetAnimInstance()->Montage_Play(DeathMontage);
+    }
 }
 
 void ABaseAIFighter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

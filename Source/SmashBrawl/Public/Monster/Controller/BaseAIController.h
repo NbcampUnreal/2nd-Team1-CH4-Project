@@ -27,6 +27,9 @@ protected:
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Player")
     TArray<TObjectPtr<ABaseCharacter>> PlayerArray;
 
+    UPROPERTY()
+    class ABaseAIFighter* ControlledFighter;
+
 private:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI", meta = (AllowPrivateAccess = "true"))
     UBlackboardComponent* BlackboardComponent;
