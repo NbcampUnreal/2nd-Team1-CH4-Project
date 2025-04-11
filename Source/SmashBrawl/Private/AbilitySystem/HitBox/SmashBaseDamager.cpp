@@ -52,6 +52,7 @@ void ASmashBaseDamager::OnMeshBeginOverlap(UPrimitiveComponent* OverlappedCompon
 {
 	if (bIsAttackAble(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult))
 	{
+		IgnoreActors.Add(OtherActor);
 		AttackActor(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 	}
 }
@@ -90,7 +91,7 @@ void ASmashBaseDamager::AttackActor(UPrimitiveComponent* OverlappedComponent, AA
 		if (DamagePlayRow.HitDirection == EHitDirection::Left ||
 	(DamagePlayRow.HitDirection == EHitDirection::Auto && Owner->GetActorLocation().X - OtherActor->GetActorLocation().X < 0))
 		{
-			UE_LOG(LogTemp, Display, TEXT("CharacterGiveDamage, Left"));
+			UE_LOG(LogTemp, Display, TEXT("CharacterGiveDamage, %d"), DamagePlayRow.DamageAmount);
 			//SmashTarget->TakeDamage(DamageRow.Attack, DamageRow.AttackType, false, DamageRow.KnockbackMultiplier);
 			TakeDamageOtherActor->TakeDamage(DamagePlayRow.DamageAmount, DamagePlayRow.AttackType, false);
 		}

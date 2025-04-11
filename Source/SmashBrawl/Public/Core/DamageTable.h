@@ -26,6 +26,8 @@ struct SMASHBRAWL_API FDamagePlayRow : public FTableRowBase
 	EHitDirection HitDirection;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float KnockbackMultiplier;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AActor> DamagerVisualActor;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
 	float LifeTime;
 };
