@@ -135,6 +135,7 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// 기본 이동 입력 바인딩
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ASmashCharacter::ResetMoveInput);
 		EnhancedInputComponent->BindAction(IA_UpDown, ETriggerEvent::Triggered, this, &ASmashCharacter::UpDownAxis);
+		EnhancedInputComponent->BindAction(IA_UpDown, ETriggerEvent::Completed, this, &ASmashCharacter::ResetUpDownAxis);
 
 		// 공격 입력 바인딩
 		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::BasicAttackPressed);
@@ -147,23 +148,17 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
 		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
 		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
-		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this,
-		                                   &ASmashCharacter::SpecialAttackPressed);
-		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this,
-		                                   &ASmashCharacter::SpecialAttackReleased);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::SpecialAttackPressed);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this, &ASmashCharacter::SpecialAttackReleased);
 
 		EnhancedInputComponent->BindAction(IA_Dodge, ETriggerEvent::Started, this, &ASmashCharacter::DodgePressed);
 
 		EnhancedInputComponent->BindAction(IA_Grab, ETriggerEvent::Started, this, &ASmashCharacter::GrabPressed);
 
-		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this,
-		                                   &ASmashCharacter::TauntUpPressed);
-		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this,
-		                                   &ASmashCharacter::TauntRightPressed);
-		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this,
-		                                   &ASmashCharacter::TauntLeftPressed);
-		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this,
-		                                   &ASmashCharacter::TauntDownPressed);
+		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntUpPressed);
+		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
+		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
+		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
 	}
 }
 
@@ -330,19 +325,19 @@ void ASmashCharacter::SyncClientPlayerData()
 
 void ASmashCharacter::SetCostume()
 {
-	// 재질 설정 (팀별 색상)
-	if (TeamOptionMaterials.IsValidIndex(PlayerNo) && TeamOptionMaterials[PlayerNo])
-	{
-		UMaterialInstance* TeamMaterial = TeamOptionMaterials[PlayerNo];
-		if (GetMesh())
-		{
-			Material = GetMesh()->CreateDynamicMaterialInstance(0, TeamMaterial);
-		}
-	}
-	else
-	{
-		UE_LOG(LogSmashCharacter, Warning, TEXT("Team Material 인덱스에 메테리얼을 제대로 설정하세요."));
-	}
+	// // 재질 설정 (팀별 색상)
+	// if (TeamOptionMaterials.IsValidIndex(PlayerNo) && TeamOptionMaterials[PlayerNo])
+	// {
+	// 	UMaterialInstance* TeamMaterial = TeamOptionMaterials[PlayerNo];
+	// 	if (GetMesh())
+	// 	{
+	// 		Material = GetMesh()->CreateDynamicMaterialInstance(0, TeamMaterial);
+	// 	}
+	// }
+	// else
+	// {
+	// 	UE_LOG(LogSmashCharacter, Warning, TEXT("Team Material 인덱스에 메테리얼을 제대로 설정하세요."));
+	// }
 }
 
 void ASmashCharacter::AttachAbilities()
@@ -785,6 +780,11 @@ void ASmashCharacter::ResetMoveInput(const FInputActionValue& Value)
 {
 	// 이동 입력 값 리셋
 	MoveInputValue = 0.0f;
+}
+
+void ASmashCharacter::ResetUpDownAxis(const FInputActionValue& InputActionValue)
+{
+	UpDownInputValue = 0.0f;
 }
 
 void ASmashCharacter::UpdateDirection()

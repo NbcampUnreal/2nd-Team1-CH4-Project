@@ -65,5 +65,4 @@ protected:
 	/** Performs the actal modifications to the camera parameters */
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category = Camera)
 	void InitiateCameraUpdate(AActor* Actor, bool Undo);
-
 };
