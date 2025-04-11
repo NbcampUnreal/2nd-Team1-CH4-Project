@@ -83,7 +83,6 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 			if (Parent && Parent->GetCapsuleComponent())
 			{
 				ParentLocation = Parent->GetCapsuleComponent()->GetComponentLocation();
-				//������ Then0
 				SetBuffer();
 				if (!bIsUse)
 				{
@@ -91,10 +90,13 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 					bIsUse = true;
 				}
 				//Then1
-				if (Parent && Parent->bLanded) //Character�� �ɹ����� Landed(bool)�� ���
+				UE_LOG(LogTemp, Error, TEXT("AbilityTick1"));
+				if (Parent && Parent->bLanded)
 				{
+					UE_LOG(LogTemp, Error, TEXT("Land"));
 					if (!bLandClosed)
 					{
+						
 						bLandClosed = true;
 						bLanding = true;
 						Land();
@@ -167,6 +169,7 @@ void ABaseAbility::Multicast_EndAbility_Implementation()
 
 void ABaseAbility::BP_OnEndAbility_Implementation()
 {
+	UE_LOG(LogTemp, Error, TEXT("EndAbility"));
 	WalkOffLedge(true);
 	bActive = false;
 	Multicast_SetFlip(true);
@@ -314,7 +317,7 @@ void ABaseAbility::FlipOnStick()
 
 void ABaseAbility::PlayAnimation(int32 InAnimNo)
 {
-	//Multicast_PlayAnimationClient(InAnimNo, Animations[InAnimNo]);
+	Multicast_PlayAnimationClient(InAnimNo, Animations[InAnimNo]);
 	Server_PlayAnimationServer(InAnimNo, Animations[InAnimNo]);
 }
 
@@ -328,11 +331,14 @@ void ABaseAbility::Multicast_PlayAnimationClient_Implementation(int32 InAnimNo, 
 		FOnMontageBlendingOutStarted BlendOutDelegate;
 		BlendOutDelegate.BindLambda([this, InAnimNo](UAnimMontage* Montage, bool bInterrupted)
 		{
-			Multicast_EndAnim(InAnimNo);
 			UE_LOG(LogTemp, Error, TEXT("EndPlayAnim_Multicast"));
 			if (bInterrupted)
 			{
 				AnimNotifyEnd(bDamager, "None");
+			}
+			else
+			{
+				Multicast_EndAnim(InAnimNo);
 			}
 		});
 		AnimInstance->Montage_SetBlendingOutDelegate(BlendOutDelegate, InMontageToPlay);
@@ -350,11 +356,14 @@ void ABaseAbility::Server_PlayAnimationServer_Implementation(int32 InAnimNo, UAn
 		FOnMontageBlendingOutStarted BlendOutDelegate;
 		BlendOutDelegate.BindLambda([this,InAnimNo](UAnimMontage* Montage, bool bInterrupted)
 		{
-			Multicast_EndAnim(InAnimNo);
 			UE_LOG(LogTemp, Error, TEXT("EndPlayAnimServer"));
 			if (bInterrupted)
 			{
 				AnimNotifyEnd(bDamager, "None");
+			}
+			else
+			{
+				Multicast_EndAnim(InAnimNo);
 			}
 		});
 		AnimInstance->Montage_SetBlendingOutDelegate(BlendOutDelegate, InMontageToPlay);
