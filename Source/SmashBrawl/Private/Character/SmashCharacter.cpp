@@ -3,6 +3,7 @@
 #include "EnhancedInputComponent.h"
 #include "AbilitySystem/BaseAbility.h"
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
+#include "Character/Camera/SmashCameraComponent.h"
 #include "Character/Components/FXComponent.h"
 #include "Character/Components/SmashStateSystem.h"
 #include "Character/Components/SmashCharacterMovementComponent.h"
@@ -19,19 +20,18 @@
 
 DEFINE_LOG_CATEGORY(LogSmashCharacter);
 
-//---------------------------------------------------------------------
-// 생성자 및 기본 엔진 오버라이드 함수
-//---------------------------------------------------------------------
 
 ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer.SetDefaultSubobjectClass<USmashCharacterMovementComponent>(ASSTCharacter::CharacterMovementComponentName))
+	: Super(ObjectInitializer
+	        .SetDefaultSubobjectClass<USmashCharacterMovementComponent>(ASSTCharacter::CharacterMovementComponentName)
+	        .SetDefaultSubobjectClass<USmashCameraComponent>(TEXT("FollowCamera")))
 {
 	// Tick 설정 - 초기에는 비활성화, StartUp에서 활성화
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	PrimaryActorTick.SetTickFunctionEnable(false);
 
-
+	SmashCameraComponent = Cast<USmashCameraComponent>(GetFollowCamera());
 	SmashCharacterMovementComponent = Cast<USmashCharacterMovementComponent>(GetCharacterMovement());
 	SmashStateSystem = CreateDefaultSubobject<USmashStateSystem>(TEXT("SmashCharacterState"));
 	SmashCharacterStatsComponent = CreateDefaultSubobject<USmashCharacterStats>(TEXT("SmashCharacterStatsComponent"));
@@ -91,9 +91,36 @@ void ASmashCharacter::BeginPlay()
 	// 땅에 닿았을 때 이벤트 핸들러 등록
 	LandedDelegate.AddDynamic(this, &ASmashCharacter::OnLandedSmash);
 
-	// 약간의 딜레이 후에 초기화 시작 (0.1초)
+	// 약간의 딜레이 후에 초기화 시작 (0.5초)
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASmashCharacter::StartUp, 0.1f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASmashCharacter::StartUp, 0.5f, false);
+
+	// 게임 시작 5초 후 카메라 모드 초기화 (타이밍이 중요)
+	FTimerHandle CameraInitTimer;
+	GetWorld()->GetTimerManager().SetTimer(CameraInitTimer, this, &ASmashCharacter::InitializeCameraMode, 5.0f, false);
+
+	FTimerHandle UpdateTargetsTimer;
+	GetWorld()->GetTimerManager().SetTimer(UpdateTargetsTimer, [this]()
+	{
+		if (SmashCameraComponent && SmashCameraComponent->GetCameraMode() == ECameraMode::Group)
+		{
+			TArray<AActor*> AllCharacters;
+			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASmashCharacter::StaticClass(), AllCharacters);
+
+			for (AActor* Actor : AllCharacters)
+			{
+				if (Actor != this && !SmashCameraComponent->GetTargetActors().Contains(Actor))
+				{
+					SmashCameraComponent->AddTargetActor(Actor);
+				}
+			}
+		}
+	}, 5.0f, true); // 5초마다 반복
+}
+
+void ASmashCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
 }
 
 void ASmashCharacter::Tick(float DeltaSeconds)
@@ -144,21 +171,24 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this, &ASmashCharacter::SpecialAttackReleased);
 
 		// 도발 입력 바인딩
-		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntUpPressed);
-		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
-		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
-		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
+		// EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntUpPressed);
+		// EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
+		// EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
+		// EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
+
 		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::SpecialAttackPressed);
 		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this, &ASmashCharacter::SpecialAttackReleased);
 
 		EnhancedInputComponent->BindAction(IA_Dodge, ETriggerEvent::Started, this, &ASmashCharacter::DodgePressed);
 
+		EnhancedInputComponent->BindAction(IA_CameraToggle, ETriggerEvent::Started, this, &ASmashCharacter::ToggleCameraMode);
+
 		EnhancedInputComponent->BindAction(IA_Grab, ETriggerEvent::Started, this, &ASmashCharacter::GrabPressed);
 
-		EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntUpPressed);
-		EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
-		EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
-		EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
+		// EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntUpPressed);
+		// EnhancedInputComponent->BindAction(IA_TauntRight, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntRightPressed);
+		// EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
+		// EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
 	}
 }
 
@@ -611,7 +641,6 @@ void ASmashCharacter::DodgeDelayEvent()
 
 void ASmashCharacter::ScreenShake(float RumbleInten, float RumbleDuration)
 {
-	// SmashCharacterStatsComponent->S
 }
 
 void ASmashCharacter::LedgeGrab()
@@ -637,6 +666,55 @@ void ASmashCharacter::LedgeGrab()
 
 	FTimerHandle DelayHandle;
 	GetWorld()->GetTimerManager().SetTimer(DelayHandle, TimerDelegate, 1.0f, false);
+}
+
+void ASmashCharacter::InitializeCameraMode()
+{
+	if (SmashCameraComponent)
+	{
+		// 새로운 카메라 초기화 함수 호출 (호스트는 그룹 모드, 클라이언트는 개인 모드)
+		SmashCameraComponent->InitializeCameraForPlayer(true);
+		UE_LOG(LogSmashCharacter, Display, TEXT("카메라 모드가 초기화되었습니다."));
+	}
+}
+
+void ASmashCharacter::ToggleCameraMode()
+{
+	if (SmashCameraComponent)
+	{
+		// 현재 모드 확인 후 토글 (로컬에서만 적용됨)
+		if (SmashCameraComponent->GetCameraMode() == ECameraMode::Group)
+		{
+			SmashCameraComponent->SetCameraMode(ECameraMode::Default, 1.0f);
+			UE_LOG(LogSmashCharacter, Display, TEXT("카메라 모드가 개인 모드로 변경되었습니다."));
+		}
+		else
+		{
+			SmashCameraComponent->SetCameraMode(ECameraMode::Group, 1.0f);
+			UE_LOG(LogSmashCharacter, Display, TEXT("카메라 모드가 그룹 모드로 변경되었습니다."));
+		}
+	}
+}
+
+void ASmashCharacter::RequestCameraShake(float Intensity, float Duration, float Falloff)
+{
+	// 기존 카메라 흔들림 요청 유지
+	if (SmashGameMode)
+	{
+		SmashGameMode->ShakeCamera(Intensity, Duration, Falloff);
+	}
+
+	// 로컬 카메라에도 직접 흔들림 적용
+	if (SmashCameraComponent)
+	{
+		SmashCameraComponent->ShakeCamera(Intensity, Duration, Falloff);
+	}
+}
+
+void ASmashCharacter::PlayReviveEffect()
+{
+	// 부활 이펙트 - 주변 카메라에 약간의 흔들림
+	RequestCameraShake(2.0f, 0.5f, 1.0f);
 }
 
 void ASmashCharacter::Launch_Implementation(FVector LaunchVector, bool bXYOver, bool bZOver)
@@ -942,7 +1020,7 @@ void ASmashCharacter::SpecialAttackReleased(const FInputActionValue& InputAction
 
 void ASmashCharacter::DodgePressed(const FInputActionValue& InputActionValue)
 {
-	// SetMovementState(FSmashPlayerMovement(false, true, true, true));
+	// SetMovementState(FSmashPlayerMovement(false, false, false, false));
 
 	if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Jump || SmashStateSystem->GetCurrentState() ==
 		ESmashPlayerStates::Fall)
@@ -1062,4 +1140,14 @@ void ASmashCharacter::ClearBuffer_Implementation()
 	BufferDirection = ESmashDirection::None;
 	bBufferdInput = false;
 	bBufferdDirection = false;
+}
+
+bool ASmashCharacter::bHitConditions()
+{
+	return true;
+}
+
+void ASmashCharacter::TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection)
+{
+	SmashCombatComponent->TakeDamage(DamageAmount, AttackType, bIsRightDirection);
 }

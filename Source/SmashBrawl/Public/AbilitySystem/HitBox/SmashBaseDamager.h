@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Core/SmashDamageBoxType.h"
-#include "Core/SmashTypes.h"
+#include "Core/DamageTable.h"
 #include "GameFramework/Actor.h"
 #include "SmashBaseDamager.generated.h"
 
+class ASmashCharacter;
 /**
  * BP_Damager및 Grab Box 스폰을 위해
  */
@@ -20,31 +20,69 @@ public:
 	// Sets default values for this actor's properties
 	ASmashBaseDamager();
 
-	UFUNCTION(BlueprintCallable, Category="SmashAbility Hitbox")
-	void Init(ACharacter* Parent, const FHitProperty HitProperty);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
-	// 블루프린트에서 생성과 클래스에서 생성을 나눠 true인경우 블루프린트에서 사용하는 변수에 여기변수를 적용한다
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	bool bSpawnByClass;
+	UFUNCTION()
+	void OnMeshBeginOverlap(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+	);
+
+	UFUNCTION()
+	virtual bool bIsAttackAble(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+		);
+
+	UFUNCTION()
+	virtual void AttackActor(
+		UPrimitiveComponent* OverlappedComponent,
+		AActor* OtherActor,
+		UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex,
+		bool bFromSweep,
+		const FHitResult& SweepResult
+		);
+
+	UFUNCTION()
+	void LifeTimeOut();
+
+	void Init(const TObjectPtr<AActor> InParent,
+		const TArray<TSubclassOf<AActor>>& InAttackAbleClasses,
+		const FDamagePlayRow& InDamagePlayRow,
+		const FDamageVisualRow& InDamageVisualRow);
+public:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility Hitbox")
+	TObjectPtr<UStaticMeshComponent> SmashDamageBox;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	TObjectPtr<AActor> SpawningOwner;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	TObjectPtr<ACharacter> SpawningParent;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	float SpawningLifeTime;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	FHitProperty SpawningHitProperty;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	int32 SpawningPriority;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	ESmashFaceing SpawningDirection;
+	TObjectPtr<AActor> Parent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
+	TSet<TObjectPtr<AActor>> IgnoreActors;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
+	TArray<TSubclassOf<AActor>> AttackAbleClasses;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
+	FDamagePlayRow DamagePlayRow;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
+	FDamageVisualRow DamageVisualRow;
+	
+	FTimerHandle LifeTimer;
 };
+

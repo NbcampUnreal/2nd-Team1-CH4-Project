@@ -9,6 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="0129cbba-eed8-44b4-82a9-3d1e917e61a8" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SmashBrawl.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.uproject" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,8 +49,8 @@
   &quot;keyToString&quot;: {
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Uproject.SmashBrawl.executor&quot;: &quot;Debug&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Charactor__KSY&quot;,
+    &quot;Uproject.SmashBrawl.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merge&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -187,7 +188,19 @@
       <workItem from="1744162243954" duration="6278000" />
       <workItem from="1744182398410" duration="2581000" />
       <workItem from="1744247079639" duration="1239000" />
-      <workItem from="1744249724970" duration="364000" />
+      <workItem from="1744249724970" duration="704000" />
+      <workItem from="1744250859553" duration="1059000" />
+      <workItem from="1744253577448" duration="1769000" />
+      <workItem from="1744255444331" duration="674000" />
+      <workItem from="1744261326742" duration="2595000" />
+      <workItem from="1744271713347" duration="5977000" />
+      <workItem from="1744285490978" duration="678000" />
+      <workItem from="1744333609387" duration="5742000" />
+      <workItem from="1744349824249" duration="778000" />
+      <workItem from="1744352934928" duration="383000" />
+      <workItem from="1744353989299" duration="730000" />
+      <workItem from="1744356139561" duration="18000" />
+      <workItem from="1744356201890" duration="380000" />
     </task>
     <servers />
   </component>

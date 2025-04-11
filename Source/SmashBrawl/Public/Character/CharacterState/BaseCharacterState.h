@@ -57,11 +57,11 @@ public:
 
 	// 액션 타입으로 액션 찾기
 	UFUNCTION(BlueprintCallable, Category = "Character State")
-	USmashAction* FindActionByType(ESmashActionType ActionType);
+	USmashAction* FindActionByType(ESmashActionType ActionType, int Index = 0);
 
 	// 액션 실행
 	UFUNCTION(BlueprintCallable, Category = "Character State")
-	bool ExecuteActionByType(ESmashActionType ActionType);
+	bool ExecuteActionByType(ESmashActionType ActionType, int Index = 0);
 
 	// 액션 리스트 반환
 	UFUNCTION(BlueprintCallable, Category = "Character State")

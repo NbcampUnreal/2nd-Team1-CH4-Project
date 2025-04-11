@@ -12,7 +12,7 @@ public class SmashBrawl : ModuleRules
 		{
 			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
 			"UMG", "UMGEditor", "Slate", "SlateCore",
-			"SST" 
+			"SST", "Niagara", "GeometryCollectionEngine"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });

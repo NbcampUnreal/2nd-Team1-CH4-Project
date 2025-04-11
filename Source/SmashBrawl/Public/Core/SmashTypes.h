@@ -75,7 +75,8 @@ enum class ESmashPlayerStates : uint8
 	Dodge UMETA(DisplayName = "Dodge"),
 	FreeFall UMETA(DisplayName = "Free Fall"),
 	Held UMETA(DisplayName = "Held"),
-	Hold UMETA(DisplayName = "Hold")
+	Hold UMETA(DisplayName = "Hold"),
+	Down UMETA(DisplayName = "Down")
 };
 
 UENUM(BlueprintType)
@@ -233,4 +234,30 @@ struct FSmashPlayerStateInfo
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
 	FSmashPlayCondition PlayCondition;
+};
+
+UENUM(BlueprintType)
+enum class EHitDirection : uint8
+{
+	Left UMETA(DisplayName = "Left"),
+	Auto UMETA(DisplayName = "Auto"),
+	Right UMETA(DisplayName = "Right")
+};
+
+UENUM(BlueprintType)
+enum class ESmashBossState : uint8
+{
+	Phase1 UMETA(DisplayName = "Phase1"),
+	ChangingPhase UMETA(DisplayName = "ChangingPhase"),
+	Phase2 UMETA(DisplayName = "Phase2"),
+	Dead UMETA(DisplayName = "Dead"),
+};
+
+UENUM(BlueprintType)
+enum class ESmashSpawnerDirection : uint8
+{
+	Up UMETA(DisplayName = "Up"),
+	Down UMETA(DisplayName = "Down"),
+	Left UMETA(DisplayName = "Left"),
+	Right UMETA(DisplayName = "Right"),
 };

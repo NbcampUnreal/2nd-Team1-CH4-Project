@@ -24,8 +24,8 @@ void UBTService_CheckTargetInRange::TickNode(UBehaviorTreeComponent& OwnerComp, 
 
     if (!Target || !Parent) return;
 
-    const float YMin = -170.f;
-    const float YMax = 170.f;
+    const float YMin = -110.f;
+    const float YMax = 110.f;
     const float ZMin = -10.f;
     const float ZMax = 10.f;
 

@@ -4,16 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "BaseBossPatternActor.h"
 #include "Lv1BossMonsterBreathProjectile.generated.h"
 
 UCLASS()
-class SMASHBRAWL_API ALv1BossMonsterBreathProjectile : public AActor
+class SMASHBRAWL_API ALv1BossMonsterBreathProjectile : public ABaseBossPatternActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
 	ALv1BossMonsterBreathProjectile();
+
+
+	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class USceneComponent* RootComp;
@@ -27,22 +34,35 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UProjectileMovementComponent* ProjectileComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	class UParticleSystem* HitParticle;
+
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	UNiagaraComponent* NiagaraTrailEffect;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UNiagaraSystem* NiagaraStartEffectTemplate;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UNiagaraSystem* NiagaraEffectTemplate;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UNiagaraSystem* NiagaraDestroyEffectTemplate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float Damage;
 
 protected:
 	UFUNCTION()
-	void OnProjectileOverlapped(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
+	void OnProjectileOverlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+							bool bFromSweep, const FHitResult& SweepResult);
 public:
 	
 	FORCEINLINE float GetDamage() const { return Damage; }
 
 	FORCEINLINE void SetDamage(const float Value) { Damage = Value; }
 
-	void Destroyed() override;
+
+	virtual void Destroyed() override;
 	
 };

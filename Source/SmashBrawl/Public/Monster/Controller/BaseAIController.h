@@ -33,5 +33,4 @@ protected:
 private:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI", meta = (AllowPrivateAccess = "true"))
     UBlackboardComponent* BlackboardComponent;
-
 };
