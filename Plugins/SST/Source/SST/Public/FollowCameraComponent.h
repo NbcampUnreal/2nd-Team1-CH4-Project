@@ -25,7 +25,7 @@ private:
 	 * 소유자 캐싱 함수
 	 * 매 번 소유자를 가져오는 대신 한 번 캐싱하여 성능을 향상시킵니다.
 	 */
-	void CacheOwner();
+	virtual void CacheOwner();
 
 protected:
 	/**
@@ -296,7 +296,7 @@ private:
 	 */
 	float RotationOffsetBlendSpeed = 1.0f;
 
-private:
+protected:
 	/**
 	 * 카메라 소유자 캐싱
 	 * 틱 마다 반복 참조를 피하기 위해 소유자를 캐싱합니다.
