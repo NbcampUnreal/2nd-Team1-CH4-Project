@@ -25,6 +25,8 @@ ALv1BossMonsterVacuum::ALv1BossMonsterVacuum()
 	NiagaraTrailEffect->bAutoActivate = false;
 
 	bReplicates = true;
+	
+	SmashDamageBox->SetupAttachment(RootComp);
 }
 
 void ALv1BossMonsterVacuum::BeginPlay()

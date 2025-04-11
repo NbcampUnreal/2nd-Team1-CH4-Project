@@ -30,6 +30,7 @@ AActor* UBaseSmashDamagerManager::CreateDamager(FTransform SpawnTransform, const
 {
 	if (GetWorld())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *SpawnTransform.GetLocation().ToString());
 		if (HitBoxMappingTable)
 		{
 

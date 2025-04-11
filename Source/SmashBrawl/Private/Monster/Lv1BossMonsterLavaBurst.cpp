@@ -18,6 +18,8 @@ ALv1BossMonsterLavaBurst::ALv1BossMonsterLavaBurst()
 	NiagaraTrailEffect->bAutoActivate = false;
 
 	bReplicates = true;
+	
+	SmashDamageBox->SetupAttachment(RootComp);
 }
 
 void ALv1BossMonsterLavaBurst::BeginPlay()

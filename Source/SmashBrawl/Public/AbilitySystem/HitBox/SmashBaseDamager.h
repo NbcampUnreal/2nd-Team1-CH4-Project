@@ -82,6 +82,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
 	FDamageVisualRow DamageVisualRow;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
+	class USceneComponent* RealRootComponent;;
 	
 	FTimerHandle LifeTimer;
 };
