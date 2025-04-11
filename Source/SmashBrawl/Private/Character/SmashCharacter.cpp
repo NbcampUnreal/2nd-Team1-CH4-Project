@@ -629,8 +629,7 @@ void ASmashCharacter::LandedAction()
 		ESmashPlayerStates CurrentState = SmashStateSystem->GetCurrentState();
 
 		// 특정 상태가 아닐 때만 상태 변경
-		if (!(CurrentState == ESmashPlayerStates::Shield ||
-			CurrentState == ESmashPlayerStates::Ability ||
+		if (!(CurrentState == ESmashPlayerStates::Ability ||
 			CurrentState == ESmashPlayerStates::Tumble))
 		{
 			SetCanFlip(true);
@@ -766,7 +765,7 @@ void ASmashCharacter::UpdateDirection()
 void ASmashCharacter::BasicAttack()
 {
 	// 방패 상태일 때는 잡기로 변경
-	if (SmashStateSystem && SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Shield)
+	if (SmashStateSystem)
 	{
 		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Grab;
@@ -774,7 +773,7 @@ void ASmashCharacter::BasicAttack()
 	}
 
 	// 방패 상태가 아니고 공격 가능한 상태일 때
-	if (SmashStateSystem && SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Shield && StateInfo.PlayerMovement.bCanAttack)
+	if (SmashStateSystem && StateInfo.PlayerMovement.bCanAttack)
 	{
 		// 공중 상태일 때는 공중 공격
 		if (GetCharacterMovement() && GetCharacterMovement()->IsFalling())
@@ -962,4 +961,14 @@ void ASmashCharacter::ClearBuffer_Implementation()
 	BufferDirection = ESmashDirection::None;
 	bBufferdInput = false;
 	bBufferdDirection = false;
+}
+
+bool ASmashCharacter::bHitConditions()
+{
+	return true;
+}
+
+void ASmashCharacter::TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection)
+{
+	SmashCombatComponent->TakeDamage(DamageAmount, AttackType, bIsRightDirection);
 }

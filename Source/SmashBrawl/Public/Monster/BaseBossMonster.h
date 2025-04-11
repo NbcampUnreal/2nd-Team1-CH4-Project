@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <Character/SmashCharacter.h>
+
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Interface/Interface_BossMonsterCombat.h"
@@ -15,7 +17,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDestructionDelegate_Init);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDestructionDelegate_Phase2);
 
 UCLASS()
-class SMASHBRAWL_API ABaseBossMonster : public ACharacter, public IInterface_BossMonsterCombat
+class SMASHBRAWL_API ABaseBossMonster : public ACharacter, public IInterface_BossMonsterCombat, public IInterface_TakeDamage
 {
 	GENERATED_BODY()
 
@@ -87,7 +89,7 @@ public:
 	TArray<class UAnimMontage*> AnimMontages;
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Player")
-	TArray<TObjectPtr<ABaseCharacter>> PlayerArray;
+	TArray<TObjectPtr<ASmashCharacter>> PlayerArray;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "State")
 	ESmashBossState BossState = ESmashBossState::Phase1;
@@ -101,6 +103,9 @@ public:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float MaxHealthPoint = 1000.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class USmashMonsterDamagerManager* DamagerManager;
+
 	UFUNCTION(BlueprintPure, Category = "Value")
 	int32 GetRandomValueInMontageIndex() const;
 
@@ -108,11 +113,13 @@ public:
 	void CastPlayer();
 
 	UFUNCTION()
-	class ABaseCharacter* GetRandomPlayer();
+	class ASmashCharacter* GetRandomPlayer();
 	
 	virtual void ReactToHit_Implementation() override;
 
 	virtual  void OnDeath_Implementation() override;
-
-	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+	
+	virtual bool bHitConditions() override;
+	
+	virtual void TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection = true) override;
 };

@@ -4,8 +4,8 @@
 #include "../../Public/Monster/BaseBossMonster.h"
 
 #include "AIController.h"
+#include "AbilitySystem/HitBox/SmashMonsterDamagerManager.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "Charactor/BaseCharacter.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
@@ -41,6 +41,8 @@ ABaseBossMonster::ABaseBossMonster()
 	RightEyeComp->SetupAttachment(GetMesh(), FName("head"));
 	RightEyeComp->SetCollisionProfileName("OverlapAllDynamic");
 	
+	DamagerManager = CreateDefaultSubobject<USmashMonsterDamagerManager>(TEXT("Damager"));
+	
 	bReplicates = true;
 
 	Tags.Add("Boss");
@@ -66,23 +68,23 @@ void ABaseBossMonster::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty
 void ABaseBossMonster::CastPlayer()
 {
 	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), FoundActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASmashCharacter::StaticClass(), FoundActors);
 
 	for (AActor* Actor : FoundActors)
 	{
-		if (ABaseCharacter* Character = Cast<ABaseCharacter>(Actor))
+		if (ASmashCharacter* Character = Cast<ASmashCharacter>(Actor))
 		{
 			PlayerArray.Add(Character);
 		}
 	}
 }
 
-ABaseCharacter* ABaseBossMonster::GetRandomPlayer()
+ASmashCharacter* ABaseBossMonster::GetRandomPlayer()
 {
 	if (PlayerArray.Num() > 0)
 	{
 		int32 RandomIndex = FMath::RandRange(0, PlayerArray.Num() - 1);
-		ABaseCharacter* RandomCharacter = PlayerArray[RandomIndex];
+		ASmashCharacter* RandomCharacter = PlayerArray[RandomIndex];
 
 		return RandomCharacter;
 	}
@@ -180,10 +182,14 @@ void ABaseBossMonster::OnDeath_Implementation()
 	IInterface_BossMonsterCombat::OnDeath_Implementation();
 }
 
-float ABaseBossMonster::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent,
-	class AController* EventInstigator, AActor* DamageCauser)
+bool ABaseBossMonster::bHitConditions()
 {
+	return true;
+}
 
+void ABaseBossMonster::TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection)
+{
+	
 	HealthPoint -= DamageAmount;
 
 	UE_LOG(LogTemp, Error, TEXT("Health Point: %f"), HealthPoint);
@@ -200,7 +206,5 @@ float ABaseBossMonster::TakeDamage(float DamageAmount, struct FDamageEvent const
 	{
 		UE_LOG(LogTemp, Error, TEXT("Die"));
 	}
-	
-	return 0;
 }
 

@@ -4,7 +4,6 @@
 #include "Monster/Lv1BossMonsterVacuum.h"
 
 #include "NiagaraComponent.h"
-#include "Charactor/BaseCharacter.h"
 #include "Components/SphereComponent.h"
 #include "Engine/PawnIterator.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -46,11 +45,11 @@ void ALv1BossMonsterVacuum::VacuumAction() const
 	FVector const SuctionCenter = GetActorLocation();
 
 	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseCharacter::StaticClass(), FoundActors);
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASmashCharacter::StaticClass(), FoundActors);
 
 	for (AActor* Actor : FoundActors)
 	{
-		if (ABaseCharacter* PlayerCharacter = Cast<ABaseCharacter>(Actor))
+		if (ASmashCharacter* PlayerCharacter = Cast<ASmashCharacter>(Actor))
 		{
 			float Distance = FVector::Dist(SuctionCenter, PlayerCharacter->GetActorLocation());
 			FVector Direction = (SuctionCenter - PlayerCharacter->GetActorLocation()).GetSafeNormal();

@@ -34,6 +34,11 @@ void ALv1BossMonsterLavaBurst::BeginPlay()
 			FVector(7.0f, 5.0f, 5.0f) 
 		);
 	}
+
+	if (SmashDamageBox)
+	{
+		SmashDamageBox->SetWorldScale3D(FVector(7.0f, 30.0f, 100.0f));
+	}
 }
 
 

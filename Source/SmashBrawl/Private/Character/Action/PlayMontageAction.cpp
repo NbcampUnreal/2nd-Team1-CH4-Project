@@ -128,7 +128,7 @@ bool UPlayMontageAction::PlayMontage()
     }
     
     // 몽타주 종료 이벤트 바인딩
-    MontageEndedDelegateHandle = AnimInstance->OnMontageEnded.AddUObject(this, &UPlayMontageAction::OnMontageEnded);
+    //MontageEndedDelegateHandle = AnimInstance->OnMontageEnded.AddUObject(this, &UPlayMontageAction::OnMontageEnded);
     
     bIsPlaying = true;
     
@@ -241,7 +241,7 @@ void UPlayMontageAction::CleanupDelegates()
             UAnimInstance* AnimInstance = OwnerCharacter->GetMesh()->GetAnimInstance();
             if (AnimInstance)
             {
-                AnimInstance->OnMontageEnded.Remove(MontageEndedDelegateHandle);
+                //AnimInstance->OnMontageEnded.Remove(MontageEndedDelegateHandle);
             }
         }
         
