@@ -1,7 +1,7 @@
 #include "SmashBrawl/Public/AbilitySystem/SmashAbilitySystemComponent.h"
 
 #include "AbilitySystem/BaseAbility.h"
-#include "GameFramework/Character.h"
+#include "Character/SmashCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "SmashBrawl/Public/Interfaces/Interface_SmashCombat.h"
 
@@ -24,9 +24,8 @@ USmashAbilitySystemComponent::USmashAbilitySystemComponent()
 void USmashAbilitySystemComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// 부모 캐릭터 참조 설정
-	Parent = Cast<ACharacter>(GetOwner());
+	Parent = Cast<ASmashCharacter>(GetOwner());
 	if (!Parent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("부모는 캐릭터가 아닙니다"));
@@ -41,11 +40,10 @@ void USmashAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick Tic
 
 void USmashAbilitySystemComponent::MainTick()
 {
-	// 능력 상태이지만 특정 공격 타입이 없는 경우, 적절한 능력 활성화
-	// if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Ability &&	IInterface_SmashCombat::Execute_GetAttackTypes(Parent) == ESmashAttacks::None)
-	// {
-	// 	Multicast_WitchAbility();
-	// }
+	if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Ability &&	IInterface_SmashCombat::Execute_GetAttackTypes(Parent) == ESmashAttacks::None)
+	{
+		Multicast_WitchAbility();
+	}
 }
 
 void USmashAbilitySystemComponent::BufferCall(ESmashBuffer NewBuffer)
@@ -81,7 +79,7 @@ void USmashAbilitySystemComponent::EndAllNonChargedAbilities(ABaseAbility* Calle
 
 		if (Ability->Parent == Parent && Ability->ChargeLevel == 0.0f && Caller != Ability)
 		{
-			Ability->EndAbility();
+			Ability->Multicast_EndAbility();
 		}
 	}
 }
@@ -114,6 +112,7 @@ void USmashAbilitySystemComponent::OnLedge()
 
 void USmashAbilitySystemComponent::AttachAllAbilities()
 {
+	UE_LOG(LogTemp, Error, TEXT("Attach"));
 	// 기본 공격 능력 부착
 	NeutralAttack = AttachAbility(NeutralAttackClass);
 	TiltUp = AttachAbility(TiltUpClass);
@@ -165,7 +164,7 @@ void USmashAbilitySystemComponent::AttachAllAbilities()
 	LedgeAttack = AttachAbility(LedgeAttackClass);
 	ProneAttack = AttachAbility(ProneAttackClass);
 	ProneStand = AttachAbility(ProneStandClass);
-	RespawnAbility = AttachAbility(RespawnAbilityClass);
+//	RespawnAbility = AttachAbility(RespawnAbilityClass);
 	Ledge = AttachAbility(LedgeClass);
 	Items = AttachAbility(ItemsClass);
 
@@ -261,7 +260,7 @@ void USmashAbilitySystemComponent::ProcessDirectionalAbility(ABaseAbility* UpAbi
 {
 	// 현재 방향 가져오기
 	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
-
+	
 	// 방향에 따라 적절한 능력 활성화
 	switch (CurrentDirection)
 	{
@@ -289,6 +288,7 @@ void USmashAbilitySystemComponent::ProcessDirectionalAbility(ABaseAbility* UpAbi
 
 	case ESmashDirection::None:
 		if (NeutralAbility)
+			UE_LOG(LogTemp, Error, TEXT("NetralAbility"));
 			ActivateDirectionalAbility(CurrentDirection, NeutralAttackType, NeutralAbility);
 		break;
 
@@ -447,12 +447,15 @@ void USmashAbilitySystemComponent::Multicast_Prone_Implementation()
 void USmashAbilitySystemComponent::Multicast_Respawning_Implementation()
 {
 	if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Dead)
-		RespawnAbility->bActive = true;
+	{}
+		//RespawnAbility->bActive = true;
 }
 
 void USmashAbilitySystemComponent::Multicast_WitchAbility_Implementation()
 {
 	const ESmashAbilityTypes CurrentAbilityTypes = IInterface_SmashCombat::Execute_GetAbilityTypes(Parent);
+	FString AbilityName = UEnum::GetValueAsString(CurrentAbilityTypes);
+	//(LogTemp, Error, TEXT("%s"), *AbilityName);
 	switch (CurrentAbilityTypes)
 	{
 	case ESmashAbilityTypes::Basic:
