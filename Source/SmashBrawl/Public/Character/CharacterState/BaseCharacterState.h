@@ -57,11 +57,11 @@ public:
 
 	// 액션 타입으로 액션 찾기
 	UFUNCTION(BlueprintCallable, Category = "Character State")
-	USmashAction* FindActionByType(ESmashActionType ActionType);
+	USmashAction* FindActionByType(ESmashActionType ActionType, int Index = 0);
 
 	// 액션 실행
 	UFUNCTION(BlueprintCallable, Category = "Character State")
-	bool ExecuteActionByType(ESmashActionType ActionType);
+	bool ExecuteActionByType(ESmashActionType ActionType, int Index = 0);
 
 	// 액션 리스트 반환
 	UFUNCTION(BlueprintCallable, Category = "Character State")
@@ -70,9 +70,9 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Character State")
 	bool IsCurrentPlayerState(ESmashPlayerStates CheckState);
 
-protected:
-	// 액션 초기화
-	void InitActions();
+    // 경과 시간 반환 함수 추가
+    UFUNCTION(BlueprintPure, Category = "Character State")
+    float GetElapsedTime() const { return ElapsedTime; }
 
 public:
 	// 이 상태의 ID
@@ -87,11 +87,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category="Character State")
 	TObjectPtr<ASmashCharacter> OwnerCharacter;
 
-	// 이 상태에서 사용 가능한 액션 클래스 목록
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
-	TArray<TSubclassOf<USmashAction>> ActionClasses;
-
-	// 생성된 액션 인스턴스 목록
-	UPROPERTY(BlueprintReadOnly, Category="Character State")
+	// 생성된 액션 인스턴스 목록 (에디터에서 직접 편집 가능)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Character State", Instanced)
 	TArray<TObjectPtr<USmashAction>> Actions;
+
+protected:
+    // 이 상태의 경과 시간 (초)
+    UPROPERTY(BlueprintReadOnly, Category = "Character State")
+    float ElapsedTime;
 };

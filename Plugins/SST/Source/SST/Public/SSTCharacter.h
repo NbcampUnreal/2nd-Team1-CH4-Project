@@ -110,4 +110,6 @@ public:
 
 	/** Helper -- get collision query params to ignore this actor and its children*/
 	virtual FCollisionQueryParams GetIgnoreSelfParams() const;
+
+	UFollowCameraComponent* GetFollowCamera() { return FollowCamera; };
 };
