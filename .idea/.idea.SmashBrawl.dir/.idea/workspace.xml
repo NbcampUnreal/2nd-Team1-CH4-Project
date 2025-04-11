@@ -9,8 +9,24 @@
   <component name="ChangeListManager">
     <list default="true" id="0129cbba-eed8-44b4-82a9-3d1e917e61a8" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_dead_01_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/TumbleMontage.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/TumbleMontage.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_liedown_idle_up.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_liedown_idle_up.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Ability.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Ability.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Down.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Down.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Hit.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Hit.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Prone.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Prone.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Tumble.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_Tumble.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_WalkRun.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/States/CS_WalkRun.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/DownMontage.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/LeftRiseMontage.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/LeftRiseMontage.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/TumbleMontage.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/ABP_Smash_UE4.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/Animations/UE4/ABP_Smash_UE4.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sword_sheath_AnimSet/Animation/anim_dead_01.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sword_sheath_AnimSet/Animation/anim_dead_01.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sword_sheath_AnimSet/Animation/anim_liedown_idle_up.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sword_sheath_AnimSet/Animation/anim_liedown_idle_up.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/CharacterState/BaseCharacterState.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/CharacterState/BaseCharacterState.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/CharacterState/BaseCharacterState.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/CharacterState/BaseCharacterState.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,6 +209,8 @@
       <workItem from="1744255444331" duration="674000" />
       <workItem from="1744261326742" duration="2595000" />
       <workItem from="1744271713347" duration="5977000" />
+      <workItem from="1744285490978" duration="678000" />
+      <workItem from="1744333609387" duration="5742000" />
     </task>
     <servers />
   </component>

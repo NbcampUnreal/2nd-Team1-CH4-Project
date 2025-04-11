@@ -942,7 +942,7 @@ void ASmashCharacter::SpecialAttackReleased(const FInputActionValue& InputAction
 
 void ASmashCharacter::DodgePressed(const FInputActionValue& InputActionValue)
 {
-	// SetMovementState(FSmashPlayerMovement(false, true, true, true));
+	// SetMovementState(FSmashPlayerMovement(false, false, false, false));
 
 	if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Jump || SmashStateSystem->GetCurrentState() ==
 		ESmashPlayerStates::Fall)
