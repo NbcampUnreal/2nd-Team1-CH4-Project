@@ -31,12 +31,6 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterLavaBurst.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterLavaBurst.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/AttackData/DT_MonsterAttackValueTable.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/AttackData/DT_MonsterAttackValueTable.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/HitBox/SmashBaseDamager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/HitBox/SmashBaseDamager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonster.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +44,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://2" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://3" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Action/PlayMontageAction.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -190,7 +184,7 @@
       <workItem from="1744199684976" duration="573000" />
       <workItem from="1744338204392" duration="13000" />
       <workItem from="1744338260435" duration="8140000" />
-      <workItem from="1744350331110" duration="1198000" />
+      <workItem from="1744350331110" duration="2916000" />
     </task>
     <servers />
   </component>

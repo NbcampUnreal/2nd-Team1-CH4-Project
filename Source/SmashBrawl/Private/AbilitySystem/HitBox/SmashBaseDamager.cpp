@@ -25,7 +25,6 @@ ASmashBaseDamager::ASmashBaseDamager()
 void ASmashBaseDamager::BeginPlay()
 {
 	Super::BeginPlay();
-
 }
 
 
