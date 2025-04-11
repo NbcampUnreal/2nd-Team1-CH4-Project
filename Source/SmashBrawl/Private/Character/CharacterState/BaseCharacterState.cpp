@@ -6,6 +6,7 @@
 UBaseCharacterState::UBaseCharacterState()
 {
 	PlayerState = ESmashPlayerStates::Idle;
+    ElapsedTime = 0.0f; // 경과 시간 초기화
 }
 
 void UBaseCharacterState::InitState_Implementation(USmashStateSystem* InStateSystem)
@@ -14,14 +15,23 @@ void UBaseCharacterState::InitState_Implementation(USmashStateSystem* InStateSys
 	{
 		OwnerStateSystem = InStateSystem;
 		OwnerCharacter = Cast<ASmashCharacter>(InStateSystem->GetOwner());
-
-		// 액션 초기화
-		InitActions();
+        
+		// 이제 각 액션의 InitAction만 호출
+		for (USmashAction* Action : Actions)
+		{
+			if (Action)
+			{
+				Action->InitAction(this);
+			}
+		}
 	}
 }
 
 void UBaseCharacterState::EnterState_Implementation()
 {
+    // 상태 진입 시 경과 시간 초기화
+    ElapsedTime = 0.0f;
+    
 	// 상태 진입 시 로직
 	if (OwnerCharacter)
 	{
@@ -34,14 +44,20 @@ void UBaseCharacterState::ExitState_Implementation()
 	// 상태 종료 시 로직
 	if (OwnerCharacter)
 	{
-		UE_LOG(LogSmashState, Verbose, TEXT("캐릭터 %s가 %s 상태를 종료했습니다"), *OwnerCharacter->GetName(), *UEnum::GetValueAsString(PlayerState));
+        UE_LOG(LogSmashState, Verbose, TEXT("캐릭터 %s가 %s 상태를 종료했습니다 (지속 시간: %.2f초)"), 
+            *OwnerCharacter->GetName(), *UEnum::GetValueAsString(PlayerState), ElapsedTime);
 	}
 }
 
 void UBaseCharacterState::TickState_Implementation()
 {
-	// 상태 업데이트 로직
-	// 자식 클래스에서 구현
+    // 상태 업데이트 로직 - 경과 시간 업데이트 추가
+    if (OwnerStateSystem && OwnerStateSystem->GetWorld())
+    {
+        ElapsedTime += OwnerStateSystem->GetWorld()->GetDeltaSeconds();
+    }
+    
+    // 자식 클래스에서 추가 구현 가능
 }
 
 bool UBaseCharacterState::CanState_Implementation()
@@ -53,26 +69,6 @@ bool UBaseCharacterState::CanState_Implementation()
 bool UBaseCharacterState::IsCurrentPlayerState(ESmashPlayerStates CheckState)
 {
 	return OwnerStateSystem->GetCurrentState() == CheckState;
-}
-
-void UBaseCharacterState::InitActions()
-{
-	// 기존 액션 제거
-	Actions.Empty();
-
-	// 액션 클래스를 기반으로 액션 생성
-	for (TSubclassOf<USmashAction> ActionClass : ActionClasses)
-	{
-		if (ActionClass)
-		{
-			USmashAction* NewAction = NewObject<USmashAction>(this, ActionClass);
-			if (NewAction)
-			{
-				NewAction->InitAction(this);
-				Actions.Add(NewAction);
-			}
-		}
-	}
 }
 
 const FSmashPlayerStateInfo& UBaseCharacterState::GetStateInfo() const
@@ -109,12 +105,14 @@ void UBaseCharacterState::SetStateInfo(const FSmashPlayerStateInfo& NewStateInfo
 	}
 }
 
-
-
-USmashAction* UBaseCharacterState::FindActionByType(ESmashActionType ActionType)
+USmashAction* UBaseCharacterState::FindActionByType(ESmashActionType ActionType, int Index)
 {
 	for (USmashAction* Action : Actions)
 	{
+		if (Index != 0)
+		{
+			return Actions[Index];
+		}
 		if (Action && Action->GetActionType() == ActionType)
 		{
 			return Action;
@@ -124,9 +122,9 @@ USmashAction* UBaseCharacterState::FindActionByType(ESmashActionType ActionType)
 	return nullptr;
 }
 
-bool UBaseCharacterState::ExecuteActionByType(ESmashActionType ActionType)
+bool UBaseCharacterState::ExecuteActionByType(ESmashActionType ActionType, int Index)
 {
-	USmashAction* Action = FindActionByType(ActionType);
+	USmashAction* Action = FindActionByType(ActionType, Index);
 	if (Action && Action->CanExecute())
 	{
 		return Action->Execute();

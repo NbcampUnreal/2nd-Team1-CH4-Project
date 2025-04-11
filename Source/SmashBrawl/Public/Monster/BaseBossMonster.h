@@ -2,6 +2,7 @@
 
 #pragma once
 
+
 #include <Character/SmashCharacter.h>
 
 #include "CoreMinimal.h"
@@ -24,6 +25,7 @@ class SMASHBRAWL_API ABaseBossMonster : public ACharacter, public IInterface_Bos
 public:
 	// Sets default values for this character's properties
 	ABaseBossMonster();
+
 
 	virtual void BeginPlay() override;
 

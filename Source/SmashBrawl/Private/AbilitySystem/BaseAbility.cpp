@@ -3,6 +3,9 @@
 
 #include "AbilitySystem/BaseAbility.h"
 
+#include <Character/Components/SmashStateSystem.h>
+
+
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Character/SmashCharacter.h"
@@ -36,15 +39,6 @@ ABaseAbility::ABaseAbility()
 void ABaseAbility::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (CurveFloat)
-	{
-		TimelineUpdate.BindUFunction(this, FName("Multicast_TickRep_Implementation"));
-		TimelineFinished.BindUFunction(this, FName("StartTimeline"));
-
-		MainTimeline->AddInterpFloat(CurveFloat, TimelineUpdate);
-		MainTimeline->SetTimelineFinishedFunc(TimelineFinished);
-	}
 	if (IsValid(Parent))
 	{
 		//AttackData = Parent(BP_Fighter�� AttackData)
@@ -60,21 +54,22 @@ void ABaseAbility::Multicast_AbilityStart_Implementation()
 	BP_OnAbilityStart();
 }
 
-void ABaseAbility::StartTimeline()
-{
-	if (MainTimeline)
-	{
-		MainTimeline->PlayFromStart();
-	}
-}
+// void ABaseAbility::StartTimeline()
+// {
+// 	if (MainTimeline)
+// 	{
+// 		UE_LOG(LogTemp, Error, TEXT("StartTimeLine"));
+// 		MainTimeline->PlayFromStart();
+// 	}
+// }
 
-void ABaseAbility::EndTimeline()
-{
-	if (MainTimeline)
-	{
-		MainTimeline->Stop();
-	}
-}
+// void ABaseAbility::EndTimeline()
+// {
+// 	if (MainTimeline)
+// 	{
+// 		MainTimeline->Stop();
+// 	}
+// }
 
 void ABaseAbility::Multicast_TickRep_Implementation()
 {
@@ -88,18 +83,20 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 			if (Parent && Parent->GetCapsuleComponent())
 			{
 				ParentLocation = Parent->GetCapsuleComponent()->GetComponentLocation();
-				//������ Then0
 				SetBuffer();
 				if (!bIsUse)
 				{
-					Multicast_AbilityStart();
+					Multicast_AbilityStart_Implementation();
 					bIsUse = true;
 				}
 				//Then1
-				if (Parent && Parent->bLanded) //Character�� �ɹ����� Landed(bool)�� ���
+				UE_LOG(LogTemp, Error, TEXT("AbilityTick1"));
+				if (Parent && Parent->bLanded)
 				{
+					UE_LOG(LogTemp, Error, TEXT("Land"));
 					if (!bLandClosed)
 					{
+						
 						bLandClosed = true;
 						bLanding = true;
 						Land();
@@ -172,6 +169,7 @@ void ABaseAbility::Multicast_EndAbility_Implementation()
 
 void ABaseAbility::BP_OnEndAbility_Implementation()
 {
+	UE_LOG(LogTemp, Error, TEXT("EndAbility"));
 	WalkOffLedge(true);
 	bActive = false;
 	Multicast_SetFlip(true);
@@ -180,8 +178,16 @@ void ABaseAbility::BP_OnEndAbility_Implementation()
 	CharacterCollision(ECollisionEnabled::Type::QueryAndPhysics);
 	FullbodyLedge(false);
 	bIsUse = false;
-	//Parent->AbilityType = ESmashAbilityTypes::None;
-	//Parent->Attacks = ESmashAttacks::None;
+	if(Parent->GetMovementComponent()->IsFalling())
+	{
+		Parent->SmashStateSystem->TryChangeState(ESmashPlayerStates::Fall,false);
+	}
+	else
+	{
+		Parent->SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle,false);
+	}
+	Parent->AbilityType = ESmashAbilityTypes::None;
+	IInterface_SmashCombat::Execute_SetAttacks(Parent,ESmashAttacks::None);
 	if (bInputButter)
 	{
 		bInputButter = false;
@@ -239,7 +245,7 @@ void ABaseAbility::Multicast_LandLeg_Implementation(UAnimMontage* LandAnimation,
 	}
 }
 
-void ABaseAbility::ActivateDamagers()
+void ABaseAbility::ActivateDamagers_Implementation()
 {
 	if (HasAuthority())
 	{
@@ -259,10 +265,6 @@ void ABaseAbility::Multicast_AddDamagersClient_Implementation(ACharacter* InPare
 void ABaseAbility::Server_AddDamagersServer_Implementation(ACharacter* InParent)
 {
 	FuncDamageBoxes(InParent);
-}
-
-void ABaseAbility::FuncDamageBoxes(ACharacter* InParent)
-{
 }
 
 void ABaseAbility::Server_SpawnProjectile_Implementation(TSubclassOf<AActor> ProjectileClass, FTransform SpawnTransform,
@@ -329,10 +331,14 @@ void ABaseAbility::Multicast_PlayAnimationClient_Implementation(int32 InAnimNo, 
 		FOnMontageBlendingOutStarted BlendOutDelegate;
 		BlendOutDelegate.BindLambda([this, InAnimNo](UAnimMontage* Montage, bool bInterrupted)
 		{
-			Multicast_EndAnim(InAnimNo);
+			UE_LOG(LogTemp, Error, TEXT("EndPlayAnim_Multicast"));
 			if (bInterrupted)
 			{
 				AnimNotifyEnd(bDamager, "None");
+			}
+			else
+			{
+				Multicast_EndAnim(InAnimNo);
 			}
 		});
 		AnimInstance->Montage_SetBlendingOutDelegate(BlendOutDelegate, InMontageToPlay);
@@ -350,10 +356,14 @@ void ABaseAbility::Server_PlayAnimationServer_Implementation(int32 InAnimNo, UAn
 		FOnMontageBlendingOutStarted BlendOutDelegate;
 		BlendOutDelegate.BindLambda([this,InAnimNo](UAnimMontage* Montage, bool bInterrupted)
 		{
-			Multicast_EndAnim(InAnimNo);
+			UE_LOG(LogTemp, Error, TEXT("EndPlayAnimServer"));
 			if (bInterrupted)
 			{
 				AnimNotifyEnd(bDamager, "None");
+			}
+			else
+			{
+				Multicast_EndAnim(InAnimNo);
 			}
 		});
 		AnimInstance->Montage_SetBlendingOutDelegate(BlendOutDelegate, InMontageToPlay);
@@ -380,7 +390,7 @@ void ABaseAbility::OnNotifyEnd(FName NotifyName, const FBranchingPointNotifyPayl
 	AnimNotifyEnd(bDamager, NotifyName);
 }
 
-void ABaseAbility::AnimNotifyStart(bool InDamager, FName NoteName)
+void ABaseAbility::AnimNotifyStart_Implementation(bool InDamager, FName NoteName)
 {
 	if (InDamager)
 	{
@@ -437,6 +447,16 @@ void ABaseAbility::FuncCharging()
 
 void ABaseAbility::SpecialAttackButton()
 {
+	if (!Parent)
+		return;
+	if (Parent->bSpecialAttackButton)
+	{
+		SpecialButtonDown();
+	}
+	else
+	{
+		SpecialButtonUp();
+	}
 }
 
 void ABaseAbility::SetBuffer()
@@ -546,7 +566,8 @@ void ABaseAbility::SetAttackStage(int32 _AttackStage)
 
 void ABaseAbility::ChangeCollisionSet()
 {
-	
+	CollisionSetIndex++;
+	CollisionSet = CollisionSets[CollisionSetIndex];
 }
 
 void ABaseAbility::AbsorbMode(bool bAbsorb)
@@ -606,6 +627,7 @@ void ABaseAbility::SetGravity(int32 Settings, float CustomValue)
 
 void ABaseAbility::HealPlayer(int32 HealAmount)
 {
+	
 }
 
 void ABaseAbility::Charge(bool InChargeing)
@@ -616,4 +638,11 @@ void ABaseAbility::Charge(bool InChargeing)
 void ABaseAbility::EndAllNonChargedAbilities(ABaseAbility* Caller)
 {
 	Parent->AbilitySystemComponent->EndAllNonChargedAbilities(Caller);
+}
+
+void ABaseAbility::StopAllMovement()
+{
+	if (!Parent)
+		return;
+	Parent->GetMovementComponent()->StopMovementImmediately();
 }

@@ -9,6 +9,7 @@
 #include "Interfaces/Interface_SmashHitBox.h"
 #include "SmashCharacter.generated.h"
 
+class USmashCameraComponent;
 class USmashCombatComponent;
 class USmashCharacterStats;
 class USmashCharacterMovementComponent;
@@ -38,7 +39,9 @@ public:
 	ASmashCharacter(const FObjectInitializer& ObjectInitializer);
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void Tick(float DeltaSeconds) override;
+
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 
@@ -77,12 +80,38 @@ public:
 	//---------------------------------------------------------------------
 	// 인풋 액션 및 입력 처리
 	//---------------------------------------------------------------------
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
+	void DodgeDelayEvent();
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
+	void ScreenShake(float RumbleInten, float RumbleDuration);
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
+	void LedgeGrab();
+
+	// 카메라 관련 함수
+
+	// 카메라 모드 초기화 (그룹 모드로 시작)
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Camera")
+	void InitializeCameraMode();
+
+	// 카메라 모드 전환 (개인 모드 ↔ 그룹 모드)
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Camera")
+	void ToggleCameraMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Camera")
+	void RequestCameraShake(float Intensity, float Duration, float Falloff = 1.0f);
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Camera")
+	void PlayReviveEffect();
+
 public:
 	/** 기본 입력 처리 함수 */
 	virtual void Move(const struct FInputActionValue& Value) override;
 	void UpDownAxis(const FInputActionValue& InputActionValue);
 	virtual void JumpOrDrop_Implementation() override;
 	void ResetMoveInput(const FInputActionValue& Value);
+	void ResetUpDownAxis(const FInputActionValue& InputActionValue);
 	void BasicAttack();
 	virtual void CrouchDrop_Implementation() override;
 	virtual void StopCrouchDrop_Implementation() override;
@@ -96,6 +125,8 @@ public:
 	void TauntRightPressed(const FInputActionValue& InputActionValue);
 	void TauntLeftPressed(const FInputActionValue& InputActionValue);
 	void TauntDownPressed(const FInputActionValue& InputActionValue);
+	void DodgePressed(const FInputActionValue& InputActionValue);
+	void GrabPressed(const FInputActionValue& InputActionValue);
 
 	/** 방향 및 입력 상태 확인 함수 */
 	UFUNCTION(BlueprintCallable, Category = "Smash Character|Input")
@@ -103,6 +134,9 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	float GetMoveInputValue() const { return MoveInputValue; }
+
+	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
+	float GetUpDownInputValue() const { return UpDownInputValue; }
 
 	UFUNCTION(BlueprintPure, Category = "Smash Character|Input")
 	bool HasMoveInput() const { return !FMath::IsNearlyZero(MoveInputValue); }
@@ -113,6 +147,10 @@ public:
 	//---------------------------------------------------------------------
 	// 캐릭터 상태 및 움직임 관리
 	//---------------------------------------------------------------------
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement", Server, Reliable)
+	void Launch(FVector LaunchVector, bool bXYOver, bool bZOver);
+
 public:
 	/** 상태 관리 함수 */
 	UFUNCTION(BlueprintCallable, Category="Smash Character|Movement")
@@ -165,7 +203,7 @@ public:
 	/** 방향 및 위치 업데이트 */
 	void FacingCheck();
 	void UpdateLocations();
-	
+
 	void Dizzy();
 	void LandedAction();
 
@@ -200,6 +238,9 @@ public:
 	/** 주요 컴포넌트 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Smash Character|Component")
 	TObjectPtr<USmashCharacterMovementComponent> SmashCharacterMovementComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Smash Character|Component")
+	TObjectPtr<USmashCameraComponent> SmashCameraComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Smash Character|Component")
 	TObjectPtr<USmashCharacterStats> SmashCharacterStatsComponent;
@@ -249,17 +290,14 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
 	UInputAction* IA_SpecialAttack;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
-	UInputAction* IA_TauntUp;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_Dodge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
+	UInputAction* IA_Grab;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
-	UInputAction* IA_TauntRight;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
-	UInputAction* IA_TauntLeft;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
-	UInputAction* IA_TauntDown;
+	UInputAction* IA_CameraToggle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Cosmetics")
 	TArray<TObjectPtr<UMaterialInstance>> TeamOptionMaterials;
@@ -301,6 +339,9 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	FVector LocationFeet;
 
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	FVector LedgeLocation;
+
 	/** 상태 플래그 */
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	bool bAttachedAbil = false;
@@ -329,7 +370,13 @@ public:
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	bool bHitRest = true;
 
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	bool bSpiked = false;
+
 	/** 전투 관련 */
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	ESmashDirection Direction;
+
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	ESmashAbilityTypes AbilityType;
 
@@ -337,34 +384,21 @@ public:
 	ESmashAttacks Attacks;
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
-	ESmashDirection Direction;
+	ESmashCharacter Character;
+
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
+	ESmashHitState HitStates;
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	int32 Team;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
+	float ProneTime;
 
 	//---------------------------------------------------------------------
 	// 비복제 상태 속성
 	//---------------------------------------------------------------------
 public:
-	/** 히트 및 효과 관련 */
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bEnergyHit;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bHitByProjectile;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bReflectMode;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bAbsorbMode;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bJustHit;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	bool bHitButNoEffect;
-	
 	/** 입력 상태 */
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
 	bool bAttackButton;
@@ -377,16 +411,10 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Input")
 	bool bSpecialAttackButtonReleased;
-	
+
 	/** 전투 관련 */
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	int32 ProjectileDamage;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	ESmashCharacter Character;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
-	ESmashHitState HitStates;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	ESmashBuffer BufferMove = ESmashBuffer::Attack;
@@ -399,6 +427,13 @@ public:
 
 
 	/** 기타 */
+public:
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
+	bool bDodgeDelay = false;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
+	float DodgeDelayTimer = 0.2f;
+
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character|Cosmetics")
 	UMaterialInstanceDynamic* Material;
 

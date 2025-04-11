@@ -75,7 +75,8 @@ enum class ESmashPlayerStates : uint8
 	Dodge UMETA(DisplayName = "Dodge"),
 	FreeFall UMETA(DisplayName = "Free Fall"),
 	Held UMETA(DisplayName = "Held"),
-	Hold UMETA(DisplayName = "Hold")
+	Hold UMETA(DisplayName = "Hold"),
+	Down UMETA(DisplayName = "Down")
 };
 
 UENUM(BlueprintType)

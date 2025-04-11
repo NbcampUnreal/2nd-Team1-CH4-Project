@@ -30,10 +30,10 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "BaseAbility|Network")
 	void BP_OnAbilityStart();
 	
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable,Category = "BaseAbility|TimeLine")
 	void StartTimeline();
 
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable,Category = "BaseAbility|TimeLine")
 	void EndTimeline();
 
 	UFUNCTION(BlueprintImplementableEvent)
@@ -61,16 +61,17 @@ public:
 	void Multicast_LandLeg(UAnimMontage* LandAnimation, float PlayRate, float StartPosition, FName StartSection,
 	                       int32 InAnimNo);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	void ActivateDamagers();
-
+	virtual void ActivateDamagers_Implementation();
+	
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_AddDamagersClient(ACharacter* InParent);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Server_AddDamagersServer(ACharacter* InParent);
 
-	UFUNCTION()
+	UFUNCTION(BlueprintImplementableEvent)
 	void FuncDamageBoxes(ACharacter* InParent);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
@@ -110,8 +111,9 @@ public:
 	UFUNCTION()
 	void OnNotifyEnd(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	void AnimNotifyStart(bool InDamager, FName NoteName);
+	virtual void AnimNotifyStart_Implementation(bool InDamager, FName NoteName);
 
 	UFUNCTION(BlueprintCallable)
 	void AnimNotifyEnd(bool InDamager, FName NoteName);
@@ -139,6 +141,10 @@ public:
 	
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShootProjectile();
+
+	
+	UFUNCTION(BlueprintCallable)
+	void StopAllMovement();
 	
 	UFUNCTION(BlueprintCallable)
 	void SetMovement(bool bCanMove);
@@ -243,7 +249,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
 	float ChargeMax;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
-	float ChargeLevel;
+	double ChargeLevel;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
 	float ChargeRate;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Charge")
@@ -337,6 +343,7 @@ public:
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Animation")
 	int32 AnimNo;
+	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Animation")
 	TArray<UAnimMontage*> Animations;
 	

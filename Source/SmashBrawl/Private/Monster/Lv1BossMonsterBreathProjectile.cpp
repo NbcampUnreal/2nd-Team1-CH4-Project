@@ -8,6 +8,7 @@
 #include "Kismet/GameplayStatics.h"
 
 
+
 // Sets default values
 ALv1BossMonsterBreathProjectile::ALv1BossMonsterBreathProjectile()
 {
@@ -23,6 +24,7 @@ ALv1BossMonsterBreathProjectile::ALv1BossMonsterBreathProjectile()
 
 	if (GetLocalRole() == ROLE_Authority)
 	{
+
 		SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ALv1BossMonsterBreathProjectile::OnProjectileOverlapped);
 	}
 
@@ -31,12 +33,14 @@ ALv1BossMonsterBreathProjectile::ALv1BossMonsterBreathProjectile()
 
 	ProjectileComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileComp->SetUpdatedComponent(RootComp);
+
 	ProjectileComp->InitialSpeed = 700;
 	ProjectileComp->MaxSpeed = 700;
 	ProjectileComp->bRotationFollowsVelocity = true;
 	ProjectileComp->ProjectileGravityScale = 0.0f;
 
 	Damage = 10.0f;
+
 
 	Tags.Add("Projectile");
 
@@ -89,6 +93,7 @@ void ALv1BossMonsterBreathProjectile::OnProjectileOverlapped(UPrimitiveComponent
 void ALv1BossMonsterBreathProjectile::Destroyed()
 {
 	Super::Destroyed();
+
 
 	if (NiagaraStartEffectTemplate)
 	{
