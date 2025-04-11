@@ -3,6 +3,7 @@
 
 #include "Monster/Lv1BossMonster.h"
 
+
 #include "NiagaraComponent.h"
 #include "AbilitySystem/HitBox/SmashMonsterDamagerManager.h"
 #include "Components/CapsuleComponent.h"
@@ -15,6 +16,7 @@ ALv1BossMonster::ALv1BossMonster()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+
 
 	LeftEyeNiagaraComponent = CreateDefaultSubobject<UNiagaraComponent>(TEXT("LeftEye"));
 	LeftEyeNiagaraComponent->SetupAttachment(LeftEyeComp);

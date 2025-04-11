@@ -3,6 +3,7 @@
 
 #include "../../Public/Monster/BaseBossMonster.h"
 
+
 #include "AIController.h"
 #include "AbilitySystem/HitBox/SmashMonsterDamagerManager.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -17,6 +18,7 @@ ABaseBossMonster::ABaseBossMonster()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
+
 
 	HeadCollision = CreateDefaultSubobject<USphereComponent>(TEXT("HeadComp"));
 	HeadCollision->SetupAttachment(GetMesh(), FName("head"));

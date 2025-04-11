@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "NiagaraComponent.h"
 #include "NiagaraFunctionLibrary.h"
 #include "BaseBossPatternActor.h"
@@ -18,6 +19,7 @@ public:
 	// Sets default values for this actor's properties
 	ALv1BossMonsterBreathProjectile();
 
+
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
@@ -31,6 +33,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UProjectileMovementComponent* ProjectileComp;
+
 
 	UPROPERTY(VisibleAnywhere, Category = "Effects")
 	UNiagaraComponent* NiagaraTrailEffect;
@@ -49,6 +52,7 @@ public:
 
 protected:
 	UFUNCTION()
+
 	void OnProjectileOverlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 							UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
 							bool bFromSweep, const FHitResult& SweepResult);
@@ -57,6 +61,7 @@ public:
 	FORCEINLINE float GetDamage() const { return Damage; }
 
 	FORCEINLINE void SetDamage(const float Value) { Damage = Value; }
+
 
 	virtual void Destroyed() override;
 	

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseBossMonster.h"
+
 #include "BaseBossPatternActor.h"
 #include "Lv1BossMonster.generated.h"
 
@@ -17,6 +18,7 @@ public:
 	ALv1BossMonster();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+
 	class UNiagaraComponent* LeftEyeNiagaraComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
