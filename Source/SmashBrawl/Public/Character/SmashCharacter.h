@@ -8,6 +8,7 @@
 #include "Interfaces/Interface_SmashCombat.h"
 #include "SmashCharacter.generated.h"
 
+class USmashCameraComponent;
 class USmashCombatComponent;
 class USmashCharacterStats;
 class USmashCharacterMovementComponent;
@@ -37,8 +38,9 @@ public:
 	ASmashCharacter(const FObjectInitializer& ObjectInitializer);
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	virtual void Tick(float DeltaSeconds) override;
-	
+
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 
@@ -85,6 +87,22 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Smash Character |Movement")
 	void LedgeGrab();
+
+	// 카메라 관련 함수
+
+	// 카메라 모드 초기화 (그룹 모드로 시작)
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Camera")
+	void InitializeCameraMode();
+
+	// 카메라 모드 전환 (개인 모드 ↔ 그룹 모드)
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Camera")
+	void ToggleCameraMode();
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Camera")
+	void RequestCameraShake(float Intensity, float Duration, float Falloff = 1.0f);
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character|Camera")
+	void PlayReviveEffect();
 
 public:
 	/** 기본 입력 처리 함수 */
@@ -220,6 +238,9 @@ public:
 	TObjectPtr<USmashCharacterMovementComponent> SmashCharacterMovementComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Smash Character|Component")
+	TObjectPtr<USmashCameraComponent> SmashCameraComponent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Smash Character|Component")
 	TObjectPtr<USmashCharacterStats> SmashCharacterStatsComponent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Smash Character|Component")
@@ -273,17 +294,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
 	UInputAction* IA_Grab;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Smash Character|Config|Input")
-	UInputAction* IA_TauntUp;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
-	UInputAction* IA_TauntRight;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
-	UInputAction* IA_TauntLeft;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Input")
-	UInputAction* IA_TauntDown;
+	UInputAction* IA_CameraToggle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Config|Cosmetics")
 	TArray<TObjectPtr<UMaterialInstance>> TeamOptionMaterials;
