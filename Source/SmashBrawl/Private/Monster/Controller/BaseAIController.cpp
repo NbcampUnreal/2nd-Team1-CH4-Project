@@ -40,6 +40,7 @@ void ABaseAIController::BeginPlay()
     {
         UE_LOG(LogTemp, Error, TEXT("PlayerArray에 Player 없음"));
     }
+}
 
 void ABaseAIController::OnPossess(APawn* InPawn)
 {
