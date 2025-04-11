@@ -242,7 +242,7 @@ void ABaseAbility::Multicast_LandLeg_Implementation(UAnimMontage* LandAnimation,
 	}
 }
 
-void ABaseAbility::ActivateDamagers()
+void ABaseAbility::ActivateDamagers_Implementation()
 {
 	if (HasAuthority())
 	{
@@ -381,7 +381,7 @@ void ABaseAbility::OnNotifyEnd(FName NotifyName, const FBranchingPointNotifyPayl
 	AnimNotifyEnd(bDamager, NotifyName);
 }
 
-void ABaseAbility::AnimNotifyStart(bool InDamager, FName NoteName)
+void ABaseAbility::AnimNotifyStart_Implementation(bool InDamager, FName NoteName)
 {
 	if (InDamager)
 	{

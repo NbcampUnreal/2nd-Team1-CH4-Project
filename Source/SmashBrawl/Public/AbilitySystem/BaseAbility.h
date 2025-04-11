@@ -61,9 +61,10 @@ public:
 	void Multicast_LandLeg(UAnimMontage* LandAnimation, float PlayRate, float StartPosition, FName StartSection,
 	                       int32 InAnimNo);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	void ActivateDamagers();
-
+	virtual void ActivateDamagers_Implementation();
+	
 	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Multicast_AddDamagersClient(ACharacter* InParent);
 
@@ -110,8 +111,9 @@ public:
 	UFUNCTION()
 	void OnNotifyEnd(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload);
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	void AnimNotifyStart(bool InDamager, FName NoteName);
+	virtual void AnimNotifyStart_Implementation(bool InDamager, FName NoteName);
 
 	UFUNCTION(BlueprintCallable)
 	void AnimNotifyEnd(bool InDamager, FName NoteName);

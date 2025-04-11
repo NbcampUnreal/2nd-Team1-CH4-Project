@@ -29,46 +29,21 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_AirBack.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_AirDown.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_AirForward.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_AirNeutral.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_AirUp.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_DodgeAir.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_DodgeBack.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_DodgeForward.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_DodgeSpot.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_Grab.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_LedgeAttack.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_LevelIntro.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_ProneAttack.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_ProneStand.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_Respawn.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_SmashDown.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_SmashForward.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_SmashUp.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_SpecialDown.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_SpecialNeutralProjectile.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_SpecialSide.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_Taunt1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_Taunt2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_ThrowBack.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_ThrowDown.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_ThrowForward.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_ThrowUp.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_TiltDown.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_TiltSide.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_TiltUp.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_dashAttack.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/Fighter/BP_proto_super.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultInput.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultInput.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/BP_BaseAbility.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/BP_BaseAbility.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Characters/BP_Fighter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Characters/BP_Fighter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/PlayerObjects/BPC_Ability.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/PlayerObjects/BPC_Ability.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/PlayerObjects/HitBoxes/BP_RelectBox.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/PlayerObjects/HitBoxes/BP_RelectBox.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_SmashBaseAbility.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_SmashBaseAbility.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_AirBack.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_AirBack.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_Neutral.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_Neutral.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_proto_LedgeHold.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_proto_Neutral.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_proto_SpecialUp.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Samsh_SmashForward.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash1_SpecialDown.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash1_SpecialNeutralProjectile.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash1_ThrowBack.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash1_ThrowDown.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash1_ThrowUp.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash1_super.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_AirNetutral.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/TestCurveFloat.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/BaseAbility.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/BaseAbility.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/AbilitySystem/BaseAbility.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/AbilitySystem/BaseAbility.h" afterDir="false" />
     </list>
@@ -84,7 +59,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -98,7 +73,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;C/C++ 프로젝트.SmashBrawl.executor&quot;: &quot;Debug&quot;,
+    &quot;C/C++ 프로젝트.SmashBrawl.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;AbilitySystem__MinSeok&quot;,
@@ -237,6 +212,8 @@
       <workItem from="1744249222116" duration="433000" />
       <workItem from="1744264865432" duration="1153000" />
       <workItem from="1744266059161" duration="1265000" />
+      <workItem from="1744267468021" duration="8621000" />
+      <workItem from="1744331322943" duration="587000" />
     </task>
     <servers />
   </component>
