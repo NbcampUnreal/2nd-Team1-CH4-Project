@@ -32,13 +32,9 @@ AActor* UBaseSmashDamagerManager::CreateDamager(FTransform SpawnTransform, const
 	{
 		if (HitBoxMappingTable)
 		{
+
 			if (FHitBoxMappingRow* MappingRow = HitBoxMappingTable->FindRow<FHitBoxMappingRow>(DamagerId, TEXT("HitBoxTable")))
 			{
-				FDamagePlayRow DamagePlayRow;
-				if (FDamagePlayRow* TableDamagePlayRow = DamagePlayTable->FindRow<FDamagePlayRow>(MappingRow->DamagePlayRowId, TEXT("DamagePlayRow")))
-				{
-					DamagePlayRow = *TableDamagePlayRow;
-				}
 
 				FDamageVisualRow DamageVisualRow;
 				if (FDamageVisualRow* TableDamageVisualRow = DamageVisualTable->FindRow<FDamageVisualRow>(MappingRow->HitboxVisualRowId, TEXT("DamageVisualRow")))
@@ -46,20 +42,28 @@ AActor* UBaseSmashDamagerManager::CreateDamager(FTransform SpawnTransform, const
 					DamageVisualRow = *TableDamageVisualRow;
 				}
 
-				if (ASmashBaseDamager* SmashBaseDamager =
-			GetWorld()->SpawnActorDeferred<ASmashBaseDamager>(ASmashBaseDamager::StaticClass(),
+				FDamagePlayRow DamagePlayRow;
+				if (FDamagePlayRow* TableDamagePlayRow = DamagePlayTable->FindRow<FDamagePlayRow>(MappingRow->DamagePlayRowId, TEXT("DamagePlayRow")))
+				{
+
+					DamagePlayRow = *TableDamagePlayRow;
+					if (ASmashBaseDamager* SmashBaseDamager =
+			GetWorld()->SpawnActorDeferred<ASmashBaseDamager>(TableDamagePlayRow->DamagerVisualActor,
 				SpawnTransform,
 				GetOwner(),
 				nullptr,
 				ESpawnActorCollisionHandlingMethod::AlwaysSpawn))
-				{
-					SmashBaseDamager->Init(GetOwner(), AttackAbleClasses, DamagePlayRow, DamageVisualRow);
-					if (AActor* SpawnActor =
-				UGameplayStatics::FinishSpawningActor(SmashBaseDamager, SpawnTransform))
 					{
-						return SpawnActor;
+						SmashBaseDamager->Init(GetOwner(), AttackAbleClasses, DamagePlayRow, DamageVisualRow);
+						if (AActor* SpawnActor =
+					UGameplayStatics::FinishSpawningActor(SmashBaseDamager, SpawnTransform))
+						{
+							return SpawnActor;
+						}
 					}
 				}
+
+				
 				
 			}
 		}

@@ -59,4 +59,5 @@ void ASmashPlayerDamager::AttackActor(UPrimitiveComponent* OverlappedComponent, 
 	{
 		DamagePlayRow.DamageAmount = TmpDamageAmount;
 	}
+	
 }
