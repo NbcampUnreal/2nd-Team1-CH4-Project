@@ -4,6 +4,7 @@
 #include "AIController.h"
 #include "BaseAIController.generated.h"
 
+class ASmashCharacter;
 class ABaseCharacter;
 UCLASS()
 class SMASHBRAWL_API ABaseAIController : public AAIController
@@ -25,7 +26,7 @@ protected:
     UBehaviorTree* BehaviorTreeAsset;
 
     UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category = "Player")
-    TArray<TObjectPtr<ABaseCharacter>> PlayerArray;
+    TArray<TObjectPtr<ASmashCharacter>> PlayerArray;
 
     UPROPERTY()
     class ABaseAIFighter* ControlledFighter;
