@@ -29,16 +29,10 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_dead_01_Side.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_dead_01_Side.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_liedown_idle_up.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_liedown_idle_up.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmashBrawl.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonster.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaL.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaL.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaR.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaR.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Init.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Init.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Phase2.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Phase2.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +50,11 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://2" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://4" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/LevelObjects/RespawnLocation.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -200,6 +198,7 @@
       <workItem from="1744359064889" duration="854000" />
       <workItem from="1744375354233" duration="1596000" />
       <workItem from="1744450781650" duration="1293000" />
+      <workItem from="1744453736414" duration="1613000" />
     </task>
     <servers />
   </component>
