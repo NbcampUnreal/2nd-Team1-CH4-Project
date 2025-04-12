@@ -11,205 +11,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0257e7bb-49ba-4eaf-9865-1559fa44f1ed" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_MainCharacter_Smash.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/3/53/G43RDKEBYF3KUW2QJH2QBC.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/4/0Q/87CZZXMCMRYWU8W8YSYD08.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/6/Y8/XIMU39W1XN4ZSTKIG9TCAZ.uasset" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Camera/SmashCameraTrigger.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Camera/SmashCameraTrigger.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/projectSettingsUpdater.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl.dir/.idea/workspace.xml" beforeDir="false" />
+    <list default="true" id="0257e7bb-49ba-4eaf-9865-1559fa44f1ed" name="변경" comment="Remove unused settings files and add SmashCameraTrigger.&#10;&#10;Removed IntelliJ Rider and user config files to clean up the repository. Introduced a new `SmashCameraTrigger` class to handle camera behavior changes during gameplay. Minor updates and refactors were also applied to camera and player registration logic.">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/AdvancedAsset/AimoffSet/lookaround.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/AdvancedAsset/BlendSpace/BlendSpace.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/AdvancedAsset/Blueprint/BP_Mannequin_Blueprint.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_attack_01.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_attack_02.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_attack_03.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_attack_jump.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_avoid_back.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_avoid_front.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_avoid_left.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_avoid_right.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_body_back_hit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_body_front_hit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_body_left_hit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_body_right_hit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_bound_down.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_bound_down_high.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_bound_up.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_bound_up_high.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_01.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_01_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_01_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_01_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_02.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_02_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_02_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_02_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_02_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_02_5.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_03.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_03_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_03_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_03_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_03_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_04.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_04_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_04_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_04_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_04_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_05.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_05_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_05_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_05_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_05_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_06.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_06_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_06_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_06_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_06_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_07.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_07_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_07_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_07_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_07_4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_08.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_08_1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_08_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_combo_08_3.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_dead_01.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_dead_02.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_dead_03.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_dead_04.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_dead_05.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_defense_01.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_heavy_back_hit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_heavy_front_hit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_heavy_left_hit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_heavy_right_hit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_idle.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_jump_Z0.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_liedown_idle_down.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_liedown_idle_up.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_rise_01.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_rise_02.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_rise_03.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_rise_04.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_roll_back.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_roll_front.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_roll_left.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_roll_right.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_run_back.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_run_backL45.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_run_backR45.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_run_front.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_run_frontL45.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_run_frontR45.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_run_left.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_run_right.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_sprint.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_stun.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_unequip_01.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_walk_back.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_walk_backL45.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_walk_backR45.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_walk_front.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_walk_frontL45.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_walk_frontR45.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_walk_left.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/anim_walk_right.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/pose/anim_pose_LookC.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/pose/anim_pose_LookD.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/pose/anim_pose_LookL.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/pose/anim_pose_LookLD.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/pose/anim_pose_LookLU.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/pose/anim_pose_LookR.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/pose/anim_pose_LookRD.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/pose/anim_pose_LookRU.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Animation/pose/anim_pose_LookU.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Maps/Overview.umap" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/Maps/Overview_BuiltData.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/FX_Materials/Instance/MI_Circle_Additive_SubUV_Inst.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/FX_Materials/Instance/MI_Glow_Additive_Inst.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/FX_Materials/Instance/MI_debris_Additive_Inst.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/FX_Materials/Instance/MI_ember_Additive_Inst.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/FX_Materials/M_Air_Trail_Dissolve_Edge.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/FX_Materials/M_Spark.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/FX_Materials/M_slash.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/FX_Materials/Master/M_Master_Additive.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/FX_Materials/Master/M_Master_Additive_SubUV.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/M_Concrete_Tiles.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/M_UE4Man_Body.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/M_UE4Man_ChestLogo.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/M_UE4Man_ChestLogo_2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/M_cover.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/M_weapon.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/MaterialLayers/ML_GlossyBlack_Latex_UE4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/MaterialLayers/ML_Plastic_Shiny_Beige.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/MaterialLayers/ML_Plastic_Shiny_Beige_LOGO.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Materials/MaterialLayers/ML_SoftMetal_UE4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Particles/P_Hit.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Particles/P_Sparks.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Particles/P_Trail.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Skeleton/SK_Mannequin.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Skeleton/SK_Mannequin_PhysicsAsset.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_Circle_4Seq_ST.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_EffectTPParticleGlowC.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_Flow_Sword.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_Glow_circle_A.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_GradientGlow.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_Hit_4sequence.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_Hit_A.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_Spark.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_debris.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_flow_air.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/T_narrow.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/Tile_T.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/Trail_T.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/FX_Textures/wave_T.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_Concrete_Tiles_D.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_Concrete_Tiles_M.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_Concrete_Tiles_N.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_Concrete_Tiles_Variation_M.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_ML_Aluminum01.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_ML_Aluminum01_N.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_ML_Rubber_Blue_01_D.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_ML_Rubber_Blue_01_N.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_MacroVariation.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_UE4Man_Logo_N.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_UE4_LOGO_CARD.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_UE4_Mannequin_MAT_MASKA.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_UE4_Mannequin__normals.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_UE4_Mannequin_occlusion_Mobile.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/T_sword_D.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/Textures/VFB.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/mesh/SM_cover.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Asset_/Animations/Sword_sheath_AnimSet/demo/mesh/SM_sword.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/0/E5/TIIUU6TUTCOF0DJSL70KZO.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/0/E5/TIIUU6TUTCOF0DJSL70KZO.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/C/MM/RZLO97LCQL0Q75UF0GXGJW.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/E/TV/5PC2MTBYD67TXKHKTJ3WLU.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/E/TV/5PC2MTBYD67TXKHKTJ3WLU.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_SmashExample/5/VZ/88H6HU14F7QQRGDYNWJO32.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_SmashExample/5/VZ/88H6HU14F7QQRGDYNWJO32.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/CameraTrigger.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/CameraTrigger.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/3/C3/BY9ZYAMJQMTO6BC3NZ8OMV.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/L_CameraTest/3/C3/BY9ZYAMJQMTO6BC3NZ8OMV.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/FollowCameraComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/FollowCameraComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/SSTCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/SSTCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/SSTCharacterMovementComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/SSTCharacterMovementComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/CameraTrigger.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/CameraTrigger.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/CameraTriggerUpdateContents.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/CameraTriggerUpdateContents.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/FollowCameraComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/FollowCameraComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/SSTCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/SSTCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Camera/SmashCameraComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Camera/SmashCameraComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Core/SmashPlatFighterGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Core/SmashPlatFighterGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Camera/SmashCameraComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/Camera/SmashCameraComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/SmashCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/SmashCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Core/SmashPlatFighterGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Core/SmashPlatFighterGameMode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Temp/Sword sheath AnimSet 4.27.zip" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,9 +29,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Plugins/SST/Intermediate/Build/Win64/UnrealEditor/Inc/SST/UHT/FollowCameraComponent.gen.cpp" root0="SKIP_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 6
@@ -346,13 +152,14 @@
       <workItem from="1744378000919" duration="2427000" />
       <workItem from="1744386609417" duration="155000" />
       <workItem from="1744386799652" duration="5595000" />
-      <workItem from="1744425220598" duration="2156000" />
+      <workItem from="1744425220598" duration="2625000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

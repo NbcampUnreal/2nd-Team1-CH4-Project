@@ -24,16 +24,16 @@ void UFollowCameraComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-    // 소유자 캐싱
+	// 소유자 캐싱
 	CacheOwner();
 
-    // 플레이어 모드 초기값 설정
+	// 플레이어 모드 초기값 설정
 	CurrentZoomDistance = CameraZoomDistance;
 	CurrentZLockHeight = CameraZLockHeight;
 	CurrentLocationOffset = CameraLocationOffset;
 	CurrentRotationOffset = CameraRotationOffset;
 
-    // 그룹 모드 초기값 설정 - 설정된 값 그대로 사용
+	// 그룹 모드 초기값 설정 - 설정된 값 그대로 사용
 	CurrentGroupZoomDistance = GroupZoomDistance;
 	CurrentGroupZLockHeight = GroupZLockHeight;
 	CurrentGroupLocationOffset = GroupLocationOffset;
@@ -45,21 +45,21 @@ void UFollowCameraComponent::BeginPlay()
 		AddActorToGroup(Owner);
 	}
 
-    // 초기화 로그 출력
-    if (bDebugMode)
-    {
-        UE_LOG(LogTemp, Log, TEXT("FollowCamera 초기화:"));
-        UE_LOG(LogTemp, Log, TEXT("  - 플레이어 모드: 줌=%.2f, Z높이=%.2f"), 
-               CameraZoomDistance, CameraZLockHeight);
-        UE_LOG(LogTemp, Log, TEXT("  - 그룹 모드: 줌=%.2f, Z높이=%.2f, 패딩=%.2f"), 
-               GroupZoomDistance, GroupZLockHeight, GroupPadding);
-        UE_LOG(LogTemp, Log, TEXT("  - 그룹 설정: 자동줌=%s, 자동오프셋=%s, Z고정=%s"), 
-               bUseAutomaticZoom ? TEXT("ON") : TEXT("OFF"),
-               bUseAutomaticOffset ? TEXT("ON") : TEXT("OFF"),
-               GroupZLock ? TEXT("ON") : TEXT("OFF"));
-        UE_LOG(LogTemp, Log, TEXT("  - 줌 범위: %.2f ~ %.2f, 줌계수=%.2f"), 
-               MinGroupZoomDistance, MaxGroupZoomDistance, AutoZoomFactor);
-    }
+	// 초기화 로그 출력
+	if (bDebugMode)
+	{
+		UE_LOG(LogTemp, Log, TEXT("FollowCamera 초기화:"));
+		UE_LOG(LogTemp, Log, TEXT("  - 플레이어 모드: 줌=%.2f, Z높이=%.2f"),
+		       CameraZoomDistance, CameraZLockHeight);
+		UE_LOG(LogTemp, Log, TEXT("  - 그룹 모드: 줌=%.2f, Z높이=%.2f, 패딩=%.2f"),
+		       GroupZoomDistance, GroupZLockHeight, GroupPadding);
+		UE_LOG(LogTemp, Log, TEXT("  - 그룹 설정: 자동줌=%s, 자동오프셋=%s, Z고정=%s"),
+		       bUseAutomaticZoom ? TEXT("ON") : TEXT("OFF"),
+		       bUseAutomaticOffset ? TEXT("ON") : TEXT("OFF"),
+		       GroupZLock ? TEXT("ON") : TEXT("OFF"));
+		UE_LOG(LogTemp, Log, TEXT("  - 줌 범위: %.2f ~ %.2f, 줌계수=%.2f"),
+		       MinGroupZoomDistance, MaxGroupZoomDistance, AutoZoomFactor);
+	}
 }
 
 float UFollowCameraComponent::UpdateOrGetFloatParameter(ECameraTriggerUpdateFloatParameter Parameter, FCameraTriggerUpdateFloat* Update)
@@ -573,9 +573,7 @@ void UFollowCameraComponent::CalculateGroupCameraPosition(float DeltaTime)
 		UE_LOG(LogTemp, Warning, TEXT("  - 현재 줌 값: %.2f"), CurrentGroupZoomDistance);
 		UE_LOG(LogTemp, Warning, TEXT("  - 설정된 Z축 높이: %.2f"), GroupZLockHeight);
 		UE_LOG(LogTemp, Warning, TEXT("  - 현재 Z축 높이: %.2f"), CurrentGroupZLockHeight);
-		UE_LOG(LogTemp, Warning, TEXT("  - 자동 줌: %s, 자동 오프셋: %s"),
-		       bUseAutomaticZoom ? TEXT("ON") : TEXT("OFF"),
-		       bUseAutomaticOffset ? TEXT("ON") : TEXT("OFF"));
+		UE_LOG(LogTemp, Warning, TEXT("  - 자동 줌: %s, 자동 오프셋: %s"), bUseAutomaticZoom ? TEXT("ON") : TEXT("OFF"), bUseAutomaticOffset ? TEXT("ON") : TEXT("OFF"));
 	}
 
 	// 보간 값 업데이트 (더 부드러운 전환을 위해 속도 조정)
@@ -735,87 +733,87 @@ FVector UFollowCameraComponent::CalculateRequiredOffset(const FVector& GroupCent
 
 float UFollowCameraComponent::CalculateRequiredZoom() const
 {
-    // 자동 줌을 사용하지 않으면 설정된 값 그대로 사용
-    if (!bUseAutomaticZoom)
-    {
-        if (bDebugMode)
-        {
-            UE_LOG(LogTemp, Log, TEXT("자동 줌 비활성화 - 설정된 줌 거리 사용: %.2f"), GroupZoomDistance);
-        }
-        return GroupZoomDistance;
-    }
+	// 자동 줌을 사용하지 않으면 설정된 값 그대로 사용
+	if (!bUseAutomaticZoom)
+	{
+		if (bDebugMode)
+		{
+			UE_LOG(LogTemp, Log, TEXT("자동 줌 비활성화 - 설정된 줌 거리 사용: %.2f"), GroupZoomDistance);
+		}
+		return GroupZoomDistance;
+	}
 
-    // 그룹에 액터가 없거나 1명뿐이면 기본값 사용
-    if (GroupActors.Num() <= 1)
-    {
-        if (bDebugMode)
-        {
-            UE_LOG(LogTemp, Warning, TEXT("그룹 액터 부족 (현재 %d명) - 기본 줌 거리 사용: %.2f"), 
-                   GroupActors.Num(), GroupZoomDistance);
-        }
-        return GroupZoomDistance;
-    }
+	// 그룹에 액터가 없거나 1명뿐이면 기본값 사용
+	if (GroupActors.Num() <= 1)
+	{
+		if (bDebugMode)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("그룹 액터 부족 (현재 %d명) - 기본 줌 거리 사용: %.2f"),
+			       GroupActors.Num(), GroupZoomDistance);
+		}
+		return GroupZoomDistance;
+	}
 
-    // 3D 바운딩 박스 계산
-    FVector minBounds, maxBounds;
-    CalculateGroupBounds(minBounds, maxBounds);
+	// 3D 바운딩 박스 계산
+	FVector minBounds, maxBounds;
+	CalculateGroupBounds(minBounds, maxBounds);
 
-    // 바운딩 박스 크기 계산
-    FVector boundsSize = maxBounds - minBounds;
+	// 바운딩 박스 크기 계산
+	FVector boundsSize = maxBounds - minBounds;
 
-    // 3D 공간에서 필요한 줌 거리 계산
-    // X, Z 평면의 크기와 Y 깊이를 모두 고려
-    float requiredXZSize = FMath::Max(boundsSize.X, boundsSize.Z);
-    float requiredYSize = boundsSize.Y;
+	// 3D 공간에서 필요한 줌 거리 계산
+	// X, Z 평면의 크기와 Y 깊이를 모두 고려
+	float requiredXZSize = FMath::Max(boundsSize.X, boundsSize.Z);
+	float requiredYSize = boundsSize.Y;
 
-    // 초기 줌 거리 계산 - 에디터에서 설정한 값 사용
-    float baseZoom = GroupZoomDistance;
+	// 초기 줌 거리 계산 - 에디터에서 설정한 값 사용
+	float baseZoom = GroupZoomDistance;
 
-    // X-Z 크기에 따른 줌 조정 - AutoZoomFactor 적용
-    float xzZoomFactor = requiredXZSize * AutoZoomFactor * 0.5f;
+	// X-Z 크기에 따른 줌 조정 - AutoZoomFactor 적용
+	float xzZoomFactor = requiredXZSize * AutoZoomFactor * 0.5f;
 
-    // Y 깊이에 따른 추가 줌
-    float yZoomFactor = requiredYSize * 0.5f;
+	// Y 깊이에 따른 추가 줌
+	float yZoomFactor = requiredYSize * 0.5f;
 
-    // 최종 줌 거리 계산 - GroupPadding 적용
-    float requiredZoom = baseZoom + GroupPadding + xzZoomFactor + yZoomFactor;
+	// 최종 줌 거리 계산 - GroupPadding 적용
+	float requiredZoom = baseZoom + GroupPadding + xzZoomFactor + yZoomFactor;
 
-    // 최소/최대 범위 적용 - 에디터에서 설정한 범위 사용
-    requiredZoom = FMath::Clamp(requiredZoom, MinGroupZoomDistance, MaxGroupZoomDistance);
+	// 최소/최대 범위 적용 - 에디터에서 설정한 범위 사용
+	requiredZoom = FMath::Clamp(requiredZoom, MinGroupZoomDistance, MaxGroupZoomDistance);
 
-    // 그룹 내 액터 수에 따른 최소 줌 거리 보장
-    int32 validActorCount = 0;
-    for (AActor* actor : GroupActors)
-    {
-        if (actor && IsValid(actor))
-        {
-            validActorCount++;
-        }
-    }
+	// 그룹 내 액터 수에 따른 최소 줌 거리 보장
+	int32 validActorCount = 0;
+	for (AActor* actor : GroupActors)
+	{
+		if (actor && IsValid(actor))
+		{
+			validActorCount++;
+		}
+	}
 
-    // 액터가 2개 이상이면 최소 줌 거리 보장
-    if (validActorCount >= 2)
-    {
-        float minZoomForActorCount = MinGroupZoomDistance + (validActorCount - 1) * 100.0f;
-        requiredZoom = FMath::Max(requiredZoom, minZoomForActorCount);
-    }
+	// 액터가 2개 이상이면 최소 줌 거리 보장
+	if (validActorCount >= 2)
+	{
+		float minZoomForActorCount = MinGroupZoomDistance + (validActorCount - 1) * 100.0f;
+		requiredZoom = FMath::Max(requiredZoom, minZoomForActorCount);
+	}
 
-    // 디버그 로그
-    if (bDebugMode)
-    {
-        UE_LOG(LogTemp, Log, TEXT("자동 줌 계산 세부정보:"));
-        UE_LOG(LogTemp, Log, TEXT("  - 바운딩 박스: [%s - %s] (크기: %s)"), 
-               *minBounds.ToString(), *maxBounds.ToString(), *boundsSize.ToString());
-        UE_LOG(LogTemp, Log, TEXT("  - 기본 줌: %.2f, 패딩: %.2f"), baseZoom, GroupPadding);
-        UE_LOG(LogTemp, Log, TEXT("  - XZ 크기: %.2f, 계수: %.2f, 결과: %.2f"), 
-               requiredXZSize, AutoZoomFactor, xzZoomFactor);
-        UE_LOG(LogTemp, Log, TEXT("  - 유효 액터 수: %d, 최소 액터별 줌: %.2f"), 
-               validActorCount, validActorCount >= 2 ? MinGroupZoomDistance + (validActorCount - 1) * 100.0f : 0.0f);
-        UE_LOG(LogTemp, Log, TEXT("  - 최종 계산된 줌: %.2f (범위: %.2f ~ %.2f)"), 
-               requiredZoom, MinGroupZoomDistance, MaxGroupZoomDistance);
-    }
+	// 디버그 로그
+	if (bDebugMode)
+	{
+		UE_LOG(LogTemp, Log, TEXT("자동 줌 계산 세부정보:"));
+		UE_LOG(LogTemp, Log, TEXT("  - 바운딩 박스: [%s - %s] (크기: %s)"),
+		       *minBounds.ToString(), *maxBounds.ToString(), *boundsSize.ToString());
+		UE_LOG(LogTemp, Log, TEXT("  - 기본 줌: %.2f, 패딩: %.2f"), baseZoom, GroupPadding);
+		UE_LOG(LogTemp, Log, TEXT("  - XZ 크기: %.2f, 계수: %.2f, 결과: %.2f"),
+		       requiredXZSize, AutoZoomFactor, xzZoomFactor);
+		UE_LOG(LogTemp, Log, TEXT("  - 유효 액터 수: %d, 최소 액터별 줌: %.2f"),
+		       validActorCount, validActorCount >= 2 ? MinGroupZoomDistance + (validActorCount - 1) * 100.0f : 0.0f);
+		UE_LOG(LogTemp, Log, TEXT("  - 최종 계산된 줌: %.2f (범위: %.2f ~ %.2f)"),
+		       requiredZoom, MinGroupZoomDistance, MaxGroupZoomDistance);
+	}
 
-    return requiredZoom;
+	return requiredZoom;
 }
 
 void UFollowCameraComponent::SetZoomDistance_Implementation(float Value, float BlendTime)
