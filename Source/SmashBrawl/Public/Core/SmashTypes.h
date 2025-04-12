@@ -41,7 +41,6 @@ enum class ESmashHitState : uint8
 	Shield UMETA(DisplayName = "Shield")
 };
 
-
 UENUM(BlueprintType)
 enum class ESmashCharacter : uint8
 {
@@ -76,7 +75,8 @@ enum class ESmashPlayerStates : uint8
 	Dodge UMETA(DisplayName = "Dodge"),
 	FreeFall UMETA(DisplayName = "Free Fall"),
 	Held UMETA(DisplayName = "Held"),
-	Hold UMETA(DisplayName = "Hold")
+	Hold UMETA(DisplayName = "Hold"),
+	Down UMETA(DisplayName = "Down")
 };
 
 UENUM(BlueprintType)
@@ -153,6 +153,42 @@ enum class ESmashDirection : uint8
 	None UMETA(DisplayName = "None")
 };
 
+UENUM(BlueprintType)
+enum class ESmashFaceing : uint8
+{
+	Left UMETA(DisplayName = "Left"),
+	Right UMETA(DisplayName = "Right")
+};
+
+UENUM(BlueprintType)
+enum class ESmashCollisionType : uint8
+{
+	Normal UMETA(DisplayName = "Normal"),
+	Sweet UMETA(DisplayName = "Sweet"),
+	Sour UMETA(DisplayName = "Sour"),
+	Spike UMETA(DisplayName = "Spike"),
+	Metior UMETA(DisplayName = "Metior"),
+	Multi UMETA(DisplayName = "Multi")
+};
+
+UENUM(BlueprintType)
+enum class ESmashShape : uint8
+{
+	Sphere UMETA(DisplayName = "Sphere"),
+	Box UMETA(DisplayName = "Box"),
+	Pill UMETA(DisplayName = "Pill")
+};
+
+UENUM(BlueprintType)
+enum class ESmashHitStates : uint8
+{
+	Normal UMETA(DisplayName = "Normal"),
+	Intangible UMETA(DisplayName = "Intangible"),
+	Invincible UMETA(DisplayName = "Invincible"),
+	Armor UMETA(DisplayName = "Armor"),
+	Shield UMETA(DisplayName = "Shield")
+};
+
 USTRUCT(BlueprintType)
 struct FSmashPlayerMovement
 {
@@ -198,4 +234,30 @@ struct FSmashPlayerStateInfo
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State Info")
 	FSmashPlayCondition PlayCondition;
+};
+
+UENUM(BlueprintType)
+enum class EHitDirection : uint8
+{
+	Left UMETA(DisplayName = "Left"),
+	Auto UMETA(DisplayName = "Auto"),
+	Right UMETA(DisplayName = "Right")
+};
+
+UENUM(BlueprintType)
+enum class ESmashBossState : uint8
+{
+	Phase1 UMETA(DisplayName = "Phase1"),
+	ChangingPhase UMETA(DisplayName = "ChangingPhase"),
+	Phase2 UMETA(DisplayName = "Phase2"),
+	Dead UMETA(DisplayName = "Dead"),
+};
+
+UENUM(BlueprintType)
+enum class ESmashSpawnerDirection : uint8
+{
+	Up UMETA(DisplayName = "Up"),
+	Down UMETA(DisplayName = "Down"),
+	Left UMETA(DisplayName = "Left"),
+	Right UMETA(DisplayName = "Right"),
 };

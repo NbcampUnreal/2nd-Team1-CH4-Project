@@ -105,10 +105,14 @@ void UBaseCharacterState::SetStateInfo(const FSmashPlayerStateInfo& NewStateInfo
 	}
 }
 
-USmashAction* UBaseCharacterState::FindActionByType(ESmashActionType ActionType)
+USmashAction* UBaseCharacterState::FindActionByType(ESmashActionType ActionType, int Index)
 {
 	for (USmashAction* Action : Actions)
 	{
+		if (Index != 0)
+		{
+			return Actions[Index];
+		}
 		if (Action && Action->GetActionType() == ActionType)
 		{
 			return Action;
@@ -118,9 +122,9 @@ USmashAction* UBaseCharacterState::FindActionByType(ESmashActionType ActionType)
 	return nullptr;
 }
 
-bool UBaseCharacterState::ExecuteActionByType(ESmashActionType ActionType)
+bool UBaseCharacterState::ExecuteActionByType(ESmashActionType ActionType, int Index)
 {
-	USmashAction* Action = FindActionByType(ActionType);
+	USmashAction* Action = FindActionByType(ActionType, Index);
 	if (Action && Action->CanExecute())
 	{
 		return Action->Execute();

@@ -6,6 +6,7 @@
 #include "Core/SmashTypes.h"
 #include "Core/SmashUitilityLibrary.h"
 #include "Interfaces/Interface_SmashCombat.h"
+#include "Interfaces/Interface_SmashHitBox.h"
 #include "SmashCharacter.generated.h"
 
 
@@ -29,7 +30,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogSmashCharacter, Log, All);
  * 네트워크 복제, 상태 관리, 오류 처리 기능이 강화됨
  */
 UCLASS()
-class SMASHBRAWL_API ASmashCharacter : public ASSTCharacter, public IInterface_SmashCombat
+class SMASHBRAWL_API ASmashCharacter : public ASSTCharacter, public IInterface_SmashCombat, public IInterface_TakeDamage
 {
 	GENERATED_BODY()
 
@@ -228,11 +229,12 @@ public:
 	virtual void SetAttacks_Implementation(ESmashAttacks NewAttacks) override;
 	virtual void BufferButtons_Implementation() override;
 	virtual void ClearBuffer_Implementation() override;
+	virtual bool bHitConditions() override;
+	virtual void TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection = true) override;
 
 	//---------------------------------------------------------------------
 	// 컴포넌트
 	//---------------------------------------------------------------------
-public:
 	/** 주요 컴포넌트 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Smash Character|Component")
 	TObjectPtr<USmashCharacterMovementComponent> SmashCharacterMovementComponent;
@@ -386,6 +388,9 @@ public:
 
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	int32 Team;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
+	float ProneTime;
 
 	//---------------------------------------------------------------------
 	// 비복제 상태 속성

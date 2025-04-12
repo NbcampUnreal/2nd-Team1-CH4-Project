@@ -5,6 +5,7 @@
 #include "Core/SmashTypes.h"
 #include "SmashAbilitySystemComponent.generated.h"
 
+class ASmashCharacter;
 class ABaseAbility;
 
 /**
@@ -222,7 +223,7 @@ public:
 	 * 부모 캐릭터 참조
 	 */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility System|References")
-	TObjectPtr<ACharacter> Parent;
+	TObjectPtr<ASmashCharacter> Parent;
 
 
 	//------------------------------------------------------------
@@ -483,8 +484,6 @@ public:
 	// 리스폰 능력
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Misc")
 	TSubclassOf<ABaseAbility> RespawnAbilityClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Misc")
-	TObjectPtr<ABaseAbility> RespawnAbility;
 
 	// 아이템 사용
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Misc")
