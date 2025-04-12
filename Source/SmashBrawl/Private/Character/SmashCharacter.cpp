@@ -1,9 +1,9 @@
 #include "SmashBrawl/Public/Character//SmashCharacter.h"
 
 #include "EnhancedInputComponent.h"
+#include "FollowCameraComponent.h"
 #include "AbilitySystem/BaseAbility.h"
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
-#include "Character/Camera/SmashCameraComponent.h"
 #include "Character/Components/FXComponent.h"
 #include "Character/Components/SmashStateSystem.h"
 #include "Character/Components/SmashCharacterMovementComponent.h"
@@ -22,16 +22,13 @@ DEFINE_LOG_CATEGORY(LogSmashCharacter);
 
 
 ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer
-	        .SetDefaultSubobjectClass<USmashCharacterMovementComponent>(ASSTCharacter::CharacterMovementComponentName)
-	        .SetDefaultSubobjectClass<USmashCameraComponent>(TEXT("FollowCamera")))
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<USmashCharacterMovementComponent>(ASSTCharacter::CharacterMovementComponentName))
 {
 	// Tick 설정 - 초기에는 비활성화, StartUp에서 활성화
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = false;
 	PrimaryActorTick.SetTickFunctionEnable(false);
 
-	SmashCameraComponent = Cast<USmashCameraComponent>(GetFollowCamera());
 	SmashCharacterMovementComponent = Cast<USmashCharacterMovementComponent>(GetCharacterMovement());
 	SmashStateSystem = CreateDefaultSubobject<USmashStateSystem>(TEXT("SmashCharacterState"));
 	SmashCharacterStatsComponent = CreateDefaultSubobject<USmashCharacterStats>(TEXT("SmashCharacterStatsComponent"));
@@ -95,27 +92,23 @@ void ASmashCharacter::BeginPlay()
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASmashCharacter::StartUp, 0.5f, false);
 
+
 	// 게임 시작 5초 후 카메라 모드 초기화 (타이밍이 중요)
 	FTimerHandle CameraInitTimer;
 	GetWorld()->GetTimerManager().SetTimer(CameraInitTimer, this, &ASmashCharacter::InitializeCameraMode, 5.0f, false);
-
-	FTimerHandle UpdateTargetsTimer;
-	GetWorld()->GetTimerManager().SetTimer(UpdateTargetsTimer, [this]()
+    
+	// 추가: 카메라 초기화 확인 타이머
+	FTimerHandle CameraCheckTimer;
+	GetWorld()->GetTimerManager().SetTimer(CameraCheckTimer, [this]()
 	{
-		if (SmashCameraComponent && SmashCameraComponent->GetCameraMode() == ECameraMode::Group)
+		// 카메라 설정 확인 로직
+		UFollowCameraComponent* CameraComponent = FindComponentByClass<UFollowCameraComponent>();
+		if (CameraComponent && CameraComponent->GetCameraMode() == ECameraMode::Group)
 		{
-			TArray<AActor*> AllCharacters;
-			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASmashCharacter::StaticClass(), AllCharacters);
-
-			for (AActor* Actor : AllCharacters)
-			{
-				if (Actor != this && !SmashCameraComponent->GetTargetActors().Contains(Actor))
-				{
-					SmashCameraComponent->AddTargetActor(Actor);
-				}
-			}
+			const TArray<AActor*>& GroupActors = CameraComponent->GetGroupActors();
+			UE_LOG(LogSmashCharacter, Log, TEXT("카메라 초기화 성공: 그룹 모드, %d개 추적 대상"), GroupActors.Num());
 		}
-	}, 5.0f, true); // 5초마다 반복
+	}, 6.0f, false);  // 카메라 초기화(5초) 후 1초 뒤에 확인
 }
 
 void ASmashCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -382,8 +375,28 @@ void ASmashCharacter::AttachAbilities()
 
 void ASmashCharacter::UpdateCamera()
 {
-	// SST 플러그인의 카메라 로직 (미구현)
-	UE_LOG(LogSmashCharacter, Display, TEXT("SST 플러그인의 카메라 로직을 사용할 예정입니다. 미구현"));
+	// // 카메라 컴포넌트 확인
+	// UFollowCameraComponent* CameraComponent = FindComponentByClass<UFollowCameraComponent>();
+	// if (!CameraComponent)
+	// {
+	// 	UE_LOG(LogSmashCharacter, Error, TEXT("UpdateCamera: FollowCameraComponent가 없습니다!"));
+	// 	return;
+	// }
+	//
+	// // 카메라 기본 설정 (플레이어 모드)
+	// CameraComponent->SetZoomDistance(400.0f, 0.5f);
+	// CameraComponent->SetMaxLeadDistance(100.0f);
+	// CameraComponent->SetLeadSpeed(5.0f);
+	// CameraComponent->SetZLock(false);
+ //    
+	// // 그룹 모드 기본 설정
+	// CameraComponent->SetGroupZoomDistance(700.0f, 0.5f);
+	// CameraComponent->SetGroupPadding(150.0f);
+	// CameraComponent->SetGroupZLock(true);
+	// CameraComponent->SetGroupZLockHeight(500.0f, 0.5f);
+ //    
+	// // 시작시 기본 모드 설정 (플레이어 모드로 시작)
+	// CameraComponent->SetCameraMode(ECameraMode::Player);
 }
 
 //---------------------------------------------------------------------
@@ -670,45 +683,68 @@ void ASmashCharacter::LedgeGrab()
 
 void ASmashCharacter::InitializeCameraMode()
 {
-	if (SmashCameraComponent)
+	// 카메라 컴포넌트 가져오기
+	UFollowCameraComponent* CameraComponent = FindComponentByClass<UFollowCameraComponent>();
+	if (!CameraComponent)
 	{
-		// 새로운 카메라 초기화 함수 호출 (호스트는 그룹 모드, 클라이언트는 개인 모드)
-		SmashCameraComponent->InitializeCameraForPlayer(true);
-		UE_LOG(LogSmashCharacter, Display, TEXT("카메라 모드가 초기화되었습니다."));
+		UE_LOG(LogSmashCharacter, Error, TEXT("InitializeCameraMode: FollowCameraComponent가 없습니다!"));
+		return;
+	}
+
+	// 기본적으로 그룹 모드로 시작
+	CameraComponent->SetCameraMode(ECameraMode::Group);
+
+	// 게임에 있는 다른 플레이어 찾기
+	TArray<AActor*> AllPlayers;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASmashCharacter::StaticClass(), AllPlayers);
+
+	// 자신 제외한 다른 플레이어를 추적 목록에 추가
+	for (AActor* Player : AllPlayers)
+	{
+		if (Player != this)
+		{
+			CameraComponent->AddActorToTrack(Player);
+			UE_LOG(LogSmashCharacter, Log, TEXT("플레이어 %s를 카메라 추적 목록에 추가했습니다."), *Player->GetName());
+		}
+	}
+
+	// 보스 찾기 (태그로 식별)
+	TArray<AActor*> BossActors;
+	UGameplayStatics::GetAllActorsWithTag(GetWorld(), FName("Boss"), BossActors);
+	if (BossActors.Num() > 0)
+	{
+		CameraComponent->SetBossActor(BossActors[0]);
+		UE_LOG(LogSmashCharacter, Log, TEXT("보스 %s를 카메라 추적 목록에 추가했습니다."), *BossActors[0]->GetName());
 	}
 }
 
 void ASmashCharacter::ToggleCameraMode()
 {
-	if (SmashCameraComponent)
+	// 카메라 컴포넌트 가져오기
+	UFollowCameraComponent* CameraComponent = FindComponentByClass<UFollowCameraComponent>();
+	if (!CameraComponent)
 	{
-		// 현재 모드 확인 후 토글 (로컬에서만 적용됨)
-		if (SmashCameraComponent->GetCameraMode() == ECameraMode::Group)
-		{
-			SmashCameraComponent->SetCameraMode(ECameraMode::Default, 1.0f);
-			UE_LOG(LogSmashCharacter, Display, TEXT("카메라 모드가 개인 모드로 변경되었습니다."));
-		}
-		else
-		{
-			SmashCameraComponent->SetCameraMode(ECameraMode::Group, 1.0f);
-			UE_LOG(LogSmashCharacter, Display, TEXT("카메라 모드가 그룹 모드로 변경되었습니다."));
-		}
+		UE_LOG(LogSmashCharacter, Error, TEXT("ToggleCameraMode: FollowCameraComponent가 없습니다!"));
+		return;
+	}
+
+	// 현재 모드 확인 및 전환
+	if (CameraComponent->GetCameraMode() == ECameraMode::Player)
+	{
+		// 플레이어 모드에서 그룹 모드로 전환
+		CameraComponent->SetCameraMode(ECameraMode::Group);
+		UE_LOG(LogSmashCharacter, Log, TEXT("카메라 모드: 그룹 모드로 전환"));
+	}
+	else
+	{
+		// 그룹 모드에서 플레이어 모드로 전환
+		CameraComponent->SetCameraMode(ECameraMode::Player);
+		UE_LOG(LogSmashCharacter, Log, TEXT("카메라 모드: 플레이어 모드로 전환"));
 	}
 }
 
 void ASmashCharacter::RequestCameraShake(float Intensity, float Duration, float Falloff)
 {
-	// 기존 카메라 흔들림 요청 유지
-	if (SmashGameMode)
-	{
-		SmashGameMode->ShakeCamera(Intensity, Duration, Falloff);
-	}
-
-	// 로컬 카메라에도 직접 흔들림 적용
-	if (SmashCameraComponent)
-	{
-		SmashCameraComponent->ShakeCamera(Intensity, Duration, Falloff);
-	}
 }
 
 void ASmashCharacter::PlayReviveEffect()
