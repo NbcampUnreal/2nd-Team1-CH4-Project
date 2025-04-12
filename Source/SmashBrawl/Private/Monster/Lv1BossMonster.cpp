@@ -43,7 +43,7 @@ void ALv1BossMonster::Server_VacuumAttack_Implementation()
 {
 	FVector HeadLocation = HeadCollision->GetComponentLocation();
 	FVector SpawnLocation = FVector(HeadLocation.X, HeadLocation.Y, HeadLocation.Z);
-	FRotator SpawnRotation = FRotator(0, 90, 0);
+	FRotator SpawnRotation = FRotator(0, 0, 0);
 	GetWorld()->SpawnActor<ABaseBossPatternActor>(Vacuum, SpawnLocation, SpawnRotation);
 }
 
@@ -59,7 +59,7 @@ void ALv1BossMonster::Server_SideLavaRAttack_Implementation()
 {
 	FVector RightArmLocation = RightArmCollision->GetComponentLocation();
 	FVector RightSpawnLocation = FVector(RightArmLocation.X , 0, RightArmLocation.Z);
-	FRotator RightSpawnRotation = FRotator(0, 0, 0);
+	FRotator RightSpawnRotation = FRotator(0, 90, 0);
 	GetWorld()->SpawnActor<ABaseBossPatternActor>(SideLavaBurstR, RightSpawnLocation, RightSpawnRotation);
 }
 
@@ -68,7 +68,7 @@ void ALv1BossMonster::Server_MagicAttack_Implementation()
 	ASmashCharacter* TargetPlayer = GetRandomPlayer();	
 	
 	FVector SpawnLocation = TargetPlayer->GetActorLocation();
-	FRotator SpawnRotation = FRotator(0, 90, 0);
+	FRotator SpawnRotation = FRotator(0, 0, 0);
 	GetWorld()->SpawnActor<ABaseBossPatternActor>(Magic, SpawnLocation, SpawnRotation);
 }
 

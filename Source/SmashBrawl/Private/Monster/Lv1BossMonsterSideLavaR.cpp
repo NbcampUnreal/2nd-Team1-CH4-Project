@@ -34,8 +34,8 @@ void ALv1BossMonsterSideLavaR::BeginPlay()
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
 			GetWorld(),
 			NiagaraEffectTemplate,
-			GetActorLocation() + FVector(250.0f, 0, -150.0f),
-			FRotator(0, 90, 0),
+			GetActorLocation() + FVector(0, 0, -150.0f),
+			FRotator(0, 180, 0),
 			FVector(5.0f, 10.0f, 5.0f) 
 		);
 	}
