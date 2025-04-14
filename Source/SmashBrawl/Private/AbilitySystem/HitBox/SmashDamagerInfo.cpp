@@ -24,3 +24,8 @@ void ASmashDamagerInfo::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
+void ASmashDamagerInfo::SetSmashMesh(UStaticMeshComponent* StaticMeshComponent)
+{
+	Mesh = TSoftObjectPtr<UStaticMesh>(StaticMeshComponent->GetStaticMesh());
+}
+

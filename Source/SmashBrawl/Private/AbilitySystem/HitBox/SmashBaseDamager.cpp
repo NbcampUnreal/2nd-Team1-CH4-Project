@@ -14,6 +14,7 @@ ASmashBaseDamager::ASmashBaseDamager()
 	PrimaryActorTick.bCanEverTick = false;
 
 	SmashDamageBox = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Smash Damage Box"));
+	SetRootComponent(SmashDamageBox);
 	SmashDamageBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly); // Overlap만
 	SmashDamageBox->SetCollisionResponseToAllChannels(ECR_Ignore);
 	SmashDamageBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
@@ -38,9 +39,11 @@ void ASmashBaseDamager::Init(const TObjectPtr<AActor> InParent,
 	DamageVisualRow = InDamageVisualRow;
 
 	IgnoreActors.Add(Parent);
-	if (UStaticMesh* Mesh = DamageVisualRow.Mesh.LoadSynchronous())
+	
+	if (UStaticMesh* Mesh = Cast<UStaticMesh>(DamageVisualRow.Mesh.LoadSynchronous()))
 	{
 		SmashDamageBox->SetStaticMesh(Mesh);
+		SmashDamageBox->SetWorldScale3D(DamageVisualRow.Scale);
 	}
 	GetWorld()->GetTimerManager().SetTimer(LifeTimer, this, &ASmashBaseDamager::LifeTimeOut, DamagePlayRow.LifeTime, false);
 
@@ -92,7 +95,7 @@ bool ASmashBaseDamager::bIsAttackAble(UPrimitiveComponent* OverlappedComponent, 
 	return false;
 }
 
-void ASmashBaseDamager::AttackActor(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+void ASmashBaseDamager::AttackActor_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (IInterface_TakeDamage* TakeDamageOtherActor = Cast<IInterface_TakeDamage>(OtherActor))
@@ -100,20 +103,16 @@ void ASmashBaseDamager::AttackActor(UPrimitiveComponent* OverlappedComponent, AA
 		if (DamagePlayRow.HitDirection == EHitDirection::Left ||
 	(DamagePlayRow.HitDirection == EHitDirection::Auto && Owner->GetActorLocation().X - OtherActor->GetActorLocation().X > 0))
 		{
-			UE_LOG(LogTemp, Display, TEXT("CharacterGiveDamage, %d"), DamagePlayRow.DamageAmount);
-			//SmashTarget->TakeDamage(DamageRow.Attack, DamageRow.AttackType, false, DamageRow.KnockbackMultiplier);
 			TakeDamageOtherActor->TakeDamage(DamagePlayRow.DamageAmount, DamagePlayRow.AttackType, false);
 		}
 		else if (DamagePlayRow.HitDirection == EHitDirection::Right ||
 			(DamagePlayRow.HitDirection == EHitDirection::Auto && Owner->GetActorLocation().X - OtherActor->GetActorLocation().X < 0))
 		{
-			UE_LOG(LogTemp, Display, TEXT("CharacterGiveDamage, Right"));
-
-			//SmashTarget->TakeDamage(DamageRow.Attack, DamageRow.AttackType, false, DamageRow.KnockbackMultiplier);
 			TakeDamageOtherActor->TakeDamage(DamagePlayRow.DamageAmount, DamagePlayRow.AttackType, true);
 		}
 	}
 }
+
 
 void ASmashBaseDamager::LifeTimeOut()
 {

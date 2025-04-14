@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Core/SmashDamageBoxType.h"
+#include "Core/SmashTypes.h"
 #include "GameFramework/Actor.h"
 #include "SmashDamagerInfo.generated.h"
 
@@ -24,8 +24,33 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	void SetSmashMesh(UStaticMeshComponent* StaticMeshComponent);
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName SmashAttackRow;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UStaticMesh> Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector RelativeLocation;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FVector SmashScale;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FRotator SmashRotator;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<USoundBase> SpawnSound;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UParticleSystem> Particle;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EHitDirection HitDirection;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	int32 DamagerIndex;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
-	FDamagerInfoProperty DamagerInfoProperty;
+	float LifeTime;
 };

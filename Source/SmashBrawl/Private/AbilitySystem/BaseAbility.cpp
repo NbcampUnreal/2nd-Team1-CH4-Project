@@ -7,6 +7,7 @@
 
 
 #include "AbilitySystem/SmashAbilitySystemComponent.h"
+#include "AbilitySystem/HitBox/SmashAbilityDamagerManager.h"
 #include "Net/UnrealNetwork.h"
 #include "Character/SmashCharacter.h"
 #include "Components/CapsuleComponent.h"
@@ -19,6 +20,7 @@ ABaseAbility::ABaseAbility()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	MainTimeline = CreateDefaultSubobject<UTimelineComponent>(TEXT("MainTimeline"));
+	SmashAbilityDamagerManager = CreateDefaultSubobject<USmashAbilityDamagerManager>(TEXT("DamagerManager"));
 
 	AttackContain.Add(FName(TEXT("Attack1")));
 	AttackContain.Add(FName(TEXT("Attack2")));
@@ -254,6 +256,15 @@ void ABaseAbility::ActivateDamagers_Implementation()
 	else
 	{
 		Multicast_AddDamagersClient(Parent);
+	}
+}
+
+void ABaseAbility::FuncDamageBoxes(ACharacter* InParent)
+{
+	ChildDamagers = SmashAbilityDamagerManager->SpawnDamagerAll();
+	for (AActor* ChildDamager : ChildDamagers)
+	{
+		ChildDamager->AttachToActor(Parent, FAttachmentTransformRules::KeepRelativeTransform);
 	}
 }
 
