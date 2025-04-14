@@ -52,15 +52,23 @@ void ALv1BossMonster::Server_SideLavaLAttack_Implementation()
 	FVector LeftArmLocation = LeftArmCollision->GetComponentLocation();
 	FVector LeftSpawnLocation = FVector(LeftArmLocation.X , 0, LeftArmLocation.Z);
 	FRotator LeftSpawnRotation = FRotator(0, 0, 0);
-	GetWorld()->SpawnActor<ABaseBossPatternActor>(SideLavaBurstL, LeftSpawnLocation, LeftSpawnRotation);
+
+	FTransform SpawnTransform = FTransform(LeftSpawnRotation, LeftSpawnLocation);
+
+	DamagerManager->CreateDamager(SpawnTransform, FName("Lv1DoubleSmashL"));
+	//GetWorld()->SpawnActor<ABaseBossPatternActor>(SideLavaBurstL, LeftSpawnLocation, LeftSpawnRotation);
 }
 
 void ALv1BossMonster::Server_SideLavaRAttack_Implementation()
 {
 	FVector RightArmLocation = RightArmCollision->GetComponentLocation();
 	FVector RightSpawnLocation = FVector(RightArmLocation.X , 0, RightArmLocation.Z);
-	FRotator RightSpawnRotation = FRotator(0, 90, 0);
-	GetWorld()->SpawnActor<ABaseBossPatternActor>(SideLavaBurstR, RightSpawnLocation, RightSpawnRotation);
+	FRotator RightSpawnRotation = FRotator(0, 0, 0);
+
+	FTransform SpawnTransform = FTransform(RightSpawnRotation, RightSpawnLocation);
+
+	DamagerManager->CreateDamager(SpawnTransform, FName("Lv1DoubleSmashR"));
+	//GetWorld()->SpawnActor<ABaseBossPatternActor>(SideLavaBurstR, RightSpawnLocation, RightSpawnRotation);
 }
 
 void ALv1BossMonster::Server_MagicAttack_Implementation()
@@ -69,7 +77,12 @@ void ALv1BossMonster::Server_MagicAttack_Implementation()
 	
 	FVector SpawnLocation = TargetPlayer->GetActorLocation();
 	FRotator SpawnRotation = FRotator(0, 0, 0);
-	GetWorld()->SpawnActor<ABaseBossPatternActor>(Magic, SpawnLocation, SpawnRotation);
+
+	FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
+
+	DamagerManager->CreateDamager(SpawnTransform, FName("Lv1Magic"));
+	
+	//GetWorld()->SpawnActor<ABaseBossPatternActor>(Magic, SpawnLocation, SpawnRotation);
 }
 
 void ALv1BossMonster::Server_LavaBurstAttack_Implementation() const
@@ -78,7 +91,7 @@ void ALv1BossMonster::Server_LavaBurstAttack_Implementation() const
 	FRotator SpawnRotation = FRotator(0, 0, 0);
 	FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
 
-	DamagerManager->CreateDamager(SpawnTransform, FName("Attack1"));
+	DamagerManager->CreateDamager(SpawnTransform, FName("Lv1Smash"));
 	
 	// if (ABaseBossPatternActor* PatternActor = GetWorld()->SpawnActor<ABaseBossPatternActor>(LavaBurst, SpawnLocation, SpawnRotation))
 	// {		
@@ -109,7 +122,12 @@ void ALv1BossMonster::Server_BreathAttack_Implementation() const
 		FVector HeadLocation = HeadCollision->GetComponentLocation();
 		FVector SpawnLocation = FVector(HeadLocation.X , 0, HeadLocation.Z);
 		FRotator SpawnRotation = FRotator(FMath::RandRange(0, 360), 0, 0);
-		GetWorld()->SpawnActor<ABaseBossPatternActor>(BreathProjectile, SpawnLocation, SpawnRotation);
+
+		FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
+
+		DamagerManager->CreateDamager(SpawnTransform, FName("Lv1Breath"));
+		
+		//GetWorld()->SpawnActor<ABaseBossPatternActor>(BreathProjectile, SpawnLocation, SpawnRotation);
 	}
 }
 

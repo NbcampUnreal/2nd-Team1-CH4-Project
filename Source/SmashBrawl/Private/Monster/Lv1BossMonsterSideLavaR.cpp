@@ -39,4 +39,43 @@ void ALv1BossMonsterSideLavaR::BeginPlay()
 			FVector(5.0f, 10.0f, 5.0f) 
 		);
 	}
+	
+	SmashDamageBox->SetWorldScale3D(FVector(5.0f, 30.0f, 100.0f));
+
+	DamagerLocationChange();
+	
+	GetWorldTimerManager().SetTimer(
+		DamagerRepeatTimerHandle,
+		this,
+		&ALv1BossMonsterSideLavaR::DamagerLocationChange,
+		0.3f,
+		true
+	);
+
+}
+
+void ALv1BossMonsterSideLavaR::DamagerDeActive()
+{
+	SmashDamageBox->SetActive(false);
+}
+
+void ALv1BossMonsterSideLavaR::DamagerLocationChange()
+{
+	if (SmashDamageBox)
+	{
+		if (DamagerCallCount >= 5)
+		{
+			GetWorldTimerManager().ClearTimer(DamagerRepeatTimerHandle); // 타이머 중지
+			Destroy();
+		}
+		
+		FVector Offset = FVector(-600.0f * DamagerCallCount, 0.0f, 0.0f);
+		SmashDamageBox->SetWorldLocation(GetActorLocation() + Offset);
+		SmashDamageBox->SetActive(true);
+
+		GetWorldTimerManager().SetTimer(DamagerActiverTimerHandle, this, &ALv1BossMonsterSideLavaR::DamagerDeActive, 0.1f, false);
+		
+		DamagerCallCount++;
+
+	}
 }

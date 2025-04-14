@@ -18,6 +18,8 @@
     <projectFile>../../Epic/UE_5.5/Engine/Source/Programs/AutomationTool/AutomationTool.csproj</projectFile>
     <projectFile kind="Docker">../../Epic/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>../../Epic/UE_5.5/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj</projectFile>
+    <projectFile profileName="EpicGames.AspNet">../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.AspNet/EpicGames.AspNet.csproj</projectFile>
+    <projectFile kind="Docker">../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/SmashBrawl.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
@@ -27,10 +29,35 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEditor.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEditor.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonster.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterBreathProjectile.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterBreathProjectile.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterLavaBurst.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterLavaBurst.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterMagic.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterMagic.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterSideLavaL.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterSideLavaL.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterSideLavaR.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterSideLavaR.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1MeteorProjectile.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1MeteorProjectile.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1MeteorSpawner.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1MeteorSpawner.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/AttackData/DT_MonsterAttackTable.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/AttackData/DT_MonsterAttackTable.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/AttackData/DT_MonsterAttackValueTable.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/AttackData/DT_MonsterAttackValueTable.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Init.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Init.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Phase2.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Phase2.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_MainCharacter_Smash.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_MainCharacter_Smash.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/HitBox/SmashBaseDamager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/HitBox/SmashBaseDamager.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonster.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonster.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterBreathProjectile.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterBreathProjectile.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterMagic.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterMagic.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterMeteor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterMeteor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaL.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaL.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaR.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterSideLavaR.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterVacuum.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/Lv1BossMonsterVacuum.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/MeteorSpawner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/MeteorSpawner.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterMagic.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterMagic.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterSideLavaL.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterSideLavaL.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterSideLavaR.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterSideLavaR.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterVacuum.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/Lv1BossMonsterVacuum.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/MeteorSpawner.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/MeteorSpawner.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,9 +77,8 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://4" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://6" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/Components/ActorComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/LevelObjects/RespawnLocation.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
@@ -197,6 +223,9 @@
       <workItem from="1744375354233" duration="1596000" />
       <workItem from="1744450781650" duration="1293000" />
       <workItem from="1744453736414" duration="1613000" />
+      <workItem from="1744460716625" duration="1165000" />
+      <workItem from="1744542033368" duration="10680000" />
+      <workItem from="1744593352044" duration="2776000" />
     </task>
     <servers />
   </component>

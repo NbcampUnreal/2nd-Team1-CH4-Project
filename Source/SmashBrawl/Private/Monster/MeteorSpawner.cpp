@@ -3,6 +3,7 @@
 
 #include "Monster/MeteorSpawner.h"
 
+#include "AbilitySystem/HitBox/SmashMonsterDamagerManager.h"
 #include "Components/BoxComponent.h"
 
 
@@ -17,6 +18,8 @@ AMeteorSpawner::AMeteorSpawner()
 	
 	SpawnVolumeComp = CreateDefaultSubobject<UBoxComponent>(TEXT("SpawnVolume"));
 	SpawnVolumeComp->SetupAttachment(MeshComp);
+	
+	DamagerManager = CreateDefaultSubobject<USmashMonsterDamagerManager>(TEXT("Damager"));
 
 	bReplicates = true;
 }
@@ -25,11 +28,11 @@ FVector AMeteorSpawner::GetSpanwerVolume() const
 {
 	FVector BoxExtent = SpawnVolumeComp->GetScaledBoxExtent();
 	FVector BoxOrigin = SpawnVolumeComp->GetComponentLocation();
-	FVector BoxOriginRemoveX = FVector(0, BoxOrigin.Y, BoxOrigin.Z);
+	FVector BoxOriginRemoveX = FVector( BoxOrigin.X, 0, BoxOrigin.Z);
 
 	return BoxOriginRemoveX + FVector(
+		FMath::RandRange(-BoxExtent.X, BoxExtent.X),
 		0,
-		FMath::RandRange(-BoxExtent.Y, BoxExtent.Y),
 		FMath::RandRange(-BoxExtent.Z, BoxExtent.Z)
 		);
 }
@@ -58,11 +61,11 @@ void AMeteorSpawner::SpawnMeteor() const
 		break;
 
 	case ESmashSpawnerDirection::Left:
-		DirectionConversionX = 0;
+		DirectionConversionX = -180;
 		break;
 
 	case ESmashSpawnerDirection::Right:
-		DirectionConversionX = -180;
+		DirectionConversionX = 0;
 		break;
 
 	default:
@@ -71,8 +74,12 @@ void AMeteorSpawner::SpawnMeteor() const
 		break;
 	}
 	
-			FVector SpawnLocation = GetSpanwerVolume();
-			FRotator SpawnRotation = FRotator(DirectionConversionX, 90, 0);
+	FVector SpawnLocation = GetSpanwerVolume();
+	FRotator SpawnRotation = FRotator(DirectionConversionX, 0, 0);
 	
-			GetWorld()->SpawnActor<ALv1BossMonsterMeteor>(Projectile, SpawnLocation, SpawnRotation);
+	FTransform SpawnTransform = FTransform(SpawnRotation, SpawnLocation);
+
+	DamagerManager->CreateDamager(SpawnTransform, FName("Meteor"));
+	
+			//GetWorld()->SpawnActor<ALv1BossMonsterMeteor>(Projectile, SpawnLocation, SpawnRotation);
 }

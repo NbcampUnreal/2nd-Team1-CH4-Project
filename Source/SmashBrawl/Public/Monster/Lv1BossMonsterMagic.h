@@ -24,7 +24,7 @@ public:
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
-	void DoAttack() const;
+	void DoAttack();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class UStaticMeshComponent* TelegraphMeshComponent;

@@ -35,10 +35,8 @@ public:
 	UNiagaraSystem* NiagaraEffectTemplate;
 
 	UPROPERTY(EditAnywhere, Category = "Value")
-	float VacuumForce = 50.f;
+	float VacuumForce = 2000.f;
 
 	FTimerHandle DestroyTimer;
 
-	
-	
 };
