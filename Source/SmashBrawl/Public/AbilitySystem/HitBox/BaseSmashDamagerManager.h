@@ -29,11 +29,7 @@ public:
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
-	UDataTable* HitBoxMappingTable;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
 	UDataTable* DamagePlayTable;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
-	UDataTable* DamageVisualTable;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
 	TArray<TSubclassOf<AActor>> AttackAbleClasses;

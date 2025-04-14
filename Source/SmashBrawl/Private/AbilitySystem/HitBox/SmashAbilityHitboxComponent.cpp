@@ -26,7 +26,7 @@ void USmashAbilityHitboxComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	Parent = GetOwner();
+	/*Parent = GetOwner();
 	TArray<AActor*> ChildActors;
 	GetOwner()->GetAllChildActors(ChildActors);
 	for (AActor* ChildActor : ChildActors)
@@ -36,7 +36,7 @@ void USmashAbilityHitboxComponent::BeginPlay()
 			DamagerInfo->DamagerInfoProperty.BoxTransform = DamagerInfo->GetTransform();
 			DamagerInfoPropertys.Add(DamagerInfo->DamagerIndex, DamagerInfo->DamagerInfoProperty);
 		}
-	}
+	}*/
 }
 
 

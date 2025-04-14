@@ -47,7 +47,7 @@ public:
 		const FHitResult& SweepResult
 		);
 
-	UFUNCTION()
+	UFUNCTION(Server, Reliable)
 	virtual void AttackActor(
 		UPrimitiveComponent* OverlappedComponent,
 		AActor* OtherActor,
@@ -63,7 +63,7 @@ public:
 	void Init(const TObjectPtr<AActor> InParent,
 		const TArray<TSubclassOf<AActor>>& InAttackAbleClasses,
 		const FDamagePlayRow& InDamagePlayRow,
-		const FDamageVisualRow& InDamageVisualRow);
+		const FDamageVisualRow& InDamageVisualRow = FDamageVisualRow());
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility Hitbox")
 	TObjectPtr<UStaticMeshComponent> SmashDamageBox;
