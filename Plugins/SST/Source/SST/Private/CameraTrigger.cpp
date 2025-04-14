@@ -54,7 +54,9 @@ void ACameraTrigger::InitiateCameraUpdate_Implementation(AActor* Actor, bool Und
 		for (const FCameraTriggerUpdateFloat p : FloatParameters)
 		{
 			FCameraTriggerUpdateFloat update = {
-				p.Parameter, followCameraComponent->UpdateOrGetFloatParameter(p.Parameter), p.BlendTime
+				p.Parameter,
+				followCameraComponent->UpdateOrGetFloatParameter(p.Parameter),
+				p.BlendTime
 			};
 			PreviousFloatParameters.Push(update);
 		}
@@ -76,11 +78,21 @@ void ACameraTrigger::InitiateCameraUpdate_Implementation(AActor* Actor, bool Und
 			};
 			PreviousVectorParameters.Push(update);
 		}
+        // 모드 파라미터 저장
+        for (const FCameraTriggerUpdateMode p : ModeParameters)
+        {
+            FCameraTriggerUpdateMode update = {
+                p.Parameter,
+                followCameraComponent->UpdateOrGetModeParameter(p.Parameter),
+                p.BlendTime
+            };
+            PreviousModeParameters.Push(update);
+        }
 	}
 
 	// Smoothly blend to new camera, if specified
 	AActor* viewTarget = Undo ? PreviousCamera : TargetCamera;
-	if (viewTarget)
+	if (viewTarget) 
 	{
 		playerController->SetViewTargetWithBlend(
 			viewTarget,
@@ -129,4 +141,14 @@ void ACameraTrigger::InitiateCameraUpdate_Implementation(AActor* Actor, bool Und
 		};
 		followCameraComponent->UpdateOrGetVectorParameter(VectorParameters[i].Parameter, &update);
 	}
+    // 모드 파라미터 업데이트
+    for (int i = 0; i < ModeParameters.Num(); i++)
+    {
+        FCameraTriggerUpdateMode update = {
+            ModeParameters[i].Parameter,
+            Undo ? PreviousModeParameters[i].Value : ModeParameters[i].Value,
+            ModeParameters[i].BlendTime
+        };
+        followCameraComponent->UpdateOrGetModeParameter(ModeParameters[i].Parameter, &update);
+}
 }

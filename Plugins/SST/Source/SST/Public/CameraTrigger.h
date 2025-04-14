@@ -10,6 +10,7 @@
 struct FCameraTriggerUpdateFloat;
 struct FCameraTriggerUpdateBool;
 struct FCameraTriggerUpdateVector;
+struct FCameraTriggerUpdateMode;
 
 /**
  * A trigger object designed to work with the CameraFollowedCharacter type.
@@ -41,12 +42,15 @@ class SST_API ACameraTrigger : public AActor
 	TArray<FCameraTriggerUpdateBool> BoolParameters;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	TArray<FCameraTriggerUpdateVector> VectorParameters;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
+    TArray<FCameraTriggerUpdateMode> ModeParameters;
 
 private:
 	class AActor* PreviousCamera;
 	TArray<FCameraTriggerUpdateFloat> PreviousFloatParameters;
 	TArray<FCameraTriggerUpdateBool> PreviousBoolParameters;
 	TArray<FCameraTriggerUpdateVector> PreviousVectorParameters;
+    TArray<FCameraTriggerUpdateMode> PreviousModeParameters;
 
 public:
 	ACameraTrigger();

@@ -9,7 +9,7 @@
 #include "Interfaces/Interface_SmashHitBox.h"
 #include "SmashCharacter.generated.h"
 
-class USmashCameraComponent;
+
 class USmashCombatComponent;
 class USmashCharacterStats;
 class USmashCharacterMovementComponent;
@@ -238,9 +238,6 @@ public:
 	/** 주요 컴포넌트 */
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Smash Character|Component")
 	TObjectPtr<USmashCharacterMovementComponent> SmashCharacterMovementComponent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Smash Character|Component")
-	TObjectPtr<USmashCameraComponent> SmashCameraComponent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Smash Character|Component")
 	TObjectPtr<USmashCharacterStats> SmashCharacterStatsComponent;
