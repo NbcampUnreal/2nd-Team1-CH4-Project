@@ -5,7 +5,7 @@
 
 UBTTask_FaceOnAttack::UBTTask_FaceOnAttack()
 {
-    NodeName = TEXT("Face On Attack");
+    NodeName = TEXT("Face Away From Target");
 }
 
 EBTNodeResult::Type UBTTask_FaceOnAttack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -24,7 +24,7 @@ EBTNodeResult::Type UBTTask_FaceOnAttack::ExecuteTask(UBehaviorTreeComponent& Ow
     float Direction = ToTarget.X;
 
     // 반대 방향이면 회전
-    if ((Direction > 0 && !AIPawn->IsFacingRight()) || (Direction < 0 && AIPawn->IsFacingRight()))
+    if ((Direction > 0 && AIPawn->IsFacingRight()) || (Direction < 0 && !AIPawn->IsFacingRight()))
     {
         AIPawn->FlipDirection();
     }
