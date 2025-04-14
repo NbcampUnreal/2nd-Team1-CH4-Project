@@ -120,16 +120,16 @@ void ABaseBossMonster::Server_PlatformDestroy_Init_Implementation()
 
 void ABaseBossMonster::StartAttack_Implementation()
 {
-	HeadCollision->SetCollisionProfileName("NoCollision");
-	LeftArmCollision->SetCollisionProfileName("NoCollision");
-	RightArmCollision->SetCollisionProfileName("NoCollision");
+	// HeadCollision->SetCollisionProfileName("NoCollision");
+	// LeftArmCollision->SetCollisionProfileName("NoCollision");
+	// RightArmCollision->SetCollisionProfileName("NoCollision");
 }
 
 void ABaseBossMonster::EndAttack_Implementation()
 {
-	HeadCollision->SetCollisionProfileName("BlockAllDynamic");
-	LeftArmCollision->SetCollisionProfileName("BlockAllDynamic");
-	RightArmCollision->SetCollisionProfileName("BlockAllDynamic");
+	// HeadCollision->SetCollisionProfileName("BlockAllDynamic");
+	// LeftArmCollision->SetCollisionProfileName("BlockAllDynamic");
+	// RightArmCollision->SetCollisionProfileName("BlockAllDynamic");
 }
 
 void ABaseBossMonster::Multicast_DoPhase2_Implementation()

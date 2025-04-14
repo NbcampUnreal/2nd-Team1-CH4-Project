@@ -40,7 +40,7 @@ void ALv1BossMonsterSideLavaR::BeginPlay()
 		);
 	}
 	
-	SmashDamageBox->SetWorldScale3D(FVector(5.0f, 30.0f, 100.0f));
+	SmashDamageBox->SetWorldScale3D(FVector(7.0f, 30.0f, 100.0f));
 
 	DamagerLocationChange();
 	
@@ -51,7 +51,6 @@ void ALv1BossMonsterSideLavaR::BeginPlay()
 		0.3f,
 		true
 	);
-
 }
 
 void ALv1BossMonsterSideLavaR::DamagerDeActive()
