@@ -8,6 +8,7 @@
 #include "Core/SmashTypes.h"
 #include "BaseAbility.generated.h"
 
+class USmashAbilityDamagerManager;
 class ASmashCharacter;
 
 UCLASS()
@@ -71,7 +72,7 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
 	void Server_AddDamagersServer(ACharacter* InParent);
 
-	UFUNCTION(BlueprintImplementableEvent)
+	UFUNCTION()
 	void FuncDamageBoxes(ACharacter* InParent);
 
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "BaseAbility|Network")
@@ -273,7 +274,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	int32 AttackStage;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
-	TArray<ACharacter*> ChildDamagers;
+	TArray<TObjectPtr<AActor>> ChildDamagers;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bActivateCollision;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
@@ -356,6 +357,9 @@ public:
 	bool bShowAttackStageOnly;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Setup")
 	int32 EditorAttackStage;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Setup")
+	TObjectPtr<USmashAbilityDamagerManager> SmashAbilityDamagerManager;
 	
 	FTimerHandle ReShieldTimerHandle;
 };

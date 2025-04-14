@@ -28,44 +28,26 @@ void UBaseSmashDamagerManager::BeginPlay()
 
 AActor* UBaseSmashDamagerManager::CreateDamager(FTransform SpawnTransform, const FName& DamagerId)
 {
-	if (GetWorld())
+	if (GetWorld() && GetWorld()->GetNetMode() != NM_DedicatedServer)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *SpawnTransform.GetLocation().ToString());
-		if (HitBoxMappingTable)
+		FDamagePlayRow DamagePlayRow;
+		if (FDamagePlayRow* TableDamagePlayRow = DamagePlayTable->FindRow<FDamagePlayRow>(DamagerId, TEXT("DamagePlayRow")))
 		{
 
-			if (FHitBoxMappingRow* MappingRow = HitBoxMappingTable->FindRow<FHitBoxMappingRow>(DamagerId, TEXT("HitBoxTable")))
+			DamagePlayRow = *TableDamagePlayRow;
+			if (ASmashBaseDamager* SmashBaseDamager =
+	GetWorld()->SpawnActorDeferred<ASmashBaseDamager>(TableDamagePlayRow->DamagerVisualActor,
+		SpawnTransform,
+		GetOwner(),
+		nullptr,
+		ESpawnActorCollisionHandlingMethod::AlwaysSpawn))
 			{
-
-				FDamageVisualRow DamageVisualRow;
-				if (FDamageVisualRow* TableDamageVisualRow = DamageVisualTable->FindRow<FDamageVisualRow>(MappingRow->HitboxVisualRowId, TEXT("DamageVisualRow")))
+				SmashBaseDamager->Init(GetOwner(), AttackAbleClasses, DamagePlayRow);
+				if (AActor* SpawnActor =
+			UGameplayStatics::FinishSpawningActor(SmashBaseDamager, SpawnTransform))
 				{
-					DamageVisualRow = *TableDamageVisualRow;
+					return SpawnActor;
 				}
-
-				FDamagePlayRow DamagePlayRow;
-				if (FDamagePlayRow* TableDamagePlayRow = DamagePlayTable->FindRow<FDamagePlayRow>(MappingRow->DamagePlayRowId, TEXT("DamagePlayRow")))
-				{
-
-					DamagePlayRow = *TableDamagePlayRow;
-					if (ASmashBaseDamager* SmashBaseDamager =
-			GetWorld()->SpawnActorDeferred<ASmashBaseDamager>(TableDamagePlayRow->DamagerVisualActor,
-				SpawnTransform,
-				GetOwner(),
-				nullptr,
-				ESpawnActorCollisionHandlingMethod::AlwaysSpawn))
-					{
-						SmashBaseDamager->Init(GetOwner(), AttackAbleClasses, DamagePlayRow, DamageVisualRow);
-						if (AActor* SpawnActor =
-					UGameplayStatics::FinishSpawningActor(SmashBaseDamager, SpawnTransform))
-						{
-							return SpawnActor;
-						}
-					}
-				}
-
-				
-				
 			}
 		}
 	}
