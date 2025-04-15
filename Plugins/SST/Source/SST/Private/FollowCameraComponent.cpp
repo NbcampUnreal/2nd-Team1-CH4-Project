@@ -341,41 +341,43 @@ void UFollowCameraComponent::RemoveActorToTrack(AActor* ActorToRemove)
 	}
 }
 
+
+//보스 액터는 카메라에서 임시 제외함.
 void UFollowCameraComponent::SetBossActor(AActor* NewBossActor)
 {
-	if (NewBossActor)
-	{
-		// 기존 보스가 있었다면 그룹에서 제거
-		if (BossActor && BossActor != NewBossActor)
-		{
-			RemoveActorFromGroup(BossActor);
-		}
-
-		// 새 보스 설정
-		BossActor = NewBossActor;
-
-		// 보스를 그룹에 추가 (추적 대상에 포함)
-		AddActorToGroup(BossActor);
-
-		if (bDebugMode)
-		{
-			UE_LOG(LogTemp, Log, TEXT("보스 액터 설정: %s"), *BossActor->GetName());
-		}
-	}
-	else
-	{
-		// 보스가 있었다면 그룹에서 제거
-		if (BossActor)
-		{
-			RemoveActorFromGroup(BossActor);
-			BossActor = nullptr;
-
-			if (bDebugMode)
-			{
-				UE_LOG(LogTemp, Log, TEXT("보스 액터 제거"));
-			}
-		}
-	}
+	// if (NewBossActor)
+	// {
+	// 	// 기존 보스가 있었다면 그룹에서 제거
+	// 	if (BossActor && BossActor != NewBossActor)
+	// 	{
+	// 		RemoveActorFromGroup(BossActor);
+	// 	}
+	//
+	// 	// 새 보스 설정
+	// 	BossActor = NewBossActor;
+	//
+	// 	// 보스를 그룹에 추가 (추적 대상에 포함)
+	// 	AddActorToGroup(BossActor);
+	//
+	// 	if (bDebugMode)
+	// 	{
+	// 		UE_LOG(LogTemp, Log, TEXT("보스 액터 설정: %s"), *BossActor->GetName());
+	// 	}
+	// }
+	// else
+	// {
+	// 	// 보스가 있었다면 그룹에서 제거
+	// 	if (BossActor)
+	// 	{
+	// 		RemoveActorFromGroup(BossActor);
+	// 		BossActor = nullptr;
+	//
+	// 		if (bDebugMode)
+	// 		{
+	// 			UE_LOG(LogTemp, Log, TEXT("보스 액터 제거"));
+	// 		}
+	// 	}
+	// }
 }
 
 // 새로 추가된 함수들
@@ -639,7 +641,7 @@ void UFollowCameraComponent::CalculateGroupCameraPosition(float DeltaTime)
 	else
 	{
 		// Z축 고정 사용 안함 - 그룹 중심점 기준 + 오프셋
-		targetLocation.Z = groupCenter.Z + 200.0f + CurrentGroupLocationOffset.Z;
+		targetLocation.Z = groupCenter.Z + 500.0f + CurrentGroupLocationOffset.Z;
 
 		if (bDebugMode)
 		{

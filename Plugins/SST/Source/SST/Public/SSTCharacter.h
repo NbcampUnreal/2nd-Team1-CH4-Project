@@ -26,7 +26,7 @@ public:
 
 	/** Camera Component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UFollowCameraComponent> FollowCamera;
+	TObjectPtr<class UFollowCameraComponent> MainFollowCamera;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))

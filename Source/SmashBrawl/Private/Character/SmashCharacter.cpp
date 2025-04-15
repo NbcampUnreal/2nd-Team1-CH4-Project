@@ -95,7 +95,7 @@ void ASmashCharacter::BeginPlay()
 
 	// 게임 시작 5초 후 카메라 모드 초기화 (타이밍이 중요)
 	FTimerHandle CameraInitTimer;
-	GetWorld()->GetTimerManager().SetTimer(CameraInitTimer, this, &ASmashCharacter::InitializeCameraMode, 5.0f, false);
+	GetWorld()->GetTimerManager().SetTimer(CameraInitTimer, this, &ASmashCharacter::InitializeCameraMode, 1.0f, false);
     
 	// 추가: 카메라 초기화 확인 타이머
 	FTimerHandle CameraCheckTimer;

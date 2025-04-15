@@ -29,11 +29,26 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/Enemy/Blueprints/BP_BaseAIFighter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Enemy/Blueprints/BP_BaseAIFighter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/AI/Blueprints/BP_GeneratedNavLinksProxy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Blueprints/BP_GeneratedNavLinksProxy.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BTT_Lv1BossSetBossLocation.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BTT_Lv1BossSetBossLocation.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/BossMonster/Animation/ChangePhase/Lv1BossMonster_InitPhase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Animation/ChangePhase/Lv1BossMonster_InitPhase.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Animation/ChangePhase/Lv1BossMonster_InitPhase2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Animation/ChangePhase/Lv1BossMonster_InitPhase2.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonster.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ParagonRampage/Characters/Heroes/Rampage/Animations/IdleBreak.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ParagonRampage/Characters/Heroes/Rampage/Animations/IdleBreak.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ParagonRampage/Characters/Heroes/Rampage/Animations/Idle_Phase2_Fixed.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ParagonRampage/Characters/Heroes/Rampage/Animations/Idle_Phase2_Fixed.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/TemplesOfCambodia/Environment/Rock_06/mi_Rock_06_01.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/TemplesOfCambodia/Environment/Rock_06/mi_Rock_06_01.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/TemplesOfCambodia/Environment/Rock_06/mi_Rock_06_02.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/TemplesOfCambodia/Environment/Rock_06/mi_Rock_06_02.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/FollowCameraComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/FollowCameraComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/SSTCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Private/SSTCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/SSTCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Plugins/SST/Source/SST/Public/SSTCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Init.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform_Init.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +62,8 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
@@ -203,7 +220,8 @@
       <workItem from="1744593352044" duration="2776000" />
       <workItem from="1744596210166" duration="44000" />
       <workItem from="1744596313994" duration="16585000" />
-      <workItem from="1744622399835" duration="2356000" />
+      <workItem from="1744622399835" duration="7675000" />
+      <workItem from="1744681252959" duration="9072000" />
     </task>
     <servers />
   </component>

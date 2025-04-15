@@ -47,7 +47,7 @@ void ABaseFracturePlatform_Init::MultiCast_Destruction_Implementation()
 		GCComponent->SetCollisionObjectType(ECC_WorldDynamic);
 
 		FVector const LaunchDirection = FVector(0.0f, 0.1f, 0.0f).GetSafeNormal();
-		float const ImpulseStrength = 100.0f;
+		float const ImpulseStrength = 500.0f;
 
 		GCComponent->AddImpulse(LaunchDirection * ImpulseStrength, NAME_None, true);
 		// 일정 시간 후 제거
