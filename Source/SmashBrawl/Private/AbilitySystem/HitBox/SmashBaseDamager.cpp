@@ -25,7 +25,6 @@ ASmashBaseDamager::ASmashBaseDamager()
 void ASmashBaseDamager::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 
@@ -51,12 +50,11 @@ void ASmashBaseDamager::Init(const TObjectPtr<AActor> InParent,
 	
 	TArray<AActor*> OverlappingActors;
 	SmashDamageBox->GetOverlappingActors(OverlappingActors);
-	
+
 	for (AActor* OverlappingActor : OverlappingActors)
 	{
 		OnMeshBeginOverlap(SmashDamageBox, OverlappingActor, nullptr, 0, true, FHitResult());
 	}
-
 }
 
 void ASmashBaseDamager::OnMeshBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
@@ -112,6 +110,7 @@ void ASmashBaseDamager::AttackActor_Implementation(UPrimitiveComponent* Overlapp
 		}
 	}
 }
+
 
 void ASmashBaseDamager::LifeTimeOut()
 {

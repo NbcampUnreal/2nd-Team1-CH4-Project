@@ -36,7 +36,7 @@ void UFXComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCom
 
 void UFXComponent::FXMainLoop()
 {
-	UE_LOG(LogSmash, Warning, TEXT("구현해야합니다"));
+	//UE_LOG(LogSmash, Warning, TEXT("구현해야합니다"));
 }
 
 void UFXComponent::PlayHitEffect(FVector Location)

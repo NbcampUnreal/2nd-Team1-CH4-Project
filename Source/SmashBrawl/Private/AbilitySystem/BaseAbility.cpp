@@ -88,14 +88,13 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 				SetBuffer();
 				if (!bIsUse)
 				{
+					UE_LOG(LogTemp, Log, TEXT("StartAbility"));
 					Multicast_AbilityStart_Implementation();
 					bIsUse = true;
 				}
 				//Then1
-				UE_LOG(LogTemp, Error, TEXT("AbilityTick1"));
 				if (Parent && Parent->bLanded)
 				{
-					UE_LOG(LogTemp, Error, TEXT("Land"));
 					if (!bLandClosed)
 					{
 						
@@ -249,6 +248,7 @@ void ABaseAbility::Multicast_LandLeg_Implementation(UAnimMontage* LandAnimation,
 
 void ABaseAbility::ActivateDamagers_Implementation()
 {
+	UE_LOG(LogTemp, Log, TEXT("ActivateDamagers"));
 	if (HasAuthority())
 	{
 		Server_AddDamagersServer(Parent);
@@ -310,15 +310,19 @@ void ABaseAbility::Multicast_ReShield_Implementation()
 
 void ABaseAbility::RemoveDamagers()
 {
-	TArray<AActor*> Damagers;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), Damagers);
-	// AActor::StaticClass�� BP_Damager Ŭ������ ����
-	for (AActor* Damager : Damagers)
+	//TArray<AActor*> Damagers;
+	//UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), Damagers);
+	//// AActor::StaticClass�� BP_Damager Ŭ������ ����
+	//for (AActor* Damager : Damagers)
+	//{
+	//	if (Damager->GetParentActor() == Parent)
+	//	{
+	//		Damager->Destroy();
+	//	}
+	//}
+	for (AActor* ChildDamager : ChildDamagers)
 	{
-		if (Damager->GetParentActor() == Parent)
-		{
-			Damager->Destroy();
-		}
+		ChildDamager->Destroy();
 	}
 }
 
@@ -328,7 +332,6 @@ void ABaseAbility::FlipOnStick()
 
 void ABaseAbility::PlayAnimation(int32 InAnimNo)
 {
-	Multicast_PlayAnimationClient(InAnimNo, Animations[InAnimNo]);
 	Server_PlayAnimationServer(InAnimNo, Animations[InAnimNo]);
 }
 
@@ -338,19 +341,22 @@ void ABaseAbility::Multicast_PlayAnimationClient_Implementation(int32 InAnimNo, 
 	if (AnimInstance)
 	{
 		AnimInstance->Montage_Play(InMontageToPlay, 1.0f);
-
 		FOnMontageBlendingOutStarted BlendOutDelegate;
-		BlendOutDelegate.BindLambda([this, InAnimNo](UAnimMontage* Montage, bool bInterrupted)
+		BlendOutDelegate.BindLambda([this, InAnimNo,AnimInstance](UAnimMontage* Montage, bool bInterrupted)
 		{
 			UE_LOG(LogTemp, Error, TEXT("EndPlayAnim_Multicast"));
+			Multicast_EndAnim(InAnimNo);
 			if (bInterrupted)
 			{
 				AnimNotifyEnd(bDamager, "None");
+				UE_LOG(LogTemp, Error, TEXT("EndPlayAnim_Multicast_Interrupted"));
 			}
 			else
 			{
-				Multicast_EndAnim(InAnimNo);
+				UE_LOG(LogTemp, Error, TEXT("EndPlayAnim_Multicast_Not_Interrupted"));
 			}
+			AnimInstance->OnPlayMontageNotifyBegin.Clear();
+			AnimInstance->OnPlayMontageNotifyEnd.Clear();
 		});
 		AnimInstance->Montage_SetBlendingOutDelegate(BlendOutDelegate, InMontageToPlay);
 		AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &ABaseAbility::OnNotifyBegin);
@@ -360,31 +366,12 @@ void ABaseAbility::Multicast_PlayAnimationClient_Implementation(int32 InAnimNo, 
 
 void ABaseAbility::Server_PlayAnimationServer_Implementation(int32 InAnimNo, UAnimMontage* InMontageToPlay)
 {
-	if (UAnimInstance* AnimInstance = Parent->GetMesh()->GetAnimInstance())
-	{
-		AnimInstance->Montage_Play(InMontageToPlay, 1.0f);
-
-		FOnMontageBlendingOutStarted BlendOutDelegate;
-		BlendOutDelegate.BindLambda([this,InAnimNo](UAnimMontage* Montage, bool bInterrupted)
-		{
-			UE_LOG(LogTemp, Error, TEXT("EndPlayAnimServer"));
-			if (bInterrupted)
-			{
-				AnimNotifyEnd(bDamager, "None");
-			}
-			else
-			{
-				Multicast_EndAnim(InAnimNo);
-			}
-		});
-		AnimInstance->Montage_SetBlendingOutDelegate(BlendOutDelegate, InMontageToPlay);
-		AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &ABaseAbility::OnNotifyBegin);
-		AnimInstance->OnPlayMontageNotifyEnd.AddDynamic(this, &ABaseAbility::OnNotifyEnd);
-	}
+	Multicast_PlayAnimationClient(InAnimNo, Animations[InAnimNo]);
 }
 
 void ABaseAbility::OnNotifyBegin(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
+	UE_LOG(LogTemp, Error, TEXT("%s"),*NotifyName.ToString());
 	if (NotifyName == "None" || AttackContain.Contains(NotifyName))
 	{
 		bDamager = true;
@@ -398,6 +385,7 @@ void ABaseAbility::OnNotifyBegin(FName NotifyName, const FBranchingPointNotifyPa
 
 void ABaseAbility::OnNotifyEnd(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
+	UAnimInstance* AnimInstance = Parent->GetMesh()->GetAnimInstance();
 	AnimNotifyEnd(bDamager, NotifyName);
 }
 
@@ -406,6 +394,7 @@ void ABaseAbility::AnimNotifyStart_Implementation(bool InDamager, FName NoteName
 	if (InDamager)
 	{
 		ActivateDamagers();
+		UE_LOG(LogTemp, Log, TEXT("ActivateDamager"));
 	}
 	if (NoteName == "ChangSet")
 	{
