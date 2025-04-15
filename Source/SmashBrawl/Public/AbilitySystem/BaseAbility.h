@@ -273,7 +273,7 @@ public:
 	bool bLanding;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	int32 AttackStage;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
+	UPROPERTY(VisibleAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	TArray<TObjectPtr<AActor>> ChildDamagers;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bActivateCollision;
