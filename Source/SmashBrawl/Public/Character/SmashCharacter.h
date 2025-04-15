@@ -196,6 +196,9 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_SmashDetection();
 
+	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
+	void RespawnEvent();
+
 	//---------------------------------------------------------------------
 	// 전투 및 히트 처리
 	//---------------------------------------------------------------------
@@ -315,6 +318,8 @@ public:
 
 	UPROPERTY(ReplicatedUsing=OnRep_PlayerNo, BlueprintReadWrite, Category = "Smash Character")
 	int32 PlayerNo;
+
+	
 
 	/** 입력 관련 */
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Smash Character|Input")
@@ -439,6 +444,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Widget")
 	TObjectPtr<UUW_HUD_CharacterInfo> UW_HUDCharacterInfo;
+
+	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
+	int32 LifeCount = 3;
 
 private:
 	/** 초기화 완료 여부 추적 */
