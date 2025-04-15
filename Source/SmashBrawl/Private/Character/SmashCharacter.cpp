@@ -153,15 +153,21 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	if (UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		// 기본 이동 입력 바인딩
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ASmashCharacter::ResetMoveInput);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this,
+		                                   &ASmashCharacter::ResetMoveInput);
 		EnhancedInputComponent->BindAction(IA_UpDown, ETriggerEvent::Triggered, this, &ASmashCharacter::UpDownAxis);
-		EnhancedInputComponent->BindAction(IA_UpDown, ETriggerEvent::Completed, this, &ASmashCharacter::ResetUpDownAxis);
+		EnhancedInputComponent->BindAction(IA_UpDown, ETriggerEvent::Completed, this,
+		                                   &ASmashCharacter::ResetUpDownAxis);
 
 		// 공격 입력 바인딩
-		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::BasicAttackPressed);
-		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Completed, this, &ASmashCharacter::BasicAttackReleased);
-		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::SpecialAttackPressed);
-		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this, &ASmashCharacter::SpecialAttackReleased);
+		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::BasicAttackPressed);
+		EnhancedInputComponent->BindAction(IA_BasicAttack, ETriggerEvent::Completed, this,
+		                                   &ASmashCharacter::BasicAttackReleased);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::SpecialAttackPressed);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this,
+		                                   &ASmashCharacter::SpecialAttackReleased);
 
 		// 도발 입력 바인딩
 		// EnhancedInputComponent->BindAction(IA_TauntUp, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntUpPressed);
@@ -169,12 +175,15 @@ void ASmashCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		// EnhancedInputComponent->BindAction(IA_TauntLeft, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntLeftPressed);
 		// EnhancedInputComponent->BindAction(IA_TauntDown, ETriggerEvent::Triggered, this, &ASmashCharacter::TauntDownPressed);
 
-		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this, &ASmashCharacter::SpecialAttackPressed);
-		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this, &ASmashCharacter::SpecialAttackReleased);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Triggered, this,
+		                                   &ASmashCharacter::SpecialAttackPressed);
+		EnhancedInputComponent->BindAction(IA_SpecialAttack, ETriggerEvent::Completed, this,
+		                                   &ASmashCharacter::SpecialAttackReleased);
 
 		EnhancedInputComponent->BindAction(IA_Dodge, ETriggerEvent::Started, this, &ASmashCharacter::DodgePressed);
 
-		EnhancedInputComponent->BindAction(IA_CameraToggle, ETriggerEvent::Started, this, &ASmashCharacter::ToggleCameraMode);
+		EnhancedInputComponent->BindAction(IA_CameraToggle, ETriggerEvent::Started, this,
+		                                   &ASmashCharacter::ToggleCameraMode);
 
 		EnhancedInputComponent->BindAction(IA_Grab, ETriggerEvent::Started, this, &ASmashCharacter::GrabPressed);
 
@@ -402,6 +411,56 @@ void ASmashCharacter::UpdateCamera()
 //---------------------------------------------------------------------
 // 상태 및 움직임 관리
 //---------------------------------------------------------------------
+
+void ASmashCharacter::RespawnEvent_Implementation()
+{
+	if (LifeCount <= 0)
+	{
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
+		return;
+	}
+
+	LifeCount--;
+
+	SmashStateSystem->TryChangeState(ESmashPlayerStates::Dead);
+
+	AbilitySystemComponent->Multicast_Respawning();
+
+	UClass* RespawnClass = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/PlatformFighterKit/Blueprints/LevelObjects/BP_RespwanLocations.BP_RespwanLocations_C"));
+	UClass* RespawnFoothold = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/PlatformFighterKit/Blueprints/PlayerObjects/BP_respwan.BP_respwan_C"));
+	
+	if (!RespawnClass) return;
+
+	TArray<AActor*> RespawnPoints;
+	UGameplayStatics::GetAllActorsOfClass(this, RespawnClass, RespawnPoints);
+
+	if (RespawnPoints.Num() == 0) return;
+
+	int32 Index = FMath::RandRange(0, RespawnPoints.Num() - 1);
+	AActor* RespawnPoint = RespawnPoints[Index];
+
+	if (!RespawnPoint) return;
+
+	if (RespawnFoothold)
+	{
+		FVector SpawnLocation = RespawnPoint->GetActorLocation();
+		FRotator SpawnRotation = FRotator::ZeroRotator;
+
+		AActor* SpawnFoothold = GetWorld()->SpawnActor<AActor>(RespawnFoothold, SpawnLocation, SpawnRotation);
+
+		if (SpawnFoothold)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Actor successfully spawned!"));
+		}
+	}
+	
+	FVector RespawnLocation = FVector(RespawnPoint->GetActorLocation().X, RespawnPoint->GetActorLocation().Y, RespawnPoint->GetActorLocation().Z + 300.0f);
+	SetActorLocation(RespawnLocation);
+	SetActorRotation(RespawnPoint->GetActorRotation());
+
+	SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
+}
 
 void ASmashCharacter::FacingCheck()
 {
@@ -849,7 +908,9 @@ void ASmashCharacter::Move(const struct FInputActionValue& Value)
 	MoveInputValue = Value.Get<float>();
 
 	// 상태 변경 시도 (걷기/달리기 상태로)
-	if (SmashStateSystem && SmashStateSystem->TryChangeState(ESmashPlayerStates::WalkAndRun))
+	ESmashPlayerStates CurrentState = SmashStateSystem->GetCurrentState();
+	bool CanAirWalk = CurrentState == ESmashPlayerStates::Fall || CurrentState == ESmashPlayerStates::Jump;
+	if (SmashStateSystem->TryChangeState(ESmashPlayerStates::WalkAndRun) || CanAirWalk)
 	{
 		// 입력 방향 설정
 		SmashCharacterMovementComponent->AddInputVector(FVector::ForwardVector * MoveInputValue);
@@ -1008,7 +1069,8 @@ void ASmashCharacter::BasicAttackPressed(const FInputActionValue& InputActionVal
 	bAttackButton = true;
 
 	// 공격 가능한 상태일 때만 처리
-	if (SmashStateSystem && SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.PlayerMovement.bCanAttack)
+	if (SmashStateSystem && SmashStateSystem->GetCurrentState() != ESmashPlayerStates::Ability && StateInfo.
+		PlayerMovement.bCanAttack)
 	{
 		// 방향 업데이트
 		UpdateDirection();
@@ -1058,15 +1120,18 @@ void ASmashCharacter::DodgePressed(const FInputActionValue& InputActionValue)
 {
 	// SetMovementState(FSmashPlayerMovement(false, false, false, false));
 
+	if (bDodgeDelay)
+		return;
+
 	if (SmashStateSystem->GetCurrentState() == ESmashPlayerStates::Jump || SmashStateSystem->GetCurrentState() ==
 		ESmashPlayerStates::Fall)
 	{
 		SmashStateSystem->TryChangeState(ESmashPlayerStates::Ability);
 		AbilityType = ESmashAbilityTypes::Dodge;
 		Direction = ESmashDirection::Up;
+		return;
 	}
 
-	if (bDodgeDelay) return;
 
 	if (GetMoveInputValue() >= 0.3f || GetMoveInputValue() <= -0.3f)
 	{
