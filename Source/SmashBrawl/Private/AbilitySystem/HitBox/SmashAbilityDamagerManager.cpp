@@ -52,7 +52,6 @@ void USmashAbilityDamagerManager::BeginPlay()
 			SmashDamagerInfoProperty.RelativeSpawnTransform = FTransform(DamagerInfo->SmashRotator, DamagerInfo->RelativeLocation);
 			SmashDamagerInfoProperty.RelativeSpawnTransform.SetScale3D(DamagerInfo->GetActorTransform().GetScale3D());
 
-			UE_LOG(LogTemp, Display, TEXT("%s"), *DamagerInfo->GetActorTransform().GetScale3D().ToString());
 			SmashDamagerInfoProperty.DamagePlayRow.HitDirection = DamagerInfo->HitDirection;
 			SmashDamagerInfoProperty.DamagePlayRow.LifeTime = 3.0f;
 
@@ -78,13 +77,18 @@ TArray<TObjectPtr<AActor>> USmashAbilityDamagerManager::SpawnDamagerAll()
 				ESpawnActorCollisionHandlingMethod::AlwaysSpawn))
 		{
 			SmashBaseDamager->Init(GetOwner(), AttackAbleClasses, DamagerInfoProperty.DamagePlayRow, DamagerInfoProperty.DamageVisualRow);
+
 			if (AActor* SpawnActor =
 		UGameplayStatics::FinishSpawningActor(SmashBaseDamager, DamagerInfoProperty.RelativeSpawnTransform))
 			{
 				UE_LOG(LogTemp, Display, TEXT("%s"), *DamagerInfoProperty.RelativeSpawnTransform.GetScale3D().ToString());
-				SpawnActor->SetActorScale3D(DamagerInfoProperty.RelativeSpawnTransform.GetScale3D());
+				SpawnActor->SetActorScale3D(DamagerInfoProperty.RelativeSpawnTransform.GetScale3D()* 4);
 				SpawnActor->AttachToActor(GetOwner(), FAttachmentTransformRules::KeepRelativeTransform);
 				SpawnDamagerAll.Add(SpawnActor);
+				if (ASmashBaseDamager* SpawnDamagerActor = Cast<ASmashBaseDamager>(SpawnActor))
+				{
+					SpawnDamagerActor->DetectOverlapActor();
+				}
 			}
 		}
 	}

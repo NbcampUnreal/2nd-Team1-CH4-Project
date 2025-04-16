@@ -47,7 +47,11 @@ void ASmashBaseDamager::Init(const TObjectPtr<AActor> InParent,
 	GetWorld()->GetTimerManager().SetTimer(LifeTimer, this, &ASmashBaseDamager::LifeTimeOut, DamagePlayRow.LifeTime, false);
 
 	SmashDamageBox->OnComponentBeginOverlap.AddDynamic(this, &ASmashBaseDamager::OnMeshBeginOverlap);
-	
+	DetectOverlapActor();
+}
+
+void ASmashBaseDamager::DetectOverlapActor()
+{
 	TArray<AActor*> OverlappingActors;
 	SmashDamageBox->GetOverlappingActors(OverlappingActors);
 
@@ -58,10 +62,13 @@ void ASmashBaseDamager::Init(const TObjectPtr<AActor> InParent,
 }
 
 void ASmashBaseDamager::OnMeshBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+                                           UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	UE_LOG(LogTemp, Warning, TEXT("DEBUG %s"), *GetActorLocation().ToString());
+
 	if (bIsAttackAble(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult))
 	{
+		
 		IgnoreActors.Add(OtherActor);
 		AttackActor(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 	}
@@ -70,18 +77,33 @@ void ASmashBaseDamager::OnMeshBeginOverlap(UPrimitiveComponent* OverlappedCompon
 bool ASmashBaseDamager::bIsAttackAble(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	
+	UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG"));
 	if (!IgnoreActors.Contains(OtherActor))
 	{
+		
+		UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG11"));
+		UE_LOG(LogTemp, Warning, TEXT("DEBUG %s"), *OtherActor->GetClass()->GetName());
 		if (OtherActor->Tags.Contains("AttackAble"))
 		{
+			
+			UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG2"));
 			if (IInterface_TakeDamage* TakeDamageOtherActor = Cast<IInterface_TakeDamage>(OtherActor))
 			{
+				
+				UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG3"));
 				for (TSubclassOf SoftClass : AttackAbleClasses)
 				{
+					
+					UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG4"));
 					if (SoftClass.Get() && OtherActor->IsA(SoftClass.Get()))
 					{
+						
+						UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG5"));
 						if (TakeDamageOtherActor->bHitConditions())
 						{
+							
+							UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG6"));
 							return true;
 						}
 					}

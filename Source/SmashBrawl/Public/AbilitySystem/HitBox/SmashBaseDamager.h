@@ -64,6 +64,9 @@ public:
 		const TArray<TSubclassOf<AActor>>& InAttackAbleClasses,
 		const FDamagePlayRow& InDamagePlayRow,
 		const FDamageVisualRow& InDamageVisualRow = FDamageVisualRow());
+
+	UFUNCTION()
+	void DetectOverlapActor();
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility Hitbox")
 	TObjectPtr<UStaticMeshComponent> SmashDamageBox;
