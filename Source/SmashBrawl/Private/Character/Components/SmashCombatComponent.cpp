@@ -140,17 +140,18 @@ void USmashCombatComponent::ApplyKnockback(bool bIsRightDirection)
 
     // Z축 상승 계산 수정 - 균형잡힌 범위 사용 및 비선형 커브 적용
     // 피격 게이지가 낮을 때는 충분한 Z축 상승을 보장하고, 높아질수록 증가율을 감소시킴
-    float PercentRatio = FMath::Clamp(CurrentPercent / 150.0f, 0.0f, 1.0f); // 150%를 최대값으로 고려
+    float PercentRatio = FMath::Clamp(CurrentPercent / 1000.0f, 0.0f, 1.0f); // 150%를 최대값으로 고려
     
     // 초기값은 더 높게 시작하되 증가율은 낮추기 위해 제곱근 대신 다른 함수 사용
     // (1 - (1 - x)²) 함수는 낮은 값에서는 빠르게 증가하다가 높은 값에서는 완만하게 증가
-    float NonLinearFactor = 1.0f - FMath::Square(1.0f - PercentRatio);
+	float NonLinearFactor = PercentRatio;
+    //float NonLinearFactor = 1.0f - FMath::Square(1.0f - PercentRatio);
     
     // 시작값을 0.35로 높이고 최대값을 0.6으로 제한
     float ZAxisFactor = FMath::Lerp(0.35f, 0.6f, NonLinearFactor);
 
     // 피격 게이지가 높을수록 X축(수평) 방향 넉백 강화
-    float XAxisMultiplier = 1.0f + (0.5f * PercentRatio); // 1.0~1.5 범위로 X축 넉백 강화
+    float XAxisMultiplier = 1.0f + (2.0f * PercentRatio); // 1.0~1.5 범위로 X축 넉백 강화
 
 	// 약간의 무작위성 추가 (자연스러운 넉백 구현)
 	// 0.9~1.1 사이의 랜덤 변동 적용
@@ -158,9 +159,9 @@ void USmashCombatComponent::ApplyKnockback(bool bIsRightDirection)
 
 	// 최종 넉백 벡터 계산
 	FVector LaunchVelocity(
-        KnockbackMagnitude * DirectionMultiplier * RandomVariation * XAxisMultiplier, // X 방향 (좌/우) - 강화됨
+        KnockbackMagnitude * DirectionMultiplier * RandomVariation * XAxisMultiplier * 1.5f, // X 방향 (좌/우) - 강화됨
 		0.0f, // Y 방향 (사용하지 않음)
-        KnockbackMagnitude * ZAxisFactor * RandomVariation // Z 방향 (수직) - 조정됨
+        KnockbackMagnitude * ZAxisFactor * RandomVariation * 1.5f // Z 방향 (수직) - 조정됨
 	);
 
 	// 캐릭터 발사 (X,Y 속도는 덮어쓰기, Z 속도도 덮어쓰기)

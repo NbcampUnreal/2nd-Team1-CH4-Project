@@ -24,6 +24,9 @@ public:
     UFUNCTION(BlueprintCallable)
     void PlayRandomAttackMontage();
 
+    UFUNCTION(NetMulticast, Reliable)
+    void Multicast_PlayRandomAttackMontage();
+
     /** 리커버리 종료 → 정상 상태 복귀 */
     UFUNCTION()
     void FinishRecovery();
@@ -43,7 +46,7 @@ public:
     /** 타겟이 지정한 Y/Z 범위 안에 있는지 확인 */
     UFUNCTION(BlueprintCallable)
     bool IsTargetInRange(AActor* TargetActor, AActor* ParentActor,
-        float YMin, float YMax,
+        float XMin, float XMax,
         float ZMin, float ZMax);
 
     /** 캐릭터가 행동 가능한 상태인지 여부 */
@@ -85,6 +88,9 @@ protected:
     /** 사망 애니메이션 재생 */
     UFUNCTION(BlueprintCallable, Category = "Combat")
     void PlayDeathMontage();
+
+    UFUNCTION(NetMulticast, Reliable)
+    void Multicast_PlayDeathMontage();
 
     UFUNCTION(BlueprintCallable, Category = "Combat")
     void TakeDamage(float DamageAmount);

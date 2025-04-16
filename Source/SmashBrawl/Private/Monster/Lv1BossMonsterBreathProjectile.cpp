@@ -72,6 +72,11 @@ void ALv1BossMonsterBreathProjectile::BeginPlay()
 		NiagaraTrailEffect->Activate();
 		NiagaraTrailEffect->SetAsset(NiagaraEffectTemplate);
 	}
+
+	if (SmashDamageBox)
+	{
+		SmashDamageBox->SetWorldScale3D(FVector(1.0f, 30.0f, 1.0f));
+	}
 	
 }
 

@@ -20,9 +20,9 @@ ASSTCharacter::ASSTCharacter(const FObjectInitializer& ObjectInitializer)
 	SSTCharacterMovementComponent = Cast<USSTCharacterMovementComponent>(GetCharacterMovement());
 
 	// Create a configurable camera to follow the player
-	FollowCamera = CreateDefaultSubobject<UFollowCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(RootComponent);
-	FollowCamera->bUsePawnControlRotation = false;
+	MainFollowCamera = CreateDefaultSubobject<UFollowCameraComponent>(TEXT("MainFollowCamera"));
+	MainFollowCamera->SetupAttachment(RootComponent);
+	MainFollowCamera->bUsePawnControlRotation = false;
 
 	// Disable controller rotation
 	bUseControllerRotationPitch = false;

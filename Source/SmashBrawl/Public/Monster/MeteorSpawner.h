@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Lv1BossMonsterMeteor.h"
+#include "AbilitySystem/HitBox/SmashMonsterDamagerManager.h"
 #include "GameFramework/Actor.h"
 #include "Core/SmashTypes.h"
 #include "MeteorSpawner.generated.h"
@@ -42,4 +43,7 @@ protected:
 
 	UPROPERTY()
 	FTimerHandle MeteorSpawnTimer;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	USmashMonsterDamagerManager* DamagerManager;
 };

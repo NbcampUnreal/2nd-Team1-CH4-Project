@@ -51,13 +51,15 @@ void ALv1BossMonsterVacuum::VacuumAction() const
 
 	for (AActor* Actor : FoundActors)
 	{
+
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *Actor->GetName());
 		if (ASmashCharacter* PlayerCharacter = Cast<ASmashCharacter>(Actor))
 		{
 			float Distance = FVector::Dist(SuctionCenter, PlayerCharacter->GetActorLocation());
 			FVector Direction = (SuctionCenter - PlayerCharacter->GetActorLocation()).GetSafeNormal();
 			FVector LaunchVelocity = Direction * VacuumForce;
-			LaunchVelocity.X = 0;
-			PlayerCharacter->LaunchCharacter(LaunchVelocity, false, false);
+			LaunchVelocity.Y = 0;
+			PlayerCharacter->LaunchCharacter(LaunchVelocity, true, true);
 		}
 	}
 }
