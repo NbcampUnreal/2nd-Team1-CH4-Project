@@ -15,6 +15,7 @@ USmashStateSystem::USmashStateSystem()
 	DefaultState = ESmashPlayerStates::Idle;
 	CurrentStateID = DefaultState;
 	bInitialized = false;
+	SetIsReplicatedByDefault(true);
 }
 
 void USmashStateSystem::BeginPlay()

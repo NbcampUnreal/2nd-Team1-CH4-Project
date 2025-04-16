@@ -22,6 +22,7 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -233,31 +234,31 @@ public:
 	// 중립 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Basic Attacks")
 	TSubclassOf<ABaseAbility> NeutralAttackClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
 	TObjectPtr<ABaseAbility> NeutralAttack;
 
 	// 상단 기울임 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Basic Attacks")
 	TSubclassOf<ABaseAbility> TiltUpClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
 	TObjectPtr<ABaseAbility> TiltUp;
 
 	// 하단 기울임 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Basic Attacks")
 	TSubclassOf<ABaseAbility> TiltDownClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
+	UPROPERTY(Replicated,BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
 	TObjectPtr<ABaseAbility> TiltDown;
 
 	// 전방 기울임 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Basic Attacks")
 	TSubclassOf<ABaseAbility> TiltForwardClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
 	TObjectPtr<ABaseAbility> TiltForward;
 
 	// 대시 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Basic Attacks")
 	TSubclassOf<ABaseAbility> DashAttackClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Basic Attacks")
 	TObjectPtr<ABaseAbility> DashAttack;
 
 	//------------------------------------------------------------
@@ -267,31 +268,31 @@ public:
 	// 중립 특수 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Special Attacks")
 	TSubclassOf<ABaseAbility> SpecialNeutralClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
 	TObjectPtr<ABaseAbility> SpecialNeutral;
 
 	// 상단 특수 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Special Attacks")
 	TSubclassOf<ABaseAbility> SpecialUpClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
 	TObjectPtr<ABaseAbility> SpecialUp;
 
 	// 하단 특수 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Special Attacks")
 	TSubclassOf<ABaseAbility> SpecialDownClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
 	TObjectPtr<ABaseAbility> SpecialDown;
 
 	// 전방 특수 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Special Attacks")
 	TSubclassOf<ABaseAbility> SpecialForwardClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
 	TObjectPtr<ABaseAbility> SpecialForward;
 
 	// 슈퍼 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Special Attacks")
 	TSubclassOf<ABaseAbility> SuperAttackClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Special Attacks")
 	TObjectPtr<ABaseAbility> SuperAttack;
 
 
@@ -302,31 +303,31 @@ public:
 	// 중립 공중 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Air Attacks")
 	TSubclassOf<ABaseAbility> AirNeutralClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
+	UPROPERTY(Replicated,BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
 	TObjectPtr<ABaseAbility> AirNeutral;
 
 	// 상단 공중 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Air Attacks")
 	TSubclassOf<ABaseAbility> AirUpClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
 	TObjectPtr<ABaseAbility> AirUp;
 
 	// 하단 공중 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Air Attacks")
 	TSubclassOf<ABaseAbility> AirDownClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
 	TObjectPtr<ABaseAbility> AirDown;
 
 	// 전방 공중 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Air Attacks")
 	TSubclassOf<ABaseAbility> AirForwardClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
 	TObjectPtr<ABaseAbility> AirForward;
 
 	// 후방 공중 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Air Attacks")
 	TSubclassOf<ABaseAbility> AirBackClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Air Attacks")
 	TObjectPtr<ABaseAbility> AirBack;
 
 	//------------------------------------------------------------
@@ -336,19 +337,19 @@ public:
 	// 상단 스매시 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Smash Attacks")
 	TSubclassOf<ABaseAbility> SmashUpClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Smash Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Smash Attacks")
 	TObjectPtr<ABaseAbility> SmashUp;
 
 	// 하단 스매시 공격
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility System|Smash Attacks")
 	TSubclassOf<ABaseAbility> SmashDownClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Smash Attacks")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Smash Attacks")
 	TObjectPtr<ABaseAbility> SmashDown;
 
 	// 전방 스매시 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Smash Attacks")
 	TSubclassOf<ABaseAbility> SmashForwardClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Smash Attacks")
+	UPROPERTY( Replicated,BlueprintReadOnly, Category="SmashAbility System|Smash Attacks")
 	TObjectPtr<ABaseAbility> SmashForward;
 
 	//------------------------------------------------------------
@@ -358,25 +359,25 @@ public:
 	// 공중 회피
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Dodge")
 	TSubclassOf<ABaseAbility> DodgeAirClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Dodge")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Dodge")
 	TObjectPtr<ABaseAbility> DodgeAir;
 
 	// 제자리 회피
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Dodge")
 	TSubclassOf<ABaseAbility> DodgeSpotClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Dodge")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Dodge")
 	TObjectPtr<ABaseAbility> DodgeSpot;
 
 	// 후방 회피
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Dodge")
 	TSubclassOf<ABaseAbility> DodgeBackClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Dodge")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Dodge")
 	TObjectPtr<ABaseAbility> DodgeBack;
 
 	// 전방 회피
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Dodge")
 	TSubclassOf<ABaseAbility> DodgeForwardClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Dodge")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Dodge")
 	TObjectPtr<ABaseAbility> DodgeForward;
 
 	//------------------------------------------------------------
@@ -386,37 +387,37 @@ public:
 	// 기본 잡기
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Grab and Throw")
 	TSubclassOf<ABaseAbility> GrabClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
 	TObjectPtr<ABaseAbility> Grab;
 
 	// 잡기 중 펀치
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Grab and Throw")
 	TSubclassOf<ABaseAbility> PummleClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
 	TObjectPtr<ABaseAbility> Pummle;
 
 	// 상단 던지기
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Grab and Throw")
 	TSubclassOf<ABaseAbility> ThrowUpClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
 	TObjectPtr<ABaseAbility> ThrowUp;
 
 	// 하단 던지기
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Grab and Throw")
 	TSubclassOf<ABaseAbility> ThrowDownClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
 	TObjectPtr<ABaseAbility> ThrowDown;
 
 	// 후방 던지기
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Grab and Throw")
 	TSubclassOf<ABaseAbility> ThrowBackwardClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
 	TObjectPtr<ABaseAbility> ThrowBackward;
 
 	// 전방 던지기
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Grab and Throw")
 	TSubclassOf<ABaseAbility> ThrowForwardClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Grab and Throw")
 	TObjectPtr<ABaseAbility> ThrowForward;
 
 	//------------------------------------------------------------
@@ -426,25 +427,25 @@ public:
 	// 상단 도발
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Taunts")
 	TSubclassOf<ABaseAbility> TauntUpClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Taunts")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Taunts")
 	TObjectPtr<ABaseAbility> TauntUp;
 
 	// 하단 도발
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Taunts")
 	TSubclassOf<ABaseAbility> TauntDownClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Taunts")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Taunts")
 	TObjectPtr<ABaseAbility> TauntDown;
 
 	// 왼쪽 도발
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Taunts")
 	TSubclassOf<ABaseAbility> TauntLeftClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Taunts")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Taunts")
 	TObjectPtr<ABaseAbility> TauntLeft;
 
 	// 오른쪽 도발
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Taunts")
 	TSubclassOf<ABaseAbility> TauntRightClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Taunts")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Taunts")
 	TObjectPtr<ABaseAbility> TauntRight;
 
 	//------------------------------------------------------------
@@ -454,31 +455,31 @@ public:
 	// 엎드린 상태에서 서기
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Prone")
 	TSubclassOf<ABaseAbility> ProneStandClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Prone")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Prone")
 	TObjectPtr<ABaseAbility> ProneStand;
 
 	// 엎드린 상태에서 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Prone")
 	TSubclassOf<ABaseAbility> ProneAttackClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Prone")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Prone")
 	TObjectPtr<ABaseAbility> ProneAttack;
 
 	// 절벽 공격
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Ledge")
 	TSubclassOf<ABaseAbility> LedgeAttackClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Ledge")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Ledge")
 	TObjectPtr<ABaseAbility> LedgeAttack;
 
 	// 절벽 잡기
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Ledge")
 	TSubclassOf<ABaseAbility> LedgeClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Ledge")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Ledge")
 	TObjectPtr<ABaseAbility> Ledge;
 
 	// 레벨 인트로
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Misc")
 	TSubclassOf<ABaseAbility> LevelIntroClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Misc")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Misc")
 	TObjectPtr<ABaseAbility> LevelIntro;
 
 	// 리스폰 능력
@@ -488,7 +489,7 @@ public:
 	// 아이템 사용
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Misc")
 	TSubclassOf<ABaseAbility> ItemsClass;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Misc")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Misc")
 	TObjectPtr<ABaseAbility> Items;
 
 	//------------------------------------------------------------
@@ -498,24 +499,24 @@ public:
 	// 추가 능력 1
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Extra Abilities")
 	TSubclassOf<ABaseAbility> ExtraAbility1Class;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Extra Abilities")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Extra Abilities")
 	TObjectPtr<ABaseAbility> ExtraAbility1;
 
 	// 추가 능력 2
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Extra Abilities")
 	TSubclassOf<ABaseAbility> ExtraAbility2Class;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Extra Abilities")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Extra Abilities")
 	TObjectPtr<ABaseAbility> ExtraAbility2;
 
 	// 추가 능력 3
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Extra Abilities")
 	TSubclassOf<ABaseAbility> ExtraAbility3Class;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Extra Abilities")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Extra Abilities")
 	TObjectPtr<ABaseAbility> ExtraAbility3;
 
 	// 추가 능력 4
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="SmashAbility System|Extra Abilities")
 	TSubclassOf<ABaseAbility> ExtraAbility4Class;
-	UPROPERTY( BlueprintReadOnly, Category="SmashAbility System|Extra Abilities")
+	UPROPERTY(Replicated, BlueprintReadOnly, Category="SmashAbility System|Extra Abilities")
 	TObjectPtr<ABaseAbility> ExtraAbility4;
 };
