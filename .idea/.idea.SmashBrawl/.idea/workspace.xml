@@ -29,9 +29,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/BP_BaseAbility_Origin.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Blueprints/Abilities/BP_BaseAbility_Origin.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_SmashUp.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_SmashUp.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_SpecialDown.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_SpecialDown.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_SmashForward.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_SmashForward.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -214,6 +212,7 @@
       <workItem from="1744677550701" duration="14703000" />
       <workItem from="1744718507309" duration="177000" />
       <workItem from="1744761827794" duration="3923000" />
+      <workItem from="1744766393161" duration="2025000" />
     </task>
     <servers />
   </component>
