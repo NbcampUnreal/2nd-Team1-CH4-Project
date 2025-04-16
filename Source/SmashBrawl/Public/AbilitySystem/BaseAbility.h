@@ -23,6 +23,7 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:
 	UFUNCTION(NetMulticast, Reliable, Category = "BaseAbility|Network")
@@ -259,17 +260,17 @@ public:
 	bool bCharged;
 
 
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
+	UPROPERTY(EditAnywhere,Replicated,BlueprintReadWrite,Category = "BaseAbility")
 	bool bActive;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
+	UPROPERTY(EditAnywhere,Replicated,BlueprintReadWrite,Category = "BaseAbility")
 	TObjectPtr<ASmashCharacter> Parent;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	FVector ParentLocation;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bInputButter;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
+	UPROPERTY(EditAnywhere,Replicated, BlueprintReadWrite,Category = "BaseAbility")
 	bool bIsUse;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
+	UPROPERTY(EditAnywhere,Replicated,BlueprintReadWrite,Category = "BaseAbility")
 	bool bLanding;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	int32 AttackStage;
@@ -283,7 +284,7 @@ public:
 	TSet<FName> AttackContain;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bDamager;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
+	UPROPERTY(EditAnywhere,Replicated, BlueprintReadWrite,Category = "BaseAbility")
 	ESmashFaceing Direction;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	TArray<AActor*> DamagerInfo;
@@ -295,7 +296,7 @@ public:
 	bool bDontEndOnLedge;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	bool bStale;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
+	UPROPERTY(EditAnywhere,Replicated,BlueprintReadWrite,Category = "BaseAbility")
 	ESmashFaceing BufferDirection;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility")
 	ESmashBuffer Buffer;
@@ -339,7 +340,7 @@ public:
 	TObjectPtr<AActor> HitBox;// class Damager
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Collisions")
 	int32 CollisionSetIndex;
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Collisions")
+	UPROPERTY(EditAnywhere,Replicated, BlueprintReadWrite,Category = "BaseAbility|Collisions")
 	TArray<int32> CollisionSetArray;
 	
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Animation")
@@ -348,7 +349,7 @@ public:
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Animation")
 	TArray<UAnimMontage*> Animations;
 	
-	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Projectile")
+	UPROPERTY(EditAnywhere,Replicated, BlueprintReadWrite,Category = "BaseAbility|Projectile")
 	TSubclassOf<AActor> Projectile;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite,Category = "BaseAbility|Projectile")
 	FTransform ProjectileTransform;

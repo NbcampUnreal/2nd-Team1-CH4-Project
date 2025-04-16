@@ -14,6 +14,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interfaces/Interface_SmashCombat.h"
+#include "Components/ActorComponent.h"
 
 // Sets default values
 ABaseAbility::ABaseAbility()
@@ -28,8 +29,8 @@ ABaseAbility::ABaseAbility()
 	AttackContain.Add(FName(TEXT("Attack4")));
 	AttackContain.Add(FName(TEXT("None")));
 
-	CollisionSet =1;
-
+	CollisionSet = 1;
+	
 	// PlatformFighterKit/Blueprints/Projectiles/BP_ProjectileBase_C
 	// ConstructorHelpers::FClassFinder<>
 
@@ -49,6 +50,19 @@ void ABaseAbility::BeginPlay()
 	else
 	{
 	}
+}
+
+void ABaseAbility::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABaseAbility, Parent);
+	DOREPLIFETIME(ABaseAbility, CollisionSetArray);
+	DOREPLIFETIME(ABaseAbility, bActive);
+	DOREPLIFETIME(ABaseAbility, bIsUse);
+	DOREPLIFETIME(ABaseAbility, bLanding);
+	DOREPLIFETIME(ABaseAbility, Direction);
+	DOREPLIFETIME(ABaseAbility, BufferDirection);
+	DOREPLIFETIME(ABaseAbility, Projectile);
 }
 
 void ABaseAbility::Multicast_AbilityStart_Implementation()
@@ -75,8 +89,6 @@ void ABaseAbility::Multicast_AbilityStart_Implementation()
 
 void ABaseAbility::Multicast_TickRep_Implementation()
 {
-	if (HasAuthority())
-	{
 		if (bActive)
 		{
 			ActiveLoop();
@@ -145,7 +157,6 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 				}
 			}
 		}
-	}
 }
 
 void ABaseAbility::Multicast_SoftEnd_Implementation()
