@@ -10,6 +10,7 @@ void ALobbyPlayerState::GetLifetimeReplicatedProps(TArray<class FLifetimePropert
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ALobbyPlayerState, bReady);
+	DOREPLIFETIME(ALobbyPlayerState, PlayerNickname);
 }
 
 void ALobbyPlayerState::ChangeReadyState()

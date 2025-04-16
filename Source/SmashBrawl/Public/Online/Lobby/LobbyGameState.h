@@ -28,6 +28,12 @@ public:
 	void RemoveReadPlayer(const APlayerController* NewPlayer);
 	UFUNCTION(BlueprintCallable, Category = "Lobby")
 	int32 GetNumReadPlayers() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Lobby")
+	TArray<APlayerState*> GetJoinedPlayerStates() const
+	{
+		return JoinPlayers.Array();
+	}
 	
 public:
 	TSet<APlayerState*> ReadyPlayers; 
