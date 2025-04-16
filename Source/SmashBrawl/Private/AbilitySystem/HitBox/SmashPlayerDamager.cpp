@@ -59,5 +59,9 @@ void ASmashPlayerDamager::AttackActor(UPrimitiveComponent* OverlappedComponent, 
 	{
 		DamagePlayRow.DamageAmount = TmpDamageAmount;
 	}
-	
+
+	if (OtherActor->ActorHasTag("Boss"))
+	{
+		//이펙트 생성
+	}
 }

@@ -85,9 +85,9 @@ protected:
 
 	// 피격 게이지에 따른 넉백 증가율
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config|KnockBack")
-	float KnockbackGrowthFactor = 3.0f;
+	float KnockbackGrowthFactor = 10.0f;
 
 	// 최대 넉백 제한
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config|KnockBack")
-	float MaxKnockbackMagnitude = 2500.0f;
+	float MaxKnockbackMagnitude = 100000.0f;
 };

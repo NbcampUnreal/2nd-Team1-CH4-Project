@@ -158,12 +158,13 @@ void USSTCharacterMovementComponent::OnMovementModeChanged(EMovementMode Previou
 			}
 		}
 	}
+	
 }
 
 void USSTCharacterMovementComponent::UpdateCharacterStateBeforeMovement(float DeltaSeconds)
 {
 	Super::UpdateCharacterStateBeforeMovement(DeltaSeconds);
-
+	
 	// Check for platform drop
 	if (WantsToPlatformDrop)
 	{
@@ -292,7 +293,7 @@ float USSTCharacterMovementComponent::GetMaxSpeed() const
 		return DashDistance / DashDurationSeconds;
 	default:
 		UE_LOG(LogTemp, Error, TEXT("Attempt to get max speed with an unknown movement mode"))
-		return 0.0f;
+			return 0.0f;
 	}
 }
 
@@ -308,7 +309,7 @@ float USSTCharacterMovementComponent::GetMaxBrakingDeceleration() const
 		return 0.0f;
 	default:
 		UE_LOG(LogTemp, Error, TEXT("Attempt to get max braking deceleration with an unknown movement mode"))
-		return 0.0f;
+			return 0.0f;
 	}
 }
 
@@ -491,8 +492,8 @@ bool USSTCharacterMovementComponent::IsEligibleWallForSliding(FHitResult& Hit)
 
 	// Check whether wall is suitably long (e.g. ignore small platforms)
 	if (!CheckWallAtLeastCapsuleHeight(Hit))
-	{
-		return false;
+	{ 
+		return false; 
 	}
 
 	return true;
@@ -537,6 +538,7 @@ void USSTCharacterMovementComponent::PerformWallJump()
 	FVector LaunchVector = WallslideJumpOffForce * FVector::ForwardVector;
 	FRotator LaunchRotator(FacingRight ? WallslideJumpAngle : WallslideJumpAngle + 90.0f, 0.0f, 0.0f);
 	Launch(LaunchRotator.RotateVector(LaunchVector));
+
 }
 
 void USSTCharacterMovementComponent::EnterDash()
@@ -593,10 +595,10 @@ void USSTCharacterMovementComponent::PhysDash(float DeltaTime, int32 Iterations)
 
 	Iterations++;
 	bJustTeleported = false;
-
+	
 	FindFloor(UpdatedComponent->GetComponentLocation(), CurrentFloor, false);
-	if (CurrentFloor.IsWalkableFloor()
-		&& (DashFollowsDownwardSlopes || CurrentFloor.HitResult.ImpactNormal.X * Velocity.X < 0))
+	if (CurrentFloor.IsWalkableFloor() 
+		&& (DashFollowsDownwardSlopes || CurrentFloor.HitResult.ImpactNormal.X * Velocity.X < 0)) 
 	{
 		// if on ground, need to compensate for any slope
 		FStepDownResult StepDownResult;
@@ -616,6 +618,7 @@ void USSTCharacterMovementComponent::PhysDash(float DeltaTime, int32 Iterations)
 			Velocity = (UpdatedComponent->GetComponentLocation() - InitialLocation) / DeltaTime;
 		}
 	}
+
 }
 
 void USSTCharacterMovementComponent::PerformDash()

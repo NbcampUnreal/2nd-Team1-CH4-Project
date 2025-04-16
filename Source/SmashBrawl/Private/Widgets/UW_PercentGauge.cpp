@@ -41,6 +41,11 @@ void UUW_PercentGauge::NativeConstruct()
 	{
 		PercentText->SetText(FText::FromString(TEXT("0%")));
 	}
+
+	if (LifeCountText)
+	{
+		LifeCountText->SetText(FText::FromString(TEXT("3")));
+	}
 }
 
 void UUW_PercentGauge::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -74,6 +79,10 @@ void UUW_PercentGauge::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 			int32 CurrentPercentInt = FMath::RoundToInt(CurrentAnimatedPercent);
 			PercentText->SetText(FText::FromString(FString::Printf(TEXT("%d%%"), CurrentPercentInt)));
 		}
+	}
+	if (LifeCountText)
+	{
+		LifeCountText->SetText(FText::FromString(FString::Printf(TEXT("%d"), OwnerCharacter->LifeCount)));
 	}
 }
 

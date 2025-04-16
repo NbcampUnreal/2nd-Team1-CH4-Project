@@ -26,7 +26,7 @@ public:
 
 	/** Camera Component */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UFollowCameraComponent> FollowCamera;
+	TObjectPtr<class UFollowCameraComponent> MainFollowCamera;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
@@ -110,6 +110,4 @@ public:
 
 	/** Helper -- get collision query params to ignore this actor and its children*/
 	virtual FCollisionQueryParams GetIgnoreSelfParams() const;
-
-	UFollowCameraComponent* GetFollowCamera() { return FollowCamera; };
 };

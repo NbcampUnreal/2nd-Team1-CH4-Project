@@ -66,6 +66,9 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Components")
 	void EndAttack();
 
+	UFUNCTION(BlueprintCallable, Category = "State")
+	FORCEINLINE float GetHealth() { return HealthPoint / MaxHealthPoint; }
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "State")
 	ESmashBossState CurrentState = ESmashBossState::Phase1;
 

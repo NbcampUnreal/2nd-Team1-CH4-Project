@@ -22,10 +22,22 @@ public:
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void DamagerDeActive();
+
+	void DamagerLocationChange();
 	
 	UPROPERTY(VisibleAnywhere, Category = "Effects")
 	UNiagaraComponent* NiagaraTrailEffect;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
 	UNiagaraSystem* NiagaraEffectTemplate;
+
+	FTimerHandle DamagerActiverTimerHandle;
+	FTimerHandle DamagerLocationTimerHandle;
+	
+	int32 DamagerCallCount = 0;
+	FTimerHandle DamagerRepeatTimerHandle;
+
 };

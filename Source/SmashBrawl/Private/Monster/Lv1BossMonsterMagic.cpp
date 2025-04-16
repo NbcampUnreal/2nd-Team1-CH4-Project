@@ -25,8 +25,9 @@ ALv1BossMonsterMagic::ALv1BossMonsterMagic()
 	bReplicates = true;
 	
 	SmashDamageBox->SetupAttachment(RootComp);
+	SmashDamageBox->SetActive(false);
+	SmashDamageBox->SetWorldLocation(GetActorLocation() + FVector(1, 1000.0f, 1.0f));
 }
-
 
 void ALv1BossMonsterMagic::BeginPlay()
 {
@@ -35,7 +36,7 @@ void ALv1BossMonsterMagic::BeginPlay()
 	GetWorldTimerManager().SetTimer(DoAttackTimerHandle, this, &ALv1BossMonsterMagic::DoAttack, 1.5f, false);
 }
 
-void ALv1BossMonsterMagic::DoAttack() const
+void ALv1BossMonsterMagic::DoAttack()
 {
 	if (NiagaraEffectTemplate)
 	{
@@ -57,4 +58,19 @@ void ALv1BossMonsterMagic::DoAttack() const
 	}
 
 	TelegraphMeshComponent->SetHiddenInGame(true);
+	
+	if (SmashDamageBox)
+	{
+		SmashDamageBox->SetWorldLocation(GetActorLocation() + FVector(0, 0, 200.0f));
+		SmashDamageBox->SetActive(true);
+		SmashDamageBox->SetWorldScale3D(FVector(4.0f, 30.0f, 5.0f));
+	}
+	
+	// TArray<AActor*> OverlappingActors;
+	// SmashDamageBox->GetOverlappingActors(OverlappingActors);
+	//
+	// for (AActor* OverlappingActor : OverlappingActors)
+	// {
+	// 	OnMeshBeginOverlap(SmashDamageBox, OverlappingActor, nullptr, 0, true, FHitResult());
+	// }
 }

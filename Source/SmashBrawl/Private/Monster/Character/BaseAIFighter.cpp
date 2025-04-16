@@ -8,6 +8,7 @@
 ABaseAIFighter::ABaseAIFighter()
 {
     bReplicates = true;
+    GetCharacterMovement()->SetIsReplicated(true);
     PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -19,6 +20,14 @@ void ABaseAIFighter::BeginPlay()
 }
 
 void ABaseAIFighter::PlayRandomAttackMontage()
+{
+    if (HasAuthority())
+    {
+        Multicast_PlayRandomAttackMontage();
+    }
+}
+
+void ABaseAIFighter::Multicast_PlayRandomAttackMontage_Implementation()
 {
     const float Rand = FMath::FRand();
 
@@ -57,7 +66,7 @@ AActor* ABaseAIFighter::GetValidTargetByDistance(AActor* TargetActor, AActor* Pa
     return (Distance >= DistanceThreshold) ? TargetActor : this;
 }
 
-bool ABaseAIFighter::IsTargetInRange(AActor* TargetActor, AActor* ParentActor, float YMin, float YMax, float ZMin, float ZMax)
+bool ABaseAIFighter::IsTargetInRange(AActor* TargetActor, AActor* ParentActor, float XMin, float XMax, float ZMin, float ZMax)
 {
     if (!TargetActor || !ParentActor)
     {
@@ -67,13 +76,13 @@ bool ABaseAIFighter::IsTargetInRange(AActor* TargetActor, AActor* ParentActor, f
     const FVector TargetLocation = TargetActor->GetActorLocation();
     const FVector ParentLocation = ParentActor->GetActorLocation();
 
-    const float YOffset = TargetLocation.Y - ParentLocation.Y;
+    const float XOffset = TargetLocation.X - ParentLocation.X;
     const float ZOffset = TargetLocation.Z - ParentLocation.Z;
 
-    const bool bYInRange = YOffset >= YMin && YOffset <= YMax;
+    const bool bXInRange = XOffset >= XMin && XOffset <= XMax;
     const bool bZInRange = ZOffset >= ZMin && ZOffset <= ZMax;
 
-    return bYInRange && bZInRange;
+    return bXInRange && bZInRange;
 }
 
 void ABaseAIFighter::SetStateFromParam(int32 Param)
@@ -82,6 +91,8 @@ void ABaseAIFighter::SetStateFromParam(int32 Param)
 
 void ABaseAIFighter::TakeDamage(float DamageAmount)
 {
+    if (!HasAuthority()) return;
+
     CurrentHP -= DamageAmount;
     CurrentHP = FMath::Clamp(CurrentHP, 0.f, MaxHP);
 
@@ -116,7 +127,15 @@ void ABaseAIFighter::Die()
 
 void ABaseAIFighter::PlayDeathMontage()
 {
-    if (DeathMontage && GetMesh() && GetMesh()->GetAnimInstance())
+    if (HasAuthority())
+    {
+        Multicast_PlayDeathMontage();
+    }
+}
+
+void ABaseAIFighter::Multicast_PlayDeathMontage_Implementation()
+{
+    if (DeathMontage && GetMesh()->GetAnimInstance())
     {
         GetMesh()->GetAnimInstance()->Montage_Play(DeathMontage);
     }

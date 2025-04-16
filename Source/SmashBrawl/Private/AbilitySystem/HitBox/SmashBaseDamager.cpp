@@ -15,9 +15,9 @@ ASmashBaseDamager::ASmashBaseDamager()
 
 	SmashDamageBox = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Smash Damage Box"));
 	SetRootComponent(SmashDamageBox);
-	SmashDamageBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly); // Overlap만
-	SmashDamageBox->SetCollisionResponseToAllChannels(ECR_Ignore);
-	SmashDamageBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	// SmashDamageBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly); // Overlap만
+	// // SmashDamageBox->SetCollisionResponseToAllChannels(ECR_Ignore);
+	// // SmashDamageBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	SmashDamageBox->SetVisibility(true);
 }
 

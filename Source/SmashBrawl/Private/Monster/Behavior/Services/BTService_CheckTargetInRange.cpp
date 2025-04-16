@@ -1,8 +1,8 @@
 #include "Monster/Behavior/Services/BTService_CheckTargetInRange.h"
-
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Monster/Character/BaseAIFighter.h"
+#include "DrawDebugHelpers.h"
 
 UBTService_CheckTargetInRange::UBTService_CheckTargetInRange()
 {
@@ -24,13 +24,13 @@ void UBTService_CheckTargetInRange::TickNode(UBehaviorTreeComponent& OwnerComp, 
 
     if (!Target || !Parent) return;
 
-    const float YMin = -110.f;
-    const float YMax = 110.f;
-    const float ZMin = -10.f;
-    const float ZMax = 10.f;
+    const float XMin = -200.f;
+    const float XMax = 200.f;
+    const float ZMin = -50.f;
+    const float ZMax = 50.f;
 
-    bool bInRange = AIPawn->IsTargetInRange(Target, Parent, YMin, YMax, ZMin, ZMax);
+    bool bInRange = AIPawn->IsTargetInRange(Target, Parent, XMin, XMax, ZMin, ZMax);
 
     OwnerComp.GetBlackboardComponent()->SetValueAsBool(GetSelectedBlackboardKey(), bInRange);
-}
 
+}
