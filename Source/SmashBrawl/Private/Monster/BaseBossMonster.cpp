@@ -205,7 +205,13 @@ void ABaseBossMonster::TakeDamage(int32 DamageAmount, ESmashAttackType AttackTyp
 
 	if (HealthPoint <= 0)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Die"));
+		if (AAIController* Ctr = Cast<AAIController>(GetController()))
+		{
+			if (UBlackboardComponent* BBC = Ctr->GetBlackboardComponent())
+			{
+				BBC->SetValueAsBool(FName("bIsDead"), true);
+			}
+		}
 	}
 }
 

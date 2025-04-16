@@ -168,6 +168,8 @@ void USmashCharacterStats::Screenshake(float RumbleInten, float RumbleDuration)
 void USmashCharacterStats::OnRep_Percent()
 {
 	// UI 업데이트 등 추가 작업 (null 체크 추가)
+	OnPercentChanged.Broadcast(0, Percent);
+	
 	if (Parent && Parent->UW_HUDCharacterInfo)
 	{
 		Parent->UW_HUDCharacterInfo->PlayShake();
