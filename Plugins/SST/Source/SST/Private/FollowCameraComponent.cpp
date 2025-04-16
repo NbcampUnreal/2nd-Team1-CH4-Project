@@ -641,7 +641,7 @@ void UFollowCameraComponent::CalculateGroupCameraPosition(float DeltaTime)
 	else
 	{
 		// Z축 고정 사용 안함 - 그룹 중심점 기준 + 오프셋
-		targetLocation.Z = groupCenter.Z + 500.0f + CurrentGroupLocationOffset.Z;
+		targetLocation.Z = groupCenter.Z + 200.0f + CurrentGroupLocationOffset.Z;
 
 		if (bDebugMode)
 		{

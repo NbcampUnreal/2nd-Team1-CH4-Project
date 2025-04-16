@@ -10,7 +10,6 @@
 #include "Components/CapsuleComponent.h"
 #include "Components/SphereComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Layers/LayersSubsystem.h"
 #include "Net/UnrealNetwork.h"
 
 // Sets default values
