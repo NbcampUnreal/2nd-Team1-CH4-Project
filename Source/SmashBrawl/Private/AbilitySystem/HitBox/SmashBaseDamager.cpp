@@ -18,7 +18,7 @@ ASmashBaseDamager::ASmashBaseDamager()
 	SmashDamageBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly); // Overlap만
 	SmashDamageBox->SetCollisionResponseToAllChannels(ECR_Ignore);
 	SmashDamageBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-	SmashDamageBox->SetVisibility(false);
+	SmashDamageBox->SetVisibility(true);
 }
 
 // Called when the game starts or when spawned

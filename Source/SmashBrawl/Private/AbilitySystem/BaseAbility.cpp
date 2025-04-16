@@ -45,10 +45,15 @@ void ABaseAbility::BeginPlay()
 	{
 		//AttackData = Parent(BP_Fighter�� AttackData)
 		StartTimeline();
+		UAnimInstance* AnimInstance = Parent->GetMesh()->GetAnimInstance();
+
+		AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &ABaseAbility::OnNotifyBegin);
+		AnimInstance->OnPlayMontageNotifyEnd.AddDynamic(this, &ABaseAbility::OnNotifyEnd);
 	}
 	else
 	{
 	}
+	
 }
 
 void ABaseAbility::Multicast_AbilityStart_Implementation()
@@ -310,7 +315,11 @@ void ABaseAbility::Multicast_ReShield_Implementation()
 
 void ABaseAbility::RemoveDamagers()
 {
-	TArray<AActor*> Damagers;
+	for (AActor* Damager : ChildDamagers)
+	{
+		Damager->Destroy();
+	}
+	/*TArray<AActor*> Damagers;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AActor::StaticClass(), Damagers);
 	// AActor::StaticClass�� BP_Damager Ŭ������ ����
 	for (AActor* Damager : Damagers)
@@ -319,7 +328,7 @@ void ABaseAbility::RemoveDamagers()
 		{
 			Damager->Destroy();
 		}
-	}
+	}*/
 }
 
 void ABaseAbility::FlipOnStick()
@@ -353,8 +362,7 @@ void ABaseAbility::Multicast_PlayAnimationClient_Implementation(int32 InAnimNo, 
 			}
 		});
 		AnimInstance->Montage_SetBlendingOutDelegate(BlendOutDelegate, InMontageToPlay);
-		AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &ABaseAbility::OnNotifyBegin);
-		AnimInstance->OnPlayMontageNotifyEnd.AddDynamic(this, &ABaseAbility::OnNotifyEnd);
+		
 	}
 }
 
@@ -378,8 +386,6 @@ void ABaseAbility::Server_PlayAnimationServer_Implementation(int32 InAnimNo, UAn
 			}
 		});
 		AnimInstance->Montage_SetBlendingOutDelegate(BlendOutDelegate, InMontageToPlay);
-		AnimInstance->OnPlayMontageNotifyBegin.AddDynamic(this, &ABaseAbility::OnNotifyBegin);
-		AnimInstance->OnPlayMontageNotifyEnd.AddDynamic(this, &ABaseAbility::OnNotifyEnd);
 	}
 }
 
@@ -393,6 +399,7 @@ void ABaseAbility::OnNotifyBegin(FName NotifyName, const FBranchingPointNotifyPa
 	{
 		bDamager = false;
 	}
+
 	AnimNotifyStart(bDamager, NotifyName);
 }
 
@@ -405,6 +412,7 @@ void ABaseAbility::AnimNotifyStart_Implementation(bool InDamager, FName NoteName
 {
 	if (InDamager)
 	{
+
 		ActivateDamagers();
 	}
 	if (NoteName == "ChangSet")
