@@ -2,8 +2,11 @@
 
 #include "AbilitySystem/BaseAbility.h"
 #include "Character/SmashCharacter.h"
+#include "Character/Components/SmashCombatComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
 #include "SmashBrawl/Public/Interfaces/Interface_SmashCombat.h"
+#include "Windows/WindowsApplication.h"
 
 USmashAbilitySystemComponent::USmashAbilitySystemComponent()
 {
@@ -33,6 +36,54 @@ void USmashAbilitySystemComponent::BeginPlay()
 		return;
 	}
 }
+void USmashAbilitySystemComponent::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(USmashAbilitySystemComponent, NeutralAttack);
+	DOREPLIFETIME(USmashAbilitySystemComponent, TiltUp);
+	DOREPLIFETIME(USmashAbilitySystemComponent, TiltDown);
+	DOREPLIFETIME(USmashAbilitySystemComponent,TiltForward);
+	DOREPLIFETIME(USmashAbilitySystemComponent,DashAttack);
+	DOREPLIFETIME(USmashAbilitySystemComponent,SpecialNeutral);
+	DOREPLIFETIME(USmashAbilitySystemComponent,SpecialUp);
+	DOREPLIFETIME(USmashAbilitySystemComponent,SpecialDown);
+	DOREPLIFETIME(USmashAbilitySystemComponent,SpecialForward);
+	DOREPLIFETIME(USmashAbilitySystemComponent,SuperAttack);
+	DOREPLIFETIME(USmashAbilitySystemComponent,AirNeutral);
+	DOREPLIFETIME(USmashAbilitySystemComponent,AirUp);
+	DOREPLIFETIME(USmashAbilitySystemComponent,AirDown);
+	DOREPLIFETIME(USmashAbilitySystemComponent,AirForward);
+	DOREPLIFETIME(USmashAbilitySystemComponent,AirBack);
+	DOREPLIFETIME(USmashAbilitySystemComponent,SmashUp);
+	DOREPLIFETIME(USmashAbilitySystemComponent,SmashDown);
+	DOREPLIFETIME(USmashAbilitySystemComponent,SmashForward);
+	DOREPLIFETIME(USmashAbilitySystemComponent,DodgeAir);
+	DOREPLIFETIME(USmashAbilitySystemComponent,DodgeSpot);
+	DOREPLIFETIME(USmashAbilitySystemComponent,DodgeForward);
+	DOREPLIFETIME(USmashAbilitySystemComponent,DodgeBack);
+	DOREPLIFETIME(USmashAbilitySystemComponent,Grab);
+	DOREPLIFETIME(USmashAbilitySystemComponent,Pummle);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ThrowUp);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ThrowDown);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ThrowForward);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ThrowBackward);
+	DOREPLIFETIME(USmashAbilitySystemComponent,TauntUp);
+	DOREPLIFETIME(USmashAbilitySystemComponent,TauntDown);
+	DOREPLIFETIME(USmashAbilitySystemComponent,TauntLeft);
+	DOREPLIFETIME(USmashAbilitySystemComponent,TauntRight);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ProneStand);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ProneAttack);
+	DOREPLIFETIME(USmashAbilitySystemComponent,LedgeAttack);
+	DOREPLIFETIME(USmashAbilitySystemComponent,Ledge);
+	DOREPLIFETIME(USmashAbilitySystemComponent,LevelIntro);
+	DOREPLIFETIME(USmashAbilitySystemComponent,Items);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ExtraAbility1);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ExtraAbility2);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ExtraAbility3);
+	DOREPLIFETIME(USmashAbilitySystemComponent,ExtraAbility4);
+	
+}
+
 
 void USmashAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
