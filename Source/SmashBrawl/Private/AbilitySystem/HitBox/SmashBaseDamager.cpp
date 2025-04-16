@@ -5,6 +5,9 @@
 
 #include "Character/SmashCharacter.h"
 #include "Interfaces/Interface_SmashHitBox.h"
+#include "Kismet/GameplayStatics.h"
+#include "Net/UnrealNetwork.h"
+#include "Particles/ParticleSystem.h"
 
 
 // Sets default values
@@ -17,8 +20,10 @@ ASmashBaseDamager::ASmashBaseDamager()
 	SetRootComponent(SmashDamageBox);
 	// SmashDamageBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly); // Overlap만
 	// // SmashDamageBox->SetCollisionResponseToAllChannels(ECR_Ignore);
-	// // SmashDamageBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
+	SmashDamageBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 	SmashDamageBox->SetVisibility(true);
+
+	SetReplicates(true);
 }
 
 // Called when the game starts or when spawned
@@ -27,10 +32,17 @@ void ASmashBaseDamager::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ASmashBaseDamager::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ASmashBaseDamager, DamageVisualRow);
+}
+
 
 void ASmashBaseDamager::Init(const TObjectPtr<AActor> InParent,
-	const TArray<TSubclassOf<AActor>>& InAttackAbleClasses, const FDamagePlayRow& InDamagePlayRow,
-	const FDamageVisualRow& InDamageVisualRow)
+                             const TArray<TSubclassOf<AActor>>& InAttackAbleClasses, const FDamagePlayRow& InDamagePlayRow,
+                             const FDamageVisualRow& InDamageVisualRow)
 {
 	Parent = InParent;
 	AttackAbleClasses = InAttackAbleClasses;
@@ -61,14 +73,32 @@ void ASmashBaseDamager::DetectOverlapActor()
 	}
 }
 
+void ASmashBaseDamager::Server_PlayHitadditional_Implementation()
+{
+	Multi_PlayHitadditional();
+}
+
+void ASmashBaseDamager::Multi_PlayHitadditional_Implementation()
+{
+	if (DamageVisualRow.SpawnSound)
+	{
+		if (USoundBase* Sound = DamageVisualRow.SpawnSound.LoadSynchronous())
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, Sound, GetRootComponent()->GetComponentLocation());
+		}
+	}
+
+	if (DamageVisualRow.Particle)
+	{
+		if (UParticleSystem* Particle = DamageVisualRow.Particle.LoadSynchronous())
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), Particle, GetRootComponent()->GetComponentLocation());
+	}
+}
 void ASmashBaseDamager::OnMeshBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
                                            UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	UE_LOG(LogTemp, Warning, TEXT("DEBUG %s"), *GetActorLocation().ToString());
-
 	if (bIsAttackAble(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult))
 	{
-		
 		IgnoreActors.Add(OtherActor);
 		AttackActor(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
 	}
@@ -77,33 +107,19 @@ void ASmashBaseDamager::OnMeshBeginOverlap(UPrimitiveComponent* OverlappedCompon
 bool ASmashBaseDamager::bIsAttackAble(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	
-	UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG"));
+	if (OtherComp)
 	if (!IgnoreActors.Contains(OtherActor))
 	{
-		
-		UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG11"));
-		UE_LOG(LogTemp, Warning, TEXT("DEBUG %s"), *OtherActor->GetClass()->GetName());
 		if (OtherActor->Tags.Contains("AttackAble"))
 		{
-			
-			UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG2"));
 			if (IInterface_TakeDamage* TakeDamageOtherActor = Cast<IInterface_TakeDamage>(OtherActor))
 			{
-				
-				UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG3"));
 				for (TSubclassOf SoftClass : AttackAbleClasses)
 				{
-					
-					UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG4"));
 					if (SoftClass.Get() && OtherActor->IsA(SoftClass.Get()))
 					{
-						
-						UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG5"));
 						if (TakeDamageOtherActor->bHitConditions())
 						{
-							
-							UE_LOG(LogTemp, Warning, TEXT("DEBUG TAKE DAMG6"));
 							return true;
 						}
 					}
@@ -130,6 +146,7 @@ void ASmashBaseDamager::AttackActor_Implementation(UPrimitiveComponent* Overlapp
 		{
 			TakeDamageOtherActor->TakeDamage(DamagePlayRow.DamageAmount, DamagePlayRow.AttackType, true);
 		}
+		Multi_PlayHitadditional();
 	}
 }
 

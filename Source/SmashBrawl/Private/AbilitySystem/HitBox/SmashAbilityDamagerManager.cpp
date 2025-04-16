@@ -3,8 +3,10 @@
 
 #include "AbilitySystem/HitBox/SmashAbilityDamagerManager.h"
 
+#include "AbilitySystem/BaseAbility.h"
 #include "AbilitySystem/HitBox/SmashDamagerInfo.h"
 #include "AbilitySystem/HitBox/SmashPlayerDamager.h"
+#include "Character/SmashCharacter.h"
 #include "Core/SmashDamageBoxType.h"
 #include "Kismet/GameplayStatics.h"
 #include "Particles/ParticleSystem.h"
@@ -30,6 +32,7 @@ void USmashAbilityDamagerManager::BeginPlay()
 	
 	TArray<AActor*> ChildActors;
 	GetOwner()->GetAllChildActors(ChildActors);
+	Parent = GetOwner<ABaseAbility>()->Parent;
 	for (AActor* ChildActor : ChildActors)
 	{
 		if (ASmashDamagerInfo* DamagerInfo = Cast<ASmashDamagerInfo>(ChildActor))
@@ -72,16 +75,15 @@ TArray<TObjectPtr<AActor>> USmashAbilityDamagerManager::SpawnDamagerAll()
 		if (ASmashBaseDamager* SmashBaseDamager =
 			GetWorld()->SpawnActorDeferred<ASmashBaseDamager>(ASmashPlayerDamager::StaticClass(),
 				DamagerInfoProperty.RelativeSpawnTransform,
-				GetOwner(),
+				Parent,
 				nullptr,
 				ESpawnActorCollisionHandlingMethod::AlwaysSpawn))
 		{
-			SmashBaseDamager->Init(GetOwner(), AttackAbleClasses, DamagerInfoProperty.DamagePlayRow, DamagerInfoProperty.DamageVisualRow);
+			SmashBaseDamager->Init(Parent, AttackAbleClasses, DamagerInfoProperty.DamagePlayRow, DamagerInfoProperty.DamageVisualRow);
 
 			if (AActor* SpawnActor =
 		UGameplayStatics::FinishSpawningActor(SmashBaseDamager, DamagerInfoProperty.RelativeSpawnTransform))
 			{
-				UE_LOG(LogTemp, Display, TEXT("%s"), *DamagerInfoProperty.RelativeSpawnTransform.GetScale3D().ToString());
 				SpawnActor->SetActorScale3D(DamagerInfoProperty.RelativeSpawnTransform.GetScale3D()* 4);
 				SpawnActor->AttachToActor(GetOwner(), FAttachmentTransformRules::KeepRelativeTransform);
 				SpawnDamagerAll.Add(SpawnActor);
