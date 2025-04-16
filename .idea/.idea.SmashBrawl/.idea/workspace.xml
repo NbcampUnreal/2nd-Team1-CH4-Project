@@ -28,11 +28,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/MobSpawner.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/MobSpawner.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/BossMonster/UI/WB_BossMonsterHP.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/UI/WB_BossMonsterHP.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/BaseBossMonster.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/BaseBossMonster.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
