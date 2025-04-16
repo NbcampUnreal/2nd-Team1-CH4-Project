@@ -19,6 +19,7 @@ USmashAbilitySystemComponent::USmashAbilitySystemComponent()
 	DamageScale.Add(0.8f);
 	DamageScale.Add(0.7f);
 	DamageScale.Add(0.6f);
+	SetIsReplicatedByDefault(true);
 }
 
 void USmashAbilitySystemComponent::BeginPlay()
@@ -453,7 +454,11 @@ void USmashAbilitySystemComponent::Multicast_Respawning_Implementation()
 
 void USmashAbilitySystemComponent::Multicast_WitchAbility_Implementation()
 {
-	const ESmashAbilityTypes CurrentAbilityTypes = IInterface_SmashCombat::Execute_GetAbilityTypes(Parent);
+	ESmashAbilityTypes CurrentAbilityTypes;
+	if (Parent)
+	{
+		CurrentAbilityTypes = IInterface_SmashCombat::Execute_GetAbilityTypes(Parent);
+	}
 	FString AbilityName = UEnum::GetValueAsString(CurrentAbilityTypes);
 	//(LogTemp, Error, TEXT("%s"), *AbilityName);
 	switch (CurrentAbilityTypes)
