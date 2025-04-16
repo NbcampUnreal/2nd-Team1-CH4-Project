@@ -82,6 +82,7 @@ void ASmashCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>
 	// 전투 관련
 	DOREPLIFETIME(ASmashCharacter, AbilityType);
 	DOREPLIFETIME(ASmashCharacter, Attacks);
+	DOREPLIFETIME(ASmashCharacter, LifeCount);
 }
 
 void ASmashCharacter::BeginPlay()
@@ -410,6 +411,8 @@ void ASmashCharacter::RespawnEvent_Implementation()
 
 	LifeCount--;
 
+	UE_LOG(LogTemp, Warning, TEXT("%d"), LifeCount);
+	
 	SmashStateSystem->TryChangeState(ESmashPlayerStates::Dead);
 
 	AbilitySystemComponent->Multicast_Respawning();
@@ -444,9 +447,16 @@ void ASmashCharacter::RespawnEvent_Implementation()
 	
 	FVector RespawnLocation = FVector(RespawnPoint->GetActorLocation().X, RespawnPoint->GetActorLocation().Y, RespawnPoint->GetActorLocation().Z + 300.0f);
 	SetActorLocation(RespawnLocation);
-	SetActorRotation(RespawnPoint->GetActorRotation());
+	// SetActorRotation(RespawnPoint->GetActorRotation());
 
-	SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
+	FTimerDelegate TimerDelegate;
+	TimerDelegate.BindLambda([this]()
+	{
+		SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
+	});
+
+	FTimerHandle DelayHandle;
+	GetWorld()->GetTimerManager().SetTimer(DelayHandle, TimerDelegate, 10.0f, false);
 }
 
 void ASmashCharacter::FacingCheck()

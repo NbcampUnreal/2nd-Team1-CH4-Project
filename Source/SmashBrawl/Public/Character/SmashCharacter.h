@@ -445,7 +445,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Smash Character|Widget")
 	TObjectPtr<UUW_HUD_CharacterInfo> UW_HUDCharacterInfo;
 
-	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Smash Character")
 	int32 LifeCount = 3;
 
 private:

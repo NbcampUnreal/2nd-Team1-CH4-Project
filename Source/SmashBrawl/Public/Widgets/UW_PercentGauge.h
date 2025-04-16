@@ -42,7 +42,10 @@ protected:
 
     UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
     TObjectPtr<UTextBlock> PercentText;
-
+    
+    UPROPERTY(BlueprintReadWrite, meta = (BindWidget))
+    TObjectPtr<UTextBlock> LifeCountText;
+    
     // 소유 캐릭터 참조
     UPROPERTY(BlueprintReadWrite, Category = "Percent Gauge")
     TObjectPtr<ASmashCharacter> OwnerCharacter;
