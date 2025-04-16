@@ -93,7 +93,7 @@ void ASmashCharacter::BeginPlay()
 
 	// 약간의 딜레이 후에 초기화 시작 (0.5초)
 	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASmashCharacter::StartUp, 0.5f, false);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &ASmashCharacter::StartUp, 1.0f, false);
 
 	// 게임 시작 5초 후 카메라 모드 초기화 (타이밍이 중요)
 	FTimerHandle CameraInitTimer;
@@ -102,8 +102,19 @@ void ASmashCharacter::BeginPlay()
 	FTimerHandle UpdateTargetsTimer;
 	GetWorld()->GetTimerManager().SetTimer(UpdateTargetsTimer, [this]()
 	{
+		if (!HasAuthority())
+		{
+			return;
+		}
+
 		if (SmashCameraComponent && SmashCameraComponent->GetCameraMode() == ECameraMode::Group)
 		{
+			if (!GetWorld())
+			{
+				UE_LOG(LogTemp, Error, TEXT("❌ GetWorld() is NULL"));
+				return;
+			}
+
 			TArray<AActor*> AllCharacters;
 			UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASmashCharacter::StaticClass(), AllCharacters);
 

@@ -90,7 +90,7 @@ void ABaseAbility::Multicast_TickRep_Implementation()
 					bIsUse = true;
 				}
 				//Then1
-				UE_LOG(LogTemp, Error, TEXT("AbilityTick1"));
+				//UE_LOG(LogTemp, Error, TEXT("AbilityTick1"));
 				if (Parent && Parent->bLanded)
 				{
 					UE_LOG(LogTemp, Error, TEXT("Land"));
