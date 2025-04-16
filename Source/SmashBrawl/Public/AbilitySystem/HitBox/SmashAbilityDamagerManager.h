@@ -8,6 +8,8 @@
 #include "SmashAbilityDamagerManager.generated.h"
 
 
+class ASmashCharacter;
+
 USTRUCT(BlueprintType)
 struct FSmashDamagerInfoProperty
 {
@@ -47,5 +49,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilityDamagerManager")
 	TArray<FSmashDamagerInfoProperty> DamagerInfos;
 	
-	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AbilityDamagerManager")
+	TObjectPtr<ASmashCharacter> Parent;
 };

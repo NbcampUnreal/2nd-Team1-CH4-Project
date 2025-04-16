@@ -49,7 +49,9 @@ void ASmashPlayerDamager::Flinch()
 void ASmashPlayerDamager::AttackActor(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	int32 TmpDamageAmount = DamagePlayRow.DamageAmount;
+	Super::AttackActor(OverlappedComponent, OtherActor, OtherComp, OtherBodyIndex, bFromSweep, SweepResult);
+
+	/*int32 TmpDamageAmount = DamagePlayRow.DamageAmount;
 	if (ASmashCharacter* OtherSmashActor = Cast<ASmashCharacter>(OtherActor))
 	{
 		DamagePlayRow.DamageAmount = 0;
@@ -58,7 +60,7 @@ void ASmashPlayerDamager::AttackActor(UPrimitiveComponent* OverlappedComponent, 
 	if (ASmashCharacter* OtherSmashActor = Cast<ASmashCharacter>(OtherActor))
 	{
 		DamagePlayRow.DamageAmount = TmpDamageAmount;
-	}
+	}*/
 
 	if (OtherActor->ActorHasTag("Boss"))
 	{

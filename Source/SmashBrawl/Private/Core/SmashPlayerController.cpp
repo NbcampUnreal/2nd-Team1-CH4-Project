@@ -7,7 +7,7 @@
 
 ASmashPlayerController::ASmashPlayerController()
 {
-	
+	WidgetPtr = nullptr;
 }
 
 void ASmashPlayerController::BeginPlay()
@@ -19,7 +19,6 @@ void ASmashPlayerController::BeginPlay()
 		WidgetPtr = CreateWidget<UUserWidget>(this, WidgetClass);
 		if (WidgetPtr)
 		{
-			
 			WidgetPtr->AddToViewport();
 		}
 		
