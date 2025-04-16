@@ -3,6 +3,7 @@
 
 #include "Online/Lobby/LobbyGameState.h"
 #include "GameFramework/PlayerState.h"
+#include "Net/UnrealNetwork.h"
 
 void ALobbyGameState::AddJoinPlayer(const APlayerController* NewPlayer)
 {
@@ -32,4 +33,12 @@ void ALobbyGameState::RemoveReadPlayer(const APlayerController* NewPlayer)
 int32 ALobbyGameState::GetNumReadPlayers() const
 {
 	return ReadyPlayers.Num();
+}
+
+void ALobbyGameState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ALobbyGameState, JoinPlayers);
+	DOREPLIFETIME(ALobbyGameState, ReadyPlayers);
 }
