@@ -28,8 +28,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
+      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Actors/BackGroundMusicPlayer.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/AnimNotifies/AnimNotify_EndGame.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Actors/BackGroundMusicPlayer.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/AnimNotifies/AnimNotify_EndGame.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEditor.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEditor.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BB_Lv1BossMonster.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/AI/Phase1/BT_Lv1BossMonster.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Animation/ChangePhase/Lv1BossMonster_Die.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Animation/ChangePhase/Lv1BossMonster_Die.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterLavaBurst.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterLavaBurst.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterSideLavaL.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterSideLavaL.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterSideLavaR.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterSideLavaR.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterVacuum.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/BossMonster/Blueprint/BP_Lv1BossMonsterVacuum.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ParagonRampage/Characters/Heroes/Rampage/Animations/Death_A.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ParagonRampage/Characters/Heroes/Rampage/Animations/Death_A.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/PlatformFighterKit/Maps/Levels/BattlePlace.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/BP_SmashFightGameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/Overlap/BP_Box.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Blueprints/Overlap/BP_Box.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__GroundAttackVFX/NS/NS_IceSprout.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__GroundAttackVFX/NS/NS_IceSprout.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__GroundAttackVFX/NS/NS_LavaBurst.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__GroundAttackVFX/NS/NS_LavaBurst.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__GroundAttackVFX/NS/NS_Line_Lava.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__GroundAttackVFX/NS/NS_Line_Lava.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__GroundAttackVFX/_GenericSource/SFX/Sfx_Ice_born_Cue.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__GroundAttackVFX/_GenericSource/SFX/Sfx_Ice_born_Cue.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Core/SmashPlatFighterGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Core/SmashPlatFighterGameMode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseBossPatternActor.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseBossPatternActor.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/BaseFracturePlatform.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Core/SmashPlatFighterGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Core/SmashPlatFighterGameMode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/BaseBossMonster.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Monster/BaseBossMonster.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +68,21 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://2" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://18" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/Components/ActorComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/NavigationSystem/Private/NavMesh/RecastNavMesh.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/SmashBrawl/UHT/BaseBossMonster.gen.cpp" root0="SKIP_HIGHLIGHTING" />
