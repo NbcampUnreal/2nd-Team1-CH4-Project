@@ -29,7 +29,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_SmashForward.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashBrawl/BluePrints/Abilities/BP_Smash_SmashForward.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sword_sheath_AnimSet/Animation/anim_attack_01_Montage.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sword_sheath_AnimSet/Animation/anim_attack_02_Montage.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sword_sheath_AnimSet/Animation/anim_attack_03_Montage.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,7 +50,8 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/SmashBrawl/UHT/BaseAbility.gen.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/SmashBrawl/UHT/BaseAbility.gen.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Action/PlayMontageAction.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -213,6 +218,7 @@
       <workItem from="1744718507309" duration="177000" />
       <workItem from="1744761827794" duration="3923000" />
       <workItem from="1744766393161" duration="2025000" />
+      <workItem from="1744768517214" duration="4543000" />
     </task>
     <servers />
   </component>
