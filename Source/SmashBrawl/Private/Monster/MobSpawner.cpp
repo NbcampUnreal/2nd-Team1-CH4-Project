@@ -27,11 +27,11 @@ FVector AMobSpawner::GetSpanwerVolume() const
 {
 	FVector BoxExtent = SpawnVolumeComp->GetScaledBoxExtent();
 	FVector BoxOrigin = SpawnVolumeComp->GetComponentLocation();
-	FVector BoxOriginRemoveX = FVector( BoxOrigin.X, 0, BoxOrigin.Z);
+	FVector BoxOriginRemoveX = FVector( BoxOrigin.X, BoxOrigin.Y, BoxOrigin.Z);
 
 	return BoxOriginRemoveX + FVector(
 		FMath::RandRange(-BoxExtent.X, BoxExtent.X),
-		0,
+		FMath::RandRange(-BoxExtent.Y, BoxExtent.Y),
 		FMath::RandRange(-BoxExtent.Z, BoxExtent.Z)
 		);
 }

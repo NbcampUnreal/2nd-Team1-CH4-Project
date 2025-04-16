@@ -37,7 +37,4 @@ protected:
 
 	UPROPERTY()
 	FTimerHandle MeteorSpawnTimer;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	USmashMonsterDamagerManager* DamagerManager;
 };
