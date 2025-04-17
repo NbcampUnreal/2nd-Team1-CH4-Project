@@ -85,8 +85,6 @@ bool UPlayMontageAction::CanExecute_Implementation()
 
 bool UPlayMontageAction::PlayMontage()
 {
-	// UE_LOG(LogTemp, Warning, TEXT("PlayeMotage 실행 부분"));
-	GEngine->AddOnScreenDebugMessage(-1, 3.0f, FColor::Red, TEXT("PlayMontage 실행 부분"));
 	// 캐릭터 및 애니메이션 인스턴스 가져오기
 	ASmashCharacter* OwnerCharacter = GetOwnerCharacter();
 	USkeletalMeshComponent* MeshComponent = OwnerCharacter->GetMesh();
