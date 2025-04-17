@@ -30,11 +30,23 @@ public:
     UFUNCTION(BlueprintCallable)
     void PlayRandomAttackMontage();
 
+    // 멀티
     UFUNCTION(NetMulticast, Reliable)
     void Multicast_PlayRandomAttackMontage();
 
     UFUNCTION(NetMulticast, Reliable)
     void Multicast_PlayHitMontage(bool bIsRightDirection);
+
+    UFUNCTION(NetMulticast, Reliable)
+    void Multicast_PlayDeathMontage();
+
+    // 멀티 사운드
+    UFUNCTION(NetMulticast, Reliable)
+    void Multicast_PlaySpawnSound();
+
+    UFUNCTION(NetMulticast, Reliable)
+    void Multicast_PlayDeathSound();
+
     /** 리커버리 종료 → 정상 상태 복귀 */
     UFUNCTION()
     void FinishRecovery();
@@ -81,8 +93,6 @@ public:
     UFUNCTION(BlueprintCallable, Category = "Combat")
     void PlayDeathMontage();
 
-    UFUNCTION(NetMulticast, Reliable)
-    void Multicast_PlayDeathMontage();
 
     //UFUNCTION(BlueprintCallable, Category = "Combat")
     //void TakeDamage(float DamageAmount);
