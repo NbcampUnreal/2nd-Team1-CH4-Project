@@ -3,12 +3,14 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "TimerManager.h"
+#include "AbilitySystem/HitBox/SmashAIDamagerManager.h"
 #include "Monster/LevelObjects/RespawnLocation.h"
 
 ABaseAIFighter::ABaseAIFighter()
 {
     bReplicates = true;
     GetCharacterMovement()->SetIsReplicated(true);
+    SpawnDamagerManager = CreateDefaultSubobject<USmashAIDamagerManager>(FName("DamageManager"));
     PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -24,6 +26,10 @@ void ABaseAIFighter::PlayRandomAttackMontage()
     if (HasAuthority())
     {
         Multicast_PlayRandomAttackMontage();
+        if (SpawnDamagerManager)
+        {
+            Damagers = SpawnDamagerManager->SpawnDamagerAll();
+        }
     }
 }
 

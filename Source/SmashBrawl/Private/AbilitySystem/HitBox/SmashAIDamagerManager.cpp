@@ -1,30 +1,28 @@
 // 
 
 
-#include "AbilitySystem/HitBox/SmashAbilityDamagerManager.h"
+#include "AbilitySystem/HitBox/SmashAIDamagerManager.h"
 
-#include "AbilitySystem/BaseAbility.h"
 #include "AbilitySystem/HitBox/SmashDamagerInfo.h"
 #include "AbilitySystem/HitBox/SmashPlayerDamager.h"
-#include "Character/SmashCharacter.h"
+#include "Core/DamageTable.h"
 #include "Core/SmashDamageBoxType.h"
 #include "Kismet/GameplayStatics.h"
-#include "Particles/ParticleSystem.h"
 
 
 // Sets default values for this component's properties
-USmashAbilityDamagerManager::USmashAbilityDamagerManager()
+USmashAIDamagerManager::USmashAIDamagerManager()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
 }
 
 
 // Called when the game starts
-void USmashAbilityDamagerManager::BeginPlay()
+void USmashAIDamagerManager::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -32,7 +30,8 @@ void USmashAbilityDamagerManager::BeginPlay()
 	
 	TArray<AActor*> ChildActors;
 	GetOwner()->GetAllChildActors(ChildActors);
-	Parent = GetOwner<ABaseAbility>()->Parent;
+	SkeletalMesh = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
+	Parent = GetOwner();
 	for (AActor* ChildActor : ChildActors)
 	{
 		if (ASmashDamagerInfo* DamagerInfo = Cast<ASmashDamagerInfo>(ChildActor))
@@ -56,7 +55,7 @@ void USmashAbilityDamagerManager::BeginPlay()
 			SmashDamagerInfoProperty.RelativeSpawnTransform.SetScale3D(DamagerInfo->GetActorTransform().GetScale3D());
 
 			SmashDamagerInfoProperty.DamagePlayRow.HitDirection = DamagerInfo->HitDirection;
-			SmashDamagerInfoProperty.DamagePlayRow.LifeTime = 3.0f;
+			SmashDamagerInfoProperty.DamagePlayRow.LifeTime = 1.0f;
 
 			SmashDamagerInfoProperty.DamageVisualRow.Mesh = DamagerInfo->Mesh;
 			SmashDamagerInfoProperty.DamageVisualRow.SpawnSound = DamagerInfo->SpawnSound;
@@ -67,13 +66,13 @@ void USmashAbilityDamagerManager::BeginPlay()
 	}
 }
 
-TArray<TObjectPtr<AActor>> USmashAbilityDamagerManager::SpawnDamagerAll()
+TArray<TObjectPtr<AActor>> USmashAIDamagerManager::SpawnDamagerAll()
 {
 	TArray<TObjectPtr<AActor>> SpawnDamagerAll;
 	for (FSmashDamagerInfoProperty DamagerInfoProperty : DamagerInfos)
 	{
 		if (ASmashBaseDamager* SmashBaseDamager =
-			GetWorld()->SpawnActorDeferred<ASmashBaseDamager>(ASmashPlayerDamager::StaticClass(),
+			GetWorld()->SpawnActorDeferred<ASmashBaseDamager>(ASmashBaseDamager::StaticClass(),
 				DamagerInfoProperty.RelativeSpawnTransform,
 				Parent,
 				nullptr,
@@ -85,7 +84,7 @@ TArray<TObjectPtr<AActor>> USmashAbilityDamagerManager::SpawnDamagerAll()
 		UGameplayStatics::FinishSpawningActor(SmashBaseDamager, DamagerInfoProperty.RelativeSpawnTransform))
 			{
 				SpawnActor->SetActorScale3D(DamagerInfoProperty.RelativeSpawnTransform.GetScale3D());
-				SpawnActor->AttachToActor(GetOwner(), FAttachmentTransformRules::KeepRelativeTransform);
+				SpawnActor->AttachToComponent(SkeletalMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, SocketName);
 				SpawnDamagerAll.Add(SpawnActor);
 				if (ASmashBaseDamager* SpawnDamagerActor = Cast<ASmashBaseDamager>(SpawnActor))
 				{
@@ -97,15 +96,3 @@ TArray<TObjectPtr<AActor>> USmashAbilityDamagerManager::SpawnDamagerAll()
 
 	return SpawnDamagerAll;
 }
-
-
-
-// Called every frame
-void USmashAbilityDamagerManager::TickComponent(float DeltaTime, ELevelTick TickType,
-                                                FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-

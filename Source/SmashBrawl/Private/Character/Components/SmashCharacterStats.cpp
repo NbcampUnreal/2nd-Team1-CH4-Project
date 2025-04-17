@@ -191,7 +191,7 @@ void USmashCharacterStats::SetPercent(int32 NewPercent)
 	{
 		int32 OldPercent = Percent;
 		Percent = FMath::Clamp(NewPercent, 0, MaxPercent);
-
+		
 		// 값이 변경되었을 때만 이벤트 발생
 		if (OldPercent != Percent)
 		{
