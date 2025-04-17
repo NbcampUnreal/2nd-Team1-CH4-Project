@@ -59,6 +59,9 @@ public:
 	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Combat")
 	void Server_LaunchCharacter(FVector LaunchVelocity, bool bXYOverride, bool bZOverride);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config|KnockBack")
+	bool bIsRight;
+	
 protected:
 	/** 소유 캐릭터 참조 */
 	UPROPERTY(BlueprintReadWrite, Category="Combat|Reference")
@@ -90,4 +93,5 @@ protected:
 	// 최대 넉백 제한
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Combat|Config|KnockBack")
 	float MaxKnockbackMagnitude = 100000.0f;
+	
 };
