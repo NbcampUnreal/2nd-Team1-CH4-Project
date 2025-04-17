@@ -19,6 +19,28 @@ void ABaseAIFighter::BeginPlay()
     CurrentHP = MaxHP;
 }
 
+bool ABaseAIFighter::bHitConditions()
+{
+    return true;
+}
+
+void ABaseAIFighter::TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection)
+{
+    if (!HasAuthority()) return;
+
+    CurrentHP -= static_cast<float>(DamageAmount);
+    CurrentHP = FMath::Clamp(CurrentHP, 0.f, MaxHP);
+
+    UE_LOG(LogTemp, Warning, TEXT("AI 피격: 현재 HP = %.1f / %.1f"), CurrentHP, MaxHP);
+
+    Multicast_PlayHitMontage(bIsRightDirection);
+
+    if (CurrentHP <= 0.f)
+    {
+        Die();
+    }
+}
+
 void ABaseAIFighter::PlayRandomAttackMontage()
 {
     if (HasAuthority())
@@ -89,20 +111,20 @@ void ABaseAIFighter::SetStateFromParam(int32 Param)
 {
 }
 
-void ABaseAIFighter::TakeDamage(float DamageAmount)
-{
-    if (!HasAuthority()) return;
-
-    CurrentHP -= DamageAmount;
-    CurrentHP = FMath::Clamp(CurrentHP, 0.f, MaxHP);
-
-    UE_LOG(LogTemp, Warning, TEXT("AI 피격: 현재 HP = %.1f"), CurrentHP);
-
-    if (CurrentHP <= 0.f)
-    {
-        Die();
-    }
-}
+//void ABaseAIFighter::TakeDamage(float DamageAmount)
+//{
+//    if (!HasAuthority()) return;
+//
+//    CurrentHP -= DamageAmount;
+//    CurrentHP = FMath::Clamp(CurrentHP, 0.f, MaxHP);
+//
+//    UE_LOG(LogTemp, Warning, TEXT("AI 피격: 현재 HP = %.1f"), CurrentHP);
+//
+//    if (CurrentHP <= 0.f)
+//    {
+//        Die();
+//    }
+//}
 
 void ABaseAIFighter::Die()
 {
@@ -187,6 +209,22 @@ void ABaseAIFighter::ResetRecovery()
     bResetRecoveryInProgress = true;
 
     GetWorldTimerManager().SetTimer(RecoveryHandle, this, &ABaseAIFighter::FinishRecovery, 2.0f, false);
+}
+
+void ABaseAIFighter::Multicast_PlayHitMontage_Implementation(bool bIsRightDirection)
+{
+    UAnimInstance* AnimInst = GetMesh()->GetAnimInstance();
+    if (AnimInst)
+    {
+        if (bIsRightDirection && KnockMontage_Backward)
+        {
+            AnimInst->Montage_Play(KnockMontage_Backward);
+        }
+        else if (!bIsRightDirection && KnockMontage_Forward)
+        {
+            AnimInst->Montage_Play(KnockMontage_Forward);
+        }
+    }
 }
 
 void ABaseAIFighter::FinishRecovery()
