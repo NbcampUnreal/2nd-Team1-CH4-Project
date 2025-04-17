@@ -21,7 +21,7 @@ ASmashBaseDamager::ASmashBaseDamager()
 	// SmashDamageBox->SetCollisionEnabled(ECollisionEnabled::QueryOnly); // Overlap만
 	// // SmashDamageBox->SetCollisionResponseToAllChannels(ECR_Ignore);
 	SmashDamageBox->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
-	SmashDamageBox->SetVisibility(true);
+	SmashDamageBox->SetVisibility(false);
 
 	SetReplicates(true);
 }
