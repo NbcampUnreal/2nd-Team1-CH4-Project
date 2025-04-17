@@ -15,4 +15,12 @@ class SMASHBRAWL_API ABaseBossPatternActor : public ASmashMonsterDamager
 public:
 	// Sets default values for this actor's properties
 	ABaseBossPatternActor();
+
+	void DestroyMe();
+
+	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	FTimerHandle PatterActorDestroyTimerHandle;
 };

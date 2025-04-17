@@ -35,7 +35,8 @@ ABaseAbility::ABaseAbility()
 	// ConstructorHelpers::FClassFinder<>
 
 	//AttackData = // ConstructorHelpers::FObjectFinder<>
-	
+
+	SetReplicates(true);
 }
 
 // Called when the game starts or when spawned

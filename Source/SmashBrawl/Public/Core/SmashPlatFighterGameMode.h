@@ -33,6 +33,10 @@ public:
     /** 카메라를 그룹 모드로 전환 */
     UFUNCTION(BlueprintCallable, Category = "Camera")
     void SwitchToGroupMode(bool bEnableGroupMode = true);
+
+	/** 게임 종료 */
+	UFUNCTION(NetMulticast, Reliable, Category = "GameSet")
+	void Multicast_EndGame();
     
 
 

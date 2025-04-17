@@ -194,3 +194,9 @@ void ASmashPlatFighterGameMode::SwitchToGroupMode(bool bEnableGroupMode)
     }
 }
 
+void ASmashPlatFighterGameMode::Multicast_EndGame_Implementation()
+{
+    //게임 종료
+    UE_LOG(LogTemp, Log, TEXT("Multicast_EndGame_Implementation"));
+}
+
