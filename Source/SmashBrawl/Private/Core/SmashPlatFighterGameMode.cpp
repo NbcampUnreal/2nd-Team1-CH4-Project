@@ -4,6 +4,7 @@
 #include "Character/SmashCharacter.h"
 // FollowCameraComponent 헤더 포함 - 경로는 프로젝트에 맞게 수정하세요
 #include "FollowCameraComponent.h"
+#include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
 
@@ -196,7 +197,34 @@ void ASmashPlatFighterGameMode::SwitchToGroupMode(bool bEnableGroupMode)
 
 void ASmashPlatFighterGameMode::Multicast_EndGame_Implementation()
 {
-    //게임 종료
     UE_LOG(LogTemp, Log, TEXT("Multicast_EndGame_Implementation"));
+
+    // 1. 월드 시간 정지
+    GetWorld()->GetWorldSettings()->SetTimeDilation(0.0f);
+
+    // 2. 기존 HUD 제거 + 새로운 HUD 표시
+    APlayerController* PC = UGameplayStatics::GetPlayerController(this, 0);
+    if (PC)
+    {
+        // 기존 HUD 제거
+        ULocalPlayer* LocalPlayer = PC->GetLocalPlayer();
+        if (LocalPlayer && LocalPlayer->ViewportClient)
+        {
+            LocalPlayer->ViewportClient->RemoveAllViewportWidgets();
+        }
+
+        // 새로운 HUD 추가
+        if (EndGameWidgetClass)
+        {
+            UUserWidget* EndGameWidget = CreateWidget<UUserWidget>(PC, EndGameWidgetClass);
+            if (EndGameWidget)
+            {
+                EndGameWidget->AddToViewport();
+
+                PC->SetShowMouseCursor(true);
+                PC->SetInputMode(FInputModeUIOnly());
+            }
+        }
+    }
 }
 
