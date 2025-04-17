@@ -4,16 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "MobSpawner.generated.h"
+#include "MobSpawnerPhase2.generated.h"
 
 UCLASS()
-class SMASHBRAWL_API AMobSpawner : public AActor
+class SMASHBRAWL_API AMobSpawnerPhase2 : public AActor
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	AMobSpawner();
+	AMobSpawnerPhase2();
 
 	FVector GetSpanwerVolume() const;
 

@@ -5,6 +5,8 @@
 
 #include "AbilitySystem/HitBox/SmashMonsterDamagerManager.h"
 #include "Components/BoxComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Monster/BaseBossMonster.h"
 
 
 // Sets default values
@@ -37,12 +39,27 @@ FVector AMeteorSpawner::GetSpanwerVolume() const
 		);
 }
 
+void AMeteorSpawner::StartActive()
+{
+	GetWorldTimerManager().SetTimer(MeteorSpawnTimer, this, &AMeteorSpawner::SpawnMeteor, SpawnTime, true);
+}
+
+void AMeteorSpawner::StopActive()
+{
+	GetWorldTimerManager().ClearTimer(MeteorSpawnTimer);
+}
+
 // Called when the game starts or when spawned
 void AMeteorSpawner::BeginPlay()
 {
 	Super::BeginPlay();
-
-	GetWorldTimerManager().SetTimer(MeteorSpawnTimer, this, &AMeteorSpawner::SpawnMeteor, SpawnTime, true);
+	
+	BossMonster = Cast<ABaseBossMonster>(UGameplayStatics::GetActorOfClass(GetWorld(), ABaseBossMonster::StaticClass()));
+	
+	if (BossMonster)
+	{
+		BossMonster->OnTriggerDestructionPhase2.AddDynamic(this, &AMeteorSpawner::StartActive);
+	}
 }
 
 void AMeteorSpawner::SpawnMeteor() const

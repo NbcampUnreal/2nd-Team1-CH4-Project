@@ -1,17 +1,16 @@
 ﻿// 
 
 
-#include "Monster/MobSpawner.h"
+#include "Monster/MobSpawnerPhase2.h"
 
 #include "Components/BoxComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Monster/BaseBossMonster.h"
-#include "Monster/MeteorSpawner.h"
 #include "Monster/Character/BaseAIFighter.h"
 
 
 // Sets default values
-AMobSpawner::AMobSpawner()
+AMobSpawnerPhase2::AMobSpawnerPhase2()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
@@ -25,7 +24,7 @@ AMobSpawner::AMobSpawner()
 	bReplicates = true;
 }
 
-FVector AMobSpawner::GetSpanwerVolume() const
+FVector AMobSpawnerPhase2::GetSpanwerVolume() const
 {
 	FVector BoxExtent = SpawnVolumeComp->GetScaledBoxExtent();
 	FVector BoxOrigin = SpawnVolumeComp->GetComponentLocation();
@@ -38,18 +37,18 @@ FVector AMobSpawner::GetSpanwerVolume() const
 		);
 }
 
-void AMobSpawner::StartActive()
+void AMobSpawnerPhase2::StartActive()
 {
-	GetWorldTimerManager().SetTimer(MeteorSpawnTimer, this, &AMobSpawner::SpawnMeteor, SpawnTime, true);
+	GetWorldTimerManager().SetTimer(MeteorSpawnTimer, this, &AMobSpawnerPhase2::SpawnMeteor, SpawnTime, true);
 }
 
-void AMobSpawner::StopActive()
+void AMobSpawnerPhase2::StopActive()
 {
 	GetWorldTimerManager().ClearTimer(MeteorSpawnTimer);
 }
 
 // Called when the game starts or when spawned
-void AMobSpawner::BeginPlay()
+void AMobSpawnerPhase2::BeginPlay()
 {
 	Super::BeginPlay();
 
@@ -57,18 +56,18 @@ void AMobSpawner::BeginPlay()
 	
 	if (BossMonster)
 	{
-		BossMonster->OnTriggerDestructionInit.AddDynamic(this, &AMobSpawner::StartActive);
-		BossMonster->OnTriggerDestructionPhase2.AddDynamic(this, &AMobSpawner::StopActive);
+		BossMonster->OnTriggerDestructionPhase2.AddDynamic(this, &AMobSpawnerPhase2::StartActive);
 	}
 }
 
-void AMobSpawner::SpawnMeteor() const
+void AMobSpawnerPhase2::SpawnMeteor() const
 {
 	
 	FVector SpawnLocation = GetSpanwerVolume();
 	FRotator SpawnRotation = FRotator(0, 0, 0);
 
 	GetWorld()->SpawnActor<ABaseAIFighter>(AIMonster, SpawnLocation, SpawnRotation);
-			//GetWorld()->SpawnActor<ALv1BossMonsterMeteor>(Projectile, SpawnLocation, SpawnRotation);
+	//GetWorld()->SpawnActor<ALv1BossMonsterMeteor>(Projectile, SpawnLocation, SpawnRotation);
 }
+
 

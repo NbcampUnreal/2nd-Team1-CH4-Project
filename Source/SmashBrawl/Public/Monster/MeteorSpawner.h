@@ -31,6 +31,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawn")
 	ESmashSpawnerDirection SpawnDirection;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Reference")
+	class ABaseBossMonster* BossMonster;
+
+	UFUNCTION()
+	void StartActive();
+
+	UFUNCTION()
+	void StopActive();
 
 protected:
 	// Called when the game starts or when spawned
