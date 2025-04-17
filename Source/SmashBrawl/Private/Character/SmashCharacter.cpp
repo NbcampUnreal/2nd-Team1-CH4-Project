@@ -414,7 +414,7 @@ void ASmashCharacter::UpdateCamera()
 // 상태 및 움직임 관리
 //---------------------------------------------------------------------
 
-void ASmashCharacter::RespawnEvent()
+void ASmashCharacter::RespawnEvent_Implementation()
 {
 	if (bIsDead == true)
 	{
@@ -434,39 +434,41 @@ void ASmashCharacter::RespawnEvent()
 
 	SmashCharacterStatsComponent->Stock--;
 
-	SmashStateSystem->TryChangeState(ESmashPlayerStates::Dead);
+	// SmashStateSystem->TryChangeState(ESmashPlayerStates::Dead);
 
 	// AbilitySystemComponent->Multicast_Respawning();
 
-	UClass* RespawnClass = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/PlatformFighterKit/Blueprints/LevelObjects/BP_RespwanLocations.BP_RespwanLocations_C"));
-	UClass* RespawnFoothold = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/PlatformFighterKit/Blueprints/PlayerObjects/BP_respwan.BP_respwan_C"));
+	// UClass* RespawnClass = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/PlatformFighterKit/Blueprints/LevelObjects/BP_RespwanLocations.BP_RespwanLocations_C"));
+	// UClass* RespawnFoothold = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/PlatformFighterKit/Blueprints/PlayerObjects/BP_respwan.BP_respwan_C"));
+	//
+	// if (!RespawnClass) return;
+	//
+	// TArray<AActor*> RespawnPoints;
+	// UGameplayStatics::GetAllActorsOfClass(this, RespawnClass, RespawnPoints);
+	//
+	// if (RespawnPoints.Num() == 0) return;
+	//
+	// int32 Index = FMath::RandRange(0, RespawnPoints.Num() - 1);
+	// AActor* RespawnPoint = RespawnPoints[Index];
+	//
+	// if (!RespawnPoint) return;
+	//
+	// if (RespawnFoothold)
+	// {
+	// 	FVector SpawnLocation = RespawnPoint->GetActorLocation();
+	// 	
+	// 	FRotator SpawnRotation = FRotator::ZeroRotator;
+	//
+	// 	AActor* SpawnFoothold = GetWorld()->SpawnActor<AActor>(RespawnFoothold, SpawnLocation, SpawnRotation);
+	//
+	// 	if (SpawnFoothold)
+	// 	{
+	// 		UE_LOG(LogTemp, Warning, TEXT("Actor successfully spawned!"));
+	// 	}
+	// }
 	
-	if (!RespawnClass) return;
-
-	TArray<AActor*> RespawnPoints;
-	UGameplayStatics::GetAllActorsOfClass(this, RespawnClass, RespawnPoints);
-
-	if (RespawnPoints.Num() == 0) return;
-
-	int32 Index = FMath::RandRange(0, RespawnPoints.Num() - 1);
-	AActor* RespawnPoint = RespawnPoints[Index];
-
-	if (!RespawnPoint) return;
-
-	if (RespawnFoothold)
-	{
-		FVector SpawnLocation = RespawnPoint->GetActorLocation();
-		FRotator SpawnRotation = FRotator::ZeroRotator;
-
-		AActor* SpawnFoothold = GetWorld()->SpawnActor<AActor>(RespawnFoothold, SpawnLocation, SpawnRotation);
-
-		if (SpawnFoothold)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Actor successfully spawned!"));
-		}
-	}
-	
-	FVector RespawnLocation = FVector(RespawnPoint->GetActorLocation().X, RespawnPoint->GetActorLocation().Y, RespawnPoint->GetActorLocation().Z + 300.0f);
+	//FVector RespawnLocation = FVector(RespawnPoint->GetActorLocation().X, RespawnPoint->GetActorLocation().Y, RespawnPoint->GetActorLocation().Z + 300.0f);
+	FVector RespawnLocation = FVector(1400, -40, -105);
 	SetActorLocation(RespawnLocation);
 	// SetActorRotation(RespawnPoint->GetActorRotation());
 
@@ -479,7 +481,8 @@ void ASmashCharacter::RespawnEvent()
 	// FTimerHandle DelayHandle;
 	// GetWorld()->GetTimerManager().SetTimer(DelayHandle, TimerDelegate, 10.0f, false);
 
-	bIsDead = false;
+	FTimerHandle TempTimerHandle;
+	GetWorldTimerManager().SetTimer(TempTimerHandle, this, &ASmashCharacter::SetBIsDeadFalse, 1.0f, false);
 }
 
 void ASmashCharacter::Server_Die_Implementation(AController* MyController)
@@ -844,6 +847,11 @@ void ASmashCharacter::PlayReviveEffect()
 {
 	// 부활 이펙트 - 주변 카메라에 약간의 흔들림
 	RequestCameraShake(2.0f, 0.5f, 1.0f);
+}
+
+void ASmashCharacter::SetBIsDeadFalse()
+{
+	bIsDead = false;
 }
 
 void ASmashCharacter::Launch_Implementation(FVector LaunchVector, bool bXYOver, bool bZOver)

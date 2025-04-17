@@ -29,7 +29,9 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/Enemy/Blueprints/BP_BaseAIFighter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/Enemy/Blueprints/BP_BaseAIFighter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/SmashCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/Character/SmashCharacter.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +51,8 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://17" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://18" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://19" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Editor/MovieSceneTools/Private/MovieSceneToolsModule.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/AutomationTool/AutomationTool.csproj" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/Components/ActorComponent.h" root0="FORCE_HIGHLIGHTING" />
@@ -63,6 +66,8 @@
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Character/Action/PlayMontageAction.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Character/SmashCharacter.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/LevelObjects/RespawnLocation.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock://C:/Unreal/2nd-Team1-CH4-Project/Source/SmashBrawl/Public/Core/SmashPlatFighterGameMode.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock://C:/Unreal/2nd-Team1-CH4-Project/Source/SmashBrawl/Public/Core/SmashPlatFighterGameMode.h" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{

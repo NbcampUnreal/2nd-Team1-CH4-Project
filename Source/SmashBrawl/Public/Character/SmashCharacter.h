@@ -105,6 +105,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Smash Character|Camera")
 	void PlayReviveEffect();
 
+	UFUNCTION()
+	void SetBIsDeadFalse();
+
 public:
 	/** 기본 입력 처리 함수 */
 	virtual void Move(const struct FInputActionValue& Value) override;
@@ -196,7 +199,7 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_SmashDetection();
 
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(Server, Reliable, BlueprintCallable)
 	void RespawnEvent();
 
 	UFUNCTION(Server, Reliable)
