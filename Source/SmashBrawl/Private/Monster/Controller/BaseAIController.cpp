@@ -12,33 +12,46 @@ ABaseAIController::ABaseAIController()
 
 void ABaseAIController::BeginPlay()
 {
-    Super::BeginPlay();
+	Super::BeginPlay();
 
-    if (UseBlackboard(BlackboardAsset, BlackboardComponent))
-    {
-        RunBehaviorTree(BehaviorTreeAsset);
-    }
-    TArray<AActor*> FoundActors;
-    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASmashCharacter::StaticClass(), FoundActors);
-    
-    for (AActor* Actor : FoundActors)
-    {
-        if (ASmashCharacter* Char = Cast<ASmashCharacter>(Actor))
-        {
-            PlayerArray.Add(Char);
-        }
-    }
-    if (PlayerArray.Num() > 0)
-    {
-        int32 RandomIndex = FMath::RandRange(0, PlayerArray.Num() - 1);
-        ASmashCharacter* RandomCharacter = PlayerArray[RandomIndex];
+	if (UseBlackboard(BlackboardAsset, BlackboardComponent))
+	{
+		RunBehaviorTree(BehaviorTreeAsset);
+	}
 
-        BlackboardComponent->SetValueAsObject(FName("Target"), RandomCharacter);
-    }
-    else
-    {
-        UE_LOG(LogTemp, Error, TEXT("PlayerArray에 Player 없음"));
-    }
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ASmashCharacter::StaticClass(), FoundActors);
+
+	for (AActor* Actor : FoundActors)
+	{
+		if (ASmashCharacter* Char = Cast<ASmashCharacter>(Actor))
+		{
+			const FString Name = Char->GetName();
+			const FString TagList = Char->Tags.IsEmpty() ? TEXT("없음") : FString::JoinBy(Char->Tags, TEXT(", "), [](const FName& Tag) { return Tag.ToString(); });
+
+			AController* Controller = Char->GetController();
+			bool bIsPlayerControlled = Controller && Controller->IsPlayerController();
+			bool bHasPlayerTag = Char->ActorHasTag("PlayerCharacter");
+
+			// 필터링 조건
+			if (bHasPlayerTag && bIsPlayerControlled)
+			{
+				PlayerArray.Add(Char);
+			}
+		}
+	}
+
+	if (PlayerArray.Num() > 0)
+	{
+		int32 RandomIndex = FMath::RandRange(0, PlayerArray.Num() - 1);
+		ASmashCharacter* RandomCharacter = PlayerArray[RandomIndex];
+
+		BlackboardComponent->SetValueAsObject(FName("Target"), RandomCharacter);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("❌ PlayerArray에 플레이어 없음! AI 타겟 설정 실패"));
+	}
 }
 
 void ABaseAIController::OnPossess(APawn* InPawn)

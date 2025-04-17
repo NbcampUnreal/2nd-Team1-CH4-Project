@@ -29,6 +29,11 @@ void UBTService_UpdateTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
     {
         if (Actor == SelfPawn) continue;
 
+        if (!Actor->Tags.Contains(FName("PlayerCharacter"))) continue;
+
+        ACharacter* Character = Cast<ACharacter>(Actor);
+        if (!Character || !Character->GetController()->IsPlayerController()) continue;
+
         float Dist = FVector::Dist(Actor->GetActorLocation(), SelfPawn->GetActorLocation());
         if (Dist < MinDist)
         {
