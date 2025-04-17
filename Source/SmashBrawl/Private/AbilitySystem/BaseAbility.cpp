@@ -349,7 +349,12 @@ void ABaseAbility::PlayAnimation(int32 InAnimNo)
 
 void ABaseAbility::Multicast_PlayAnimationClient_Implementation(int32 InAnimNo, UAnimMontage* InMontageToPlay)
 {
-	UAnimInstance* AnimInstance = Parent->GetMesh()->GetAnimInstance();
+	UAnimInstance* AnimInstance = nullptr;
+	if (Parent && Parent->GetMesh())
+	{
+		AnimInstance = Parent->GetMesh()->GetAnimInstance();
+	}
+	
 	if (AnimInstance)
 	{
 		AnimInstance->Montage_Play(InMontageToPlay, 1.0f);
