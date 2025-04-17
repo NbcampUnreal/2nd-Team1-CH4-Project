@@ -82,7 +82,7 @@ void UUW_PercentGauge::NativeTick(const FGeometry& MyGeometry, float InDeltaTime
 	}
 	if (LifeCountText)
 	{
-		LifeCountText->SetText(FText::FromString(FString::Printf(TEXT("%d"), OwnerCharacter->LifeCount)));
+		LifeCountText->SetText(FText::FromString(FString::Printf(TEXT("%d"), OwnerCharacter->SmashCharacterStatsComponent->Stock)));
 	}
 }
 

@@ -16,7 +16,7 @@ USmashCharacterStats::USmashCharacterStats()
 	// 기본값 초기화
 	Percent = 0;
 	MaxPercent = 1000;
-	Stock = 3; // 기본 스톡 수
+	Stock = 10; // 기본 스톡 수
 	DefaultGravityScale = 1.0f;
 	Weight = 100.0f;
 	SuperIndex = 0;
@@ -38,6 +38,8 @@ USmashCharacterStats::USmashCharacterStats()
 void USmashCharacterStats::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	Stock = 10; // 기본 스톡 수
 
 	// Parent 변수 초기화 (중복 제거)
 	Parent = Cast<ASmashCharacter>(GetOwner());
