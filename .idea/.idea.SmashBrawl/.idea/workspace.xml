@@ -31,9 +31,7 @@
   <component name="ChangeListManager">
     <list default="true" id="d0a8a06c-ab7e-461b-971f-336116795ba0" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SmashBrawl/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SmashBrawl.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/SmashAbilitySystemComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Private/AbilitySystem/SmashAbilitySystemComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SmashBrawl/Public/AbilitySystem/SmashAbilitySystemComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SmashBrawl/Public/AbilitySystem/SmashAbilitySystemComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/SmashGame_/Character/BP_SmashCharacter_Main.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,7 +65,16 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://7" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://2" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/SmashBrawl/UHT/BaseBossMonster.gen.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/UnrealEditor/Inc/SmashBrawl/UHT/Interface_SmashCombat.gen.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SmashBrawl/Private/Monster/LevelObjects/RespawnLocation.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -253,6 +260,7 @@
       <workItem from="1744765766367" duration="386000" />
       <workItem from="1744782827457" duration="6476000" />
       <workItem from="1744799642489" duration="3932000" />
+      <workItem from="1744848192562" duration="2815000" />
     </task>
     <servers />
   </component>
