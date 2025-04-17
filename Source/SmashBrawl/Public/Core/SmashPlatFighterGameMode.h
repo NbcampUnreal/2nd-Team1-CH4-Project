@@ -23,9 +23,10 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	virtual void PostLogin(APlayerController* NewPlayer) override;
-	virtual void Logout(AController* Exiting) override;
 
 public:
+	virtual void Logout(AController* Exiting) override;
+
     /** 보스 등록 함수 */
     UFUNCTION(BlueprintCallable, Category = "Boss")
     void RegisterBoss(AActor* BossActor);

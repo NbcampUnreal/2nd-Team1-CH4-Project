@@ -196,8 +196,14 @@ public:
 	UFUNCTION(NetMulticast, Unreliable)
 	void Multicast_SmashDetection();
 
-	UFUNCTION(BlueprintCallable, NetMulticast, Reliable)
+	UFUNCTION(BlueprintCallable)
 	void RespawnEvent();
+
+	UFUNCTION(Server, Reliable)
+	void Server_Die(AController* MyController);
+
+	UFUNCTION()
+	void Die(AController* MyController);
 
 	//---------------------------------------------------------------------
 	// 전투 및 히트 처리
@@ -269,6 +275,11 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, Category = "Smash Character")
 	TObjectPtr<ASmashPlatFighterGameMode> SmashGameMode;
+
+	bool bIsDead = false;
+
+	UFUNCTION(BlueprintCallable, Category = "Smash Character")
+	bool GetIsDead(){ return bIsDead;}
 
 	//---------------------------------------------------------------------
 	// 설정 및 입력 액션

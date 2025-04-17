@@ -42,6 +42,7 @@ ASmashCharacter::ASmashCharacter(const FObjectInitializer& ObjectInitializer)
 	Attacks = ESmashAttacks::None;
 	Direction = ESmashDirection::None;
 	AbilityType = ESmashAbilityTypes::None;
+	bReplicates = true;
 }
 
 void ASmashCharacter::GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const
@@ -413,22 +414,29 @@ void ASmashCharacter::UpdateCamera()
 // 상태 및 움직임 관리
 //---------------------------------------------------------------------
 
-void ASmashCharacter::RespawnEvent_Implementation()
+void ASmashCharacter::RespawnEvent()
 {
-	if (LifeCount <= 0)
+	if (bIsDead == true)
 	{
-		SetActorHiddenInGame(true);
-		SetActorEnableCollision(false);
 		return;
 	}
 
-	LifeCount--;
-
-	UE_LOG(LogTemp, Warning, TEXT("%d"), LifeCount);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Green, FString::Printf(TEXT("%d"), SmashCharacterStatsComponent->Stock));
+	bIsDead = true;
 	
+	if (SmashCharacterStatsComponent->Stock <= 0)
+	{
+		// SetActorHiddenInGame(true);
+		// SetActorEnableCollision(false);
+		Server_Die(GetController());
+		return;
+	}
+
+	SmashCharacterStatsComponent->Stock--;
+
 	SmashStateSystem->TryChangeState(ESmashPlayerStates::Dead);
 
-	AbilitySystemComponent->Multicast_Respawning();
+	// AbilitySystemComponent->Multicast_Respawning();
 
 	UClass* RespawnClass = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/PlatformFighterKit/Blueprints/LevelObjects/BP_RespwanLocations.BP_RespwanLocations_C"));
 	UClass* RespawnFoothold = StaticLoadClass(AActor::StaticClass(), nullptr, TEXT("/Game/PlatformFighterKit/Blueprints/PlayerObjects/BP_respwan.BP_respwan_C"));
@@ -462,14 +470,30 @@ void ASmashCharacter::RespawnEvent_Implementation()
 	SetActorLocation(RespawnLocation);
 	// SetActorRotation(RespawnPoint->GetActorRotation());
 
-	FTimerDelegate TimerDelegate;
-	TimerDelegate.BindLambda([this]()
-	{
-		SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
-	});
+	// FTimerDelegate TimerDelegate;
+	// TimerDelegate.BindLambda([this]()
+	// {
+	// 	SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
+	// });
+	//
+	// FTimerHandle DelayHandle;
+	// GetWorld()->GetTimerManager().SetTimer(DelayHandle, TimerDelegate, 10.0f, false);
 
-	FTimerHandle DelayHandle;
-	GetWorld()->GetTimerManager().SetTimer(DelayHandle, TimerDelegate, 10.0f, false);
+	bIsDead = false;
+}
+
+void ASmashCharacter::Server_Die_Implementation(AController* MyController)
+{
+	Die(MyController);
+}
+
+void ASmashCharacter::Die(AController* MyController)
+{
+	if (HasAuthority())
+	{
+		Destroy();
+		SmashGameMode->Logout(MyController);
+	}
 }
 
 void ASmashCharacter::FacingCheck()
