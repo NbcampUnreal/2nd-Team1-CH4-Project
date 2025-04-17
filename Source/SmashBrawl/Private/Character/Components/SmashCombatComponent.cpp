@@ -51,6 +51,8 @@ void USmashCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 
 void USmashCombatComponent::TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection)
 {
+	bIsRight = bIsRightDirection;
+	
 	// 클라이언트이면 서버 RPC 호출
 	if (!GetOwner()->HasAuthority())
 	{

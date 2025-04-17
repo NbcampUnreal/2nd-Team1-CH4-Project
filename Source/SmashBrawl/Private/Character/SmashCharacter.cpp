@@ -874,7 +874,8 @@ void ASmashCharacter::LandedAction()
 		ESmashPlayerStates CurrentState = SmashStateSystem->GetCurrentState();
 
 		// 특정 상태가 아닐 때만 상태 변경
-		if (!(CurrentState == ESmashPlayerStates::Ability || CurrentState == ESmashPlayerStates::Tumble))
+		if (!(CurrentState == ESmashPlayerStates::Ability || CurrentState == ESmashPlayerStates::Tumble
+			|| CurrentState == ESmashPlayerStates::Down))
 		{
 			SetCanFlip(true);
 			SmashStateSystem->TryChangeState(ESmashPlayerStates::Idle);
