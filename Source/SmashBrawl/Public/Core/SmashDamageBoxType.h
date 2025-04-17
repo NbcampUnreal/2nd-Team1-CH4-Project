@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+#include "Core/DamageTable.h"
 #include "SmashDamageBoxType.generated.h"
 
 /**
@@ -77,4 +78,19 @@ struct FDamagerInfoProperty
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility Hitbox")
 	FTransform BoxTransform;
+};
+
+
+USTRUCT(BlueprintType)
+struct FSmashDamagerInfoProperty
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Condition")
+	FTransform RelativeSpawnTransform;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Condition")
+	FDamagePlayRow DamagePlayRow;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player Condition")
+	FDamageVisualRow DamageVisualRow;
 };

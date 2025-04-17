@@ -2,7 +2,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/Interface_SmashHitBox.h"
 #include "BaseAIFighter.generated.h"
+
+class USmashAIDamagerManager;
 
 UCLASS()
 class SMASHBRAWL_API ABaseAIFighter : public ACharacter
@@ -139,7 +142,6 @@ protected:
     /** 리스폰 위치 방향으로 이동 */
     void MoveTowardRespawn();
 
-
 public:
     // --- 어빌리티용 입력 값들 (네트워크 동기화 포함) ---
 
@@ -158,4 +160,10 @@ public:
     /** 방향 입력 */
     UPROPERTY(Replicated, BlueprintReadWrite, EditAnywhere)
     int32 Direction;
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    TObjectPtr<USmashAIDamagerManager> SpawnDamagerManager;
+    
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+    TArray<TObjectPtr<AActor>> Damagers;
 };
