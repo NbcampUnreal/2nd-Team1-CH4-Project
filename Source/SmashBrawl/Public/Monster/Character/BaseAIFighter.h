@@ -77,6 +77,18 @@ public:
     UFUNCTION(BlueprintCallable, Category = "AI|State")
     bool IsOffStage() const;
 
+    /** 사망 애니메이션 재생 */
+    UFUNCTION(BlueprintCallable, Category = "Combat")
+    void PlayDeathMontage();
+
+    UFUNCTION(NetMulticast, Reliable)
+    void Multicast_PlayDeathMontage();
+
+    //UFUNCTION(BlueprintCallable, Category = "Combat")
+    //void TakeDamage(float DamageAmount);
+
+    UFUNCTION(BlueprintCallable, Category = "Combat")
+    void Die();
 protected:
     void SetStateFromParam(int32 Param);
 
@@ -101,19 +113,12 @@ protected:
     UPROPERTY(EditDefaultsOnly, Category = "Animation|Attack")
     UAnimMontage* AttackMontage_Uppercut;
 
-    /** 사망 애니메이션 재생 */
-    UFUNCTION(BlueprintCallable, Category = "Combat")
-    void PlayDeathMontage();
+    // 사운드
+    UPROPERTY(EditDefaultsOnly, Category = "Sound")
+    USoundBase* DeathSound;
 
-    UFUNCTION(NetMulticast, Reliable)
-    void Multicast_PlayDeathMontage();
-
-    //UFUNCTION(BlueprintCallable, Category = "Combat")
-    //void TakeDamage(float DamageAmount);
-
-    UFUNCTION(BlueprintCallable, Category = "Combat")
-    void Die();
-
+    UPROPERTY(EditDefaultsOnly, Category = "Sound")
+    USoundBase* SpawnSound;
 
     /** 리커버리 딜레이 타이머 핸들 */
     FTimerHandle RecoveryHandle;
