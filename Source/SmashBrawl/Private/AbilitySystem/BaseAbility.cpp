@@ -229,8 +229,10 @@ void ABaseAbility::Multicast_LandLeg_Implementation(UAnimMontage* LandAnimation,
 	SetJump(false);
 	SetMovement(false);
 	UAnimInstance* AnimInstance = Parent->GetMesh()->GetAnimInstance();
+	AnimInstance->StopAllMontages(false);
 	if (AnimInstance)
 	{
+		AnimInstance->StopAllMontages(true);
 		AnimInstance->Montage_Play(LandAnimation, PlayRate);
 		if (StartPosition > 0.0f)
 		{
@@ -352,6 +354,7 @@ void ABaseAbility::Multicast_PlayAnimationClient_Implementation(int32 InAnimNo, 
 	UAnimInstance* AnimInstance = Parent->GetMesh()->GetAnimInstance();
 	if (AnimInstance)
 	{
+		AnimInstance->StopAllMontages(false);
 		AnimInstance->Montage_Play(InMontageToPlay, 1.0f);
 		FOnMontageBlendingOutStarted BlendOutDelegate;
 		BlendOutDelegate.BindLambda([this, InAnimNo,AnimInstance](UAnimMontage* Montage, bool bInterrupted)

@@ -14,7 +14,7 @@ void ASmashPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (WidgetClass)
+	if (IsLocalController() && WidgetClass)
 	{
 		WidgetPtr = CreateWidget<UUserWidget>(this, WidgetClass);
 		if (WidgetPtr)
