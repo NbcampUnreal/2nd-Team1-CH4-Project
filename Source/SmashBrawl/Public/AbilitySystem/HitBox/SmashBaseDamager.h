@@ -25,6 +25,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 public:
 
 	UFUNCTION()
@@ -64,6 +65,14 @@ public:
 		const TArray<TSubclassOf<AActor>>& InAttackAbleClasses,
 		const FDamagePlayRow& InDamagePlayRow,
 		const FDamageVisualRow& InDamageVisualRow = FDamageVisualRow());
+
+	UFUNCTION()
+	void DetectOverlapActor();
+	
+	UFUNCTION(NetMulticast, Reliable)
+	void Multi_PlayHitadditional();
+	UFUNCTION(Server, Reliable)
+	void Server_PlayHitadditional();
 public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="SmashAbility Hitbox")
 	TObjectPtr<UStaticMeshComponent> SmashDamageBox;
@@ -80,7 +89,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
 	FDamagePlayRow DamagePlayRow;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")
 	FDamageVisualRow DamageVisualRow;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="SmashAbility DamageTable")

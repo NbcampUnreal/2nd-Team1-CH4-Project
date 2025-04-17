@@ -17,6 +17,7 @@ class SMASHBRAWL_API ALobbyPlayerState : public APlayerState
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 public:
+
 	UFUNCTION(BlueprintCallable, Category = "Lobby")
 	void ChangeReadyState();
 	
@@ -24,6 +25,14 @@ public:
 	bool GetIsReady() const;
 	
 public:
+	UPROPERTY(Replicated)
+	FString PlayerNickname;
+
+	UFUNCTION(BlueprintCallable)
+	FString GetPlayerNickname() const { return PlayerNickname; }
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerNickname(const FString& Name) { PlayerNickname = Name; }
+
 	UPROPERTY(Replicated)
 	bool bReady;
 	
