@@ -185,7 +185,7 @@ void USmashGameInstance::OnCreateSessionComplete(FName SessionName, bool bWasSuc
 			World->GetTimerManager().SetTimer(TimerHandle, [World]()
 				{
 					UE_LOG(LogTemp, Warning, TEXT("🌍 딜레이 후 맵 이동"));
-					FString MapPath = TEXT("/Game/PlatformFighterKit/Maps/Levels/BattlePlace?listen");
+					FString MapPath = TEXT("/Game/PlatformFighterKit/Maps/Menu/OnlineLobby?listen");
 					World->ServerTravel(MapPath);
 				}, 2.0f, false);
 		}

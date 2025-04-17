@@ -5,6 +5,8 @@
 
 #include "Core/SmashPlayerController.h"
 #include "Online/Lobby/LobbyGameState.h"
+#include "Online/Lobby/LobbyPlayerState.h"
+
 
 ALobbyMode::ALobbyMode()
 {
@@ -24,8 +26,24 @@ void ALobbyMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
+	static TArray<FString> AvailableNicknames = { TEXT("늑대"), TEXT("오리"), TEXT("여우"), TEXT("곰") };
+
 	if (LobbyGameState)
 	{
+		if (APlayerState* PS = NewPlayer->GetPlayerState<APlayerState>())
+		{
+			if (AvailableNicknames.Num() > 0)
+			{
+				int32 RandIndex = FMath::RandRange(0, AvailableNicknames.Num() - 1);
+				FString Nick = AvailableNicknames[RandIndex];
+				AvailableNicknames.RemoveAt(RandIndex);
+
+				if (ALobbyPlayerState* LPS = Cast<ALobbyPlayerState>(PS))
+				{
+					LPS->SetPlayerNickname(Nick);
+				}
+			}
+		}
 		LobbyGameState->AddJoinPlayer(NewPlayer);
 	}
 }

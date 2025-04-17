@@ -28,9 +28,19 @@ public:
 	void RemoveReadPlayer(const APlayerController* NewPlayer);
 	UFUNCTION(BlueprintCallable, Category = "Lobby")
 	int32 GetNumReadPlayers() const;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Lobby")
+	TArray<APlayerState*> GetJoinedPlayerStates() const
+	{
+		return JoinPlayers;
+	}
 	
 public:
-	TSet<APlayerState*> ReadyPlayers; 
-	TSet<APlayerState*> JoinPlayers;
+	UPROPERTY(Replicated)
+	TArray<APlayerState*> ReadyPlayers;
+	UPROPERTY(Replicated)
+	TArray<APlayerState*> JoinPlayers;
 
 };
