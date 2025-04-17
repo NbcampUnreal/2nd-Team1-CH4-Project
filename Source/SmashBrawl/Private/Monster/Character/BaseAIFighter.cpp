@@ -19,6 +19,11 @@ void ABaseAIFighter::BeginPlay()
     Super::BeginPlay();
 
     CurrentHP = MaxHP;
+
+    if (HasAuthority())
+    {
+        Multicast_PlaySpawnSound();
+    }
 }
 
 bool ABaseAIFighter::bHitConditions()
@@ -136,9 +141,6 @@ void ABaseAIFighter::Die()
 {
     if (!bActive) return;
 
-    UE_LOG(LogTemp, Warning, TEXT("AI 사망"));
-
-    // 행동 막기
     bActive = false;
 
     // 몽타주 중지
@@ -147,9 +149,12 @@ void ABaseAIFighter::Die()
         GetMesh()->GetAnimInstance()->StopAllMontages(0.2f);
     }
 
-     PlayDeathMontage();
-
-    // 제거
+    if (HasAuthority())
+    {
+        Multicast_PlayDeathSound();
+    }
+    
+    PlayDeathMontage();
     SetLifeSpan(3.0f);
 }
 
@@ -161,13 +166,6 @@ void ABaseAIFighter::PlayDeathMontage()
     }
 }
 
-void ABaseAIFighter::Multicast_PlayDeathMontage_Implementation()
-{
-    if (DeathMontage && GetMesh()->GetAnimInstance())
-    {
-        GetMesh()->GetAnimInstance()->Montage_Play(DeathMontage);
-    }
-}
 
 void ABaseAIFighter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
@@ -217,6 +215,14 @@ void ABaseAIFighter::ResetRecovery()
     GetWorldTimerManager().SetTimer(RecoveryHandle, this, &ABaseAIFighter::FinishRecovery, 2.0f, false);
 }
 
+void ABaseAIFighter::Multicast_PlayDeathMontage_Implementation()
+{
+    if (DeathMontage && GetMesh()->GetAnimInstance())
+    {
+        GetMesh()->GetAnimInstance()->Montage_Play(DeathMontage);
+    }
+}
+
 void ABaseAIFighter::Multicast_PlayHitMontage_Implementation(bool bIsRightDirection)
 {
     UAnimInstance* AnimInst = GetMesh()->GetAnimInstance();
@@ -230,6 +236,22 @@ void ABaseAIFighter::Multicast_PlayHitMontage_Implementation(bool bIsRightDirect
         {
             AnimInst->Montage_Play(KnockMontage_Forward);
         }
+    }
+}
+
+void ABaseAIFighter::Multicast_PlaySpawnSound_Implementation()
+{
+    if (SpawnSound)
+    {
+        UGameplayStatics::PlaySoundAtLocation(this, SpawnSound, GetActorLocation());
+    }
+}
+
+void ABaseAIFighter::Multicast_PlayDeathSound_Implementation()
+{
+    if (DeathSound)
+    {
+        UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
     }
 }
 
