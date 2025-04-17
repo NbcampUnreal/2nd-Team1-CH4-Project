@@ -103,10 +103,10 @@ public:
 	bool bIsAttacking = false;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float HealthPoint = 100.0f;
+	float HealthPoint = 10000.0f;
 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float MaxHealthPoint = 100.0f;
+	float MaxHealthPoint = 10000.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	class USmashMonsterDamagerManager* DamagerManager;

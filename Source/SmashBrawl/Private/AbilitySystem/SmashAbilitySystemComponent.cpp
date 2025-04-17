@@ -92,6 +92,11 @@ void USmashAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTick Tic
 
 void USmashAbilitySystemComponent::MainTick()
 {
+	if (!Parent)
+	{
+		return;
+	}
+	
 	if (IInterface_SmashCombat::Execute_GetPlayerState(Parent) == ESmashPlayerStates::Ability &&	IInterface_SmashCombat::Execute_GetAttackTypes(Parent) == ESmashAttacks::None)
 	{
 		Multicast_WitchAbility();
@@ -311,7 +316,15 @@ void USmashAbilitySystemComponent::ProcessDirectionalAbility(ABaseAbility* UpAbi
                                                              ESmashAttacks NeutralAttackType)
 {
 	// 현재 방향 가져오기
-	const ESmashDirection CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
+	ESmashDirection CurrentDirection = ESmashDirection::None;
+	if (Parent)
+	{
+		CurrentDirection = IInterface_SmashCombat::Execute_GetDirection(Parent);
+	}
+	else
+	{
+		return;
+	}
 	
 	// 방향에 따라 적절한 능력 활성화
 	switch (CurrentDirection)

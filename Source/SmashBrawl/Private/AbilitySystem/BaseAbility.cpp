@@ -182,6 +182,12 @@ void ABaseAbility::Multicast_EndAbility_Implementation()
 
 void ABaseAbility::BP_OnEndAbility_Implementation()
 {
+
+	if (!IsValid(Parent))
+	{
+		return;
+	}
+	
 	UE_LOG(LogTemp, Error, TEXT("EndAbility"));
 	WalkOffLedge(true);
 	bActive = false;
@@ -191,6 +197,7 @@ void ABaseAbility::BP_OnEndAbility_Implementation()
 	CharacterCollision(ECollisionEnabled::Type::QueryAndPhysics);
 	FullbodyLedge(false);
 	bIsUse = false;
+	
 	if(Parent->GetMovementComponent()->IsFalling())
 	{
 		Parent->SmashStateSystem->TryChangeState(ESmashPlayerStates::Fall,false);
@@ -225,6 +232,11 @@ void ABaseAbility::Reset()
 void ABaseAbility::Multicast_LandLeg_Implementation(UAnimMontage* LandAnimation, float PlayRate, float StartPosition,
                                                     FName StartSection, int32 InAnimNo)
 {
+	if (!IsValid(Parent))
+	{
+		return;
+	}
+	
 	Multicast_SetFlip(false);
 	SetJump(false);
 	SetMovement(false);
@@ -262,6 +274,11 @@ void ABaseAbility::Multicast_LandLeg_Implementation(UAnimMontage* LandAnimation,
 
 void ABaseAbility::ActivateDamagers_Implementation()
 {
+	if (!IsValid(Parent))
+	{
+		return;
+	}
+	
 	UE_LOG(LogTemp, Log, TEXT("ActivateDamagers"));
 	if (HasAuthority())
 	{
@@ -275,6 +292,11 @@ void ABaseAbility::ActivateDamagers_Implementation()
 
 void ABaseAbility::FuncDamageBoxes(ACharacter* InParent)
 {
+	if (!IsValid(Parent))
+	{
+		return;
+	}
+	
 	ChildDamagers = SmashAbilityDamagerManager->SpawnDamagerAll();
 	for (AActor* ChildDamager : ChildDamagers)
 	{
@@ -351,6 +373,12 @@ void ABaseAbility::PlayAnimation(int32 InAnimNo)
 
 void ABaseAbility::Multicast_PlayAnimationClient_Implementation(int32 InAnimNo, UAnimMontage* InMontageToPlay)
 {
+
+	if (!IsValid(Parent))
+	{
+		return;
+	}
+	
 	UAnimInstance* AnimInstance = Parent->GetMesh()->GetAnimInstance();
 	if (AnimInstance)
 	{
@@ -400,6 +428,10 @@ void ABaseAbility::OnNotifyBegin(FName NotifyName, const FBranchingPointNotifyPa
 
 void ABaseAbility::OnNotifyEnd(FName NotifyName, const FBranchingPointNotifyPayload& BranchingPointPayload)
 {
+	if (!IsValid(Parent))
+	{
+		return;
+	}
 	UAnimInstance* AnimInstance = Parent->GetMesh()->GetAnimInstance();
 	AnimNotifyEnd(bDamager, NotifyName);
 }
@@ -556,6 +588,10 @@ void ABaseAbility::Multicast_EndAnim_Implementation(int32 InAnimNo)
 
 void ABaseAbility::ActivateOtherAbility(ABaseAbility* Ability)
 {
+		if (!IsValid(Parent))
+    	{
+    		return;
+    	}
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseAbility::StaticClass(), FoundActors);
 	for (AActor* Actor : FoundActors)
@@ -600,6 +636,11 @@ void ABaseAbility::FullbodyLedge(bool bFullBodyLedgeGrab)
 
 void ABaseAbility::TeleportCharacter(FVector Location, bool bSweep, bool bTeleport)
 {
+	if (!IsValid(Parent))
+	{
+		return;
+	}
+	
 	Parent->GetCapsuleComponent()->SetWorldLocation(Location, bSweep);
 }
 
@@ -652,6 +693,11 @@ void ABaseAbility::Charge(bool InChargeing)
 
 void ABaseAbility::EndAllNonChargedAbilities(ABaseAbility* Caller)
 {
+	if (!IsValid(Parent))
+	{
+		return;
+	}
+	
 	Parent->AbilitySystemComponent->EndAllNonChargedAbilities(Caller);
 }
 
