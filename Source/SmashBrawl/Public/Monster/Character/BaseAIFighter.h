@@ -8,7 +8,7 @@
 class USmashAIDamagerManager;
 
 UCLASS()
-class SMASHBRAWL_API ABaseAIFighter : public ACharacter
+class SMASHBRAWL_API ABaseAIFighter : public ACharacter, public IInterface_TakeDamage
 {
     GENERATED_BODY()
 
@@ -16,6 +16,9 @@ public:
     ABaseAIFighter();
 
     virtual void BeginPlay() override;
+
+    virtual bool bHitConditions() override;
+    virtual void TakeDamage(int32 DamageAmount, ESmashAttackType AttackType, bool bIsRightDirection = true) override;
 
     /** 어빌리티 입력 파라미터 설정 */
     void SetAbility(float InLeftRight, float InUpDown, int32 InParam, int32 InAbilityType, int32 InDirection);
@@ -30,6 +33,8 @@ public:
     UFUNCTION(NetMulticast, Reliable)
     void Multicast_PlayRandomAttackMontage();
 
+    UFUNCTION(NetMulticast, Reliable)
+    void Multicast_PlayHitMontage(bool bIsRightDirection);
     /** 리커버리 종료 → 정상 상태 복귀 */
     UFUNCTION()
     void FinishRecovery();
@@ -41,6 +46,7 @@ public:
     /** 리커버리 상태 리셋 (딜레이 기반) */
     UFUNCTION()
     void ResetRecovery();
+
 
     // 캐릭터의 좌우 방향을 반전
     void FlipDirection();
@@ -74,6 +80,13 @@ public:
 protected:
     void SetStateFromParam(int32 Param);
 
+    // --- 피격 반응 애니메이션 ---
+    UPROPERTY(EditDefaultsOnly, Category = "Animation|Hit")
+    UAnimMontage* KnockMontage_Forward;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Animation|Hit")
+    UAnimMontage* KnockMontage_Backward;
+
     /** 사망 몽타주 */
     UPROPERTY(EditDefaultsOnly, Category = "Animation")
     UAnimMontage* DeathMontage;
@@ -95,11 +108,12 @@ protected:
     UFUNCTION(NetMulticast, Reliable)
     void Multicast_PlayDeathMontage();
 
-    UFUNCTION(BlueprintCallable, Category = "Combat")
-    void TakeDamage(float DamageAmount);
+    //UFUNCTION(BlueprintCallable, Category = "Combat")
+    //void TakeDamage(float DamageAmount);
 
     UFUNCTION(BlueprintCallable, Category = "Combat")
     void Die();
+
 
     /** 리커버리 딜레이 타이머 핸들 */
     FTimerHandle RecoveryHandle;
