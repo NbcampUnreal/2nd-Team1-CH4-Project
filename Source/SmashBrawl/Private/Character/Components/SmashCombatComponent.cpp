@@ -159,9 +159,9 @@ void USmashCombatComponent::ApplyKnockback(bool bIsRightDirection)
 
 	// 최종 넉백 벡터 계산
 	FVector LaunchVelocity(
-        KnockbackMagnitude * DirectionMultiplier * RandomVariation * XAxisMultiplier * 1.5f, // X 방향 (좌/우) - 강화됨
+        KnockbackMagnitude * DirectionMultiplier * RandomVariation * XAxisMultiplier * 1.7f, // X 방향 (좌/우) - 강화됨
 		0.0f, // Y 방향 (사용하지 않음)
-        KnockbackMagnitude * ZAxisFactor * RandomVariation * 1.5f // Z 방향 (수직) - 조정됨
+        KnockbackMagnitude * ZAxisFactor * RandomVariation * 4.0f // Z 방향 (수직) - 조정됨
 	);
 
 	// 캐릭터 발사 (X,Y 속도는 덮어쓰기, Z 속도도 덮어쓰기)
