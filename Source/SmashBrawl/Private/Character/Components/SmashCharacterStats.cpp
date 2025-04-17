@@ -12,7 +12,6 @@ USmashCharacterStats::USmashCharacterStats()
 	// 필요한 경우에만 Tick을 활성화
 	PrimaryComponentTick.bCanEverTick = false;
 
-	// SetIsReplicated(true);
 
 	// 기본값 초기화
 	Percent = 0;
@@ -32,6 +31,8 @@ USmashCharacterStats::USmashCharacterStats()
 	bEnableNaturalRecovery = true;
 	NaturalRecoveryRate = 1;   // 초당 1씩 감소
 	NaturalRecoveryInterval = 1.0f; // 1초마다 업데이트
+
+	SetIsReplicatedByDefault(true);
 }
 
 void USmashCharacterStats::BeginPlay()
