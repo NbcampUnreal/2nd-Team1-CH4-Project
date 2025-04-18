@@ -4,13 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "BaseBossMonster.h"
-#include "Interface/Interface_BossMonsterCombat.h"
 
-#include "Monster/Lv1BossMonsterBreathProjectile.h"
+#include "BaseBossPatternActor.h"
 #include "Lv1BossMonster.generated.h"
 
 UCLASS()
-class SMASHBRAWL_API ALv1BossMonster : public ABaseBossMonster, public IInterface_BossMonsterCombat
+class SMASHBRAWL_API ALv1BossMonster : public ABaseBossMonster
 {
 	GENERATED_BODY()
 
@@ -19,25 +18,54 @@ public:
 	ALv1BossMonster();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	TSubclassOf<ALv1BossMonsterBreathProjectile> BreathProjectile;
 
-	//이 함수는 RPC가 아님. 로컬에서도 PerformAttack() 호출 시 실행 가능
-	virtual void PerformAttack_Implementation() override;
+	class UNiagaraComponent* LeftEyeNiagaraComponent;
 
-	//이 함수는 서버에서만 실행되어야 함. 실질적 공격 함수
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
-	void Multicast_PerformAnimation();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UNiagaraComponent* RightEyeNiagaraComponent;
 
-	UFUNCTION(NetMulticast, Reliable, BlueprintCallable)
-	void Multicast_PerformAttack();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> BreathProjectile;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> LavaBurst;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> SideLavaBurstR;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> SideLavaBurstL;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> Magic;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	TSubclassOf<ABaseBossPatternActor> Vacuum;
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+	void Server_FireEye();
+	
 	UFUNCTION(Server, Reliable)
 	void Server_BreathAttack() const;
 
-	virtual void ReactToHit_Implementation() override;
+	UFUNCTION(Server, Reliable)
+	void Server_BiteAttack() const;
 
-	virtual  void OnDeath_Implementation() override;
+	UFUNCTION(Server, Reliable)
+	void Server_FlyBreathAttack() const;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Anim")
-	class UAnimMontage* BreathMontage;
+	UFUNCTION(Server, Reliable)
+	void Server_LavaBurstAttack() const;
+
+	UFUNCTION(Server, Reliable)
+	void Server_MagicAttack();
+
+	UFUNCTION(Server, Reliable)
+	void Server_SideLavaRAttack();
+
+	UFUNCTION(Server, Reliable)
+	void Server_SideLavaLAttack();
+
+	UFUNCTION(Server, Reliable)
+	void Server_VacuumAttack();
 };

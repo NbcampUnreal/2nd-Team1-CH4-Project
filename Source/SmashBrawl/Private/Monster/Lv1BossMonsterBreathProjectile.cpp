@@ -6,7 +6,7 @@
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
-#include "Monster/Lv1BossMonster.h"
+
 
 
 // Sets default values
@@ -24,7 +24,8 @@ ALv1BossMonsterBreathProjectile::ALv1BossMonsterBreathProjectile()
 
 	if (GetLocalRole() == ROLE_Authority)
 	{
-		SphereComp->OnComponentHit.AddDynamic(this, &ALv1BossMonsterBreathProjectile::OnProjectileOverlapped);
+
+		SphereComp->OnComponentBeginOverlap.AddDynamic(this, &ALv1BossMonsterBreathProjectile::OnProjectileOverlapped);
 	}
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
@@ -32,30 +33,85 @@ ALv1BossMonsterBreathProjectile::ALv1BossMonsterBreathProjectile()
 
 	ProjectileComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComp"));
 	ProjectileComp->SetUpdatedComponent(RootComp);
-	ProjectileComp->InitialSpeed = 500;
-	ProjectileComp->MaxSpeed = 500;
+
+	ProjectileComp->InitialSpeed = 700;
+	ProjectileComp->MaxSpeed = 700;
 	ProjectileComp->bRotationFollowsVelocity = true;
 	ProjectileComp->ProjectileGravityScale = 0.0f;
 
 	Damage = 10.0f;
+
+
+	Tags.Add("Projectile");
+
+	NiagaraTrailEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("TrailEffect"));
+	NiagaraTrailEffect->SetupAttachment(RootComponent);
+	NiagaraTrailEffect->bAutoActivate = false;
 }
 
-void ALv1BossMonsterBreathProjectile::OnProjectileOverlapped(UPrimitiveComponent* HitComponent, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ALv1BossMonsterBreathProjectile::BeginPlay()
 {
+	Super::BeginPlay();
+
+	if (NiagaraStartEffectTemplate)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			NiagaraStartEffectTemplate,
+			GetActorLocation(),
+			GetActorRotation(),
+			FVector(5.0f, 5.0f, 5.0f) 
+		);
+	}
+
+	
+	if (NiagaraEffectTemplate)
+	{
+		NiagaraTrailEffect->Activate();
+		NiagaraTrailEffect->SetAsset(NiagaraEffectTemplate);
+	}
+	
+}
+
+void ALv1BossMonsterBreathProjectile::OnProjectileOverlapped(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                                                             UPrimitiveComponent* OtherComp, int32 OtherBodyIndex,
+                                                             bool bFromSweep, const FHitResult& SweepResult)
+{
+
 	if (OtherActor)
 	{
-		UGameplayStatics::ApplyPointDamage(OtherActor, Damage, NormalImpulse, Hit, GetInstigator()->Controller, this, nullptr);
+		if (!OtherActor->ActorHasTag(TEXT("Boss")) && !OtherActor->ActorHasTag(TEXT("Projectile")))
+		{
+			//UGameplayStatics::ApplyPointDamage(OtherActor, Damage, GetActorForwardVector(), SweepResult, nullptr, this, nullptr);
+			Destroy();
+		}
 	}
-	Destroy();
 }
 
 void ALv1BossMonsterBreathProjectile::Destroyed()
 {
 	Super::Destroyed();
 
-	if (HitParticle)
+
+	if (NiagaraStartEffectTemplate)
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(this, HitParticle, GetActorLocation(), FRotator::ZeroRotator, true);
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			NiagaraStartEffectTemplate,
+			GetActorLocation(),
+			GetActorRotation(),
+			FVector(5.0f, 5.0f, 5.0f) 
+		);
+	}
+	
+	if (NiagaraDestroyEffectTemplate)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			NiagaraDestroyEffectTemplate,
+			GetActorLocation(),
+			GetActorRotation(),
+			FVector(5.0f, 5.0f, 5.0f) 
+		);
 	}
 }

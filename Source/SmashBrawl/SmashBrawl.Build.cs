@@ -8,7 +8,12 @@ public class SmashBrawl : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput" });
+		PublicDependencyModuleNames.AddRange(new string[] 
+		{
+			"Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput",
+			"UMG", "UMGEditor", "Slate", "SlateCore",
+			"SST", "Niagara", "GeometryCollectionEngine"
+		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
