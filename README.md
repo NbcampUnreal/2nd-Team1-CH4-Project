@@ -71,6 +71,12 @@ SmashBrawl
 - **AMeteorSpawner**: 보스 공격과 연계된 메테오 투사체 생성
 - **ABaseFracturePlatform**: 페이즈 전환 시 플랫폼 파괴 등 환경 변화 처리
 
+### 공격 시스템
+-  기존 공격시스템방식은 DamagerInfo를 통해 캐릭터의 행동중 원하는 위치를 에디터에서 설정하고, 이를통해 게임이 시작했을때 Damager라는 Actor를 생성및 캐릭터에 부착, 이것을 통해 공격 판정을 진행하는방식
+-  다만 이방식은 원하는곳에 피격범위를 에디터에서 시각적으로 판단할수있는 장점이있으나 공격자와 독립적인 공격 ( ex) 맵에서 생성하는 범위공격) 일경우 이방식은 불편할수있음
+-  따라서 캐릭터의 공격방식은 유지하되 추가적인 몬스터의 공격방식을 위해 Damager를 c++로 정의, 캐릭터와 몬스터에서 Damager를 생성하기위한 Manager를 Componenet로 구현
+-  **ABaseManager**: Damager의 생성을 도와주는 Manager, 추가적으로 공격가능한 class를 지정할수있어 상속 받은 Actor별 AttackAbleClass를 TArray로 지정해 이 엑터가 공격가능한 엑터를 지정해줄수있다.
+-  **ABaseDamager** : 기존방식의 Actor를 통해 곂치는 엑터를 검출, 데미지를 적용한다. Manager에서 지정한 공격가능한 클래스에 대한 검사와 한번공격한엑터, 본인 엑터를 Ignores에 저장, 여러번 공격하는것을 방지하고, 피격대상은 Tag에 'AttackAble'추가하고 IInterFace_TakeDamge를 구현해 Tag를 통해 1차적으로 빠르게 검사하고 피격대상이 IInterface_TakeDamge를 구현하였다면 구현한 TakeDamge를 실행시켜 Damager는 공격방법을, 피격하는 대상은 TakeDamage를통해 구현을 나눠 분리하였다.
 ---
 
 ## 🌟 추가 구현 사항
